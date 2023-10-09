@@ -1,0 +1,184 @@
+{
+    "type": "CompilationUnit",
+    "packageDeclaration": {
+        "type": "PackageDeclaration",
+        "name": {
+            "type": "Name",
+            "identifier": "opencodeplan",
+            "qualifier": {
+                "type": "Name",
+                "identifier": "jmdevall"
+            }
+        }
+    },
+    "imports": [
+        {
+            "type": "ImportDeclaration",
+            "isAsterisk": "false",
+            "isStatic": "false",
+            "name": {
+                "type": "Name",
+                "identifier": "Languages",
+                "qualifier": {
+                    "type": "Name",
+                    "identifier": "treesitter",
+                    "qualifier": {
+                        "type": "Name",
+                        "identifier": "serenade",
+                        "qualifier": {
+                            "type": "Name",
+                            "identifier": "ai"
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "type": "ImportDeclaration",
+            "isAsterisk": "false",
+            "isStatic": "false",
+            "name": {
+                "type": "Name",
+                "identifier": "Node",
+                "qualifier": {
+                    "type": "Name",
+                    "identifier": "treesitter",
+                    "qualifier": {
+                        "type": "Name",
+                        "identifier": "serenade",
+                        "qualifier": {
+                            "type": "Name",
+                            "identifier": "ai"
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "type": "ImportDeclaration",
+            "isAsterisk": "false",
+            "isStatic": "false",
+            "name": {
+                "type": "Name",
+                "identifier": "Parser",
+                "qualifier": {
+                    "type": "Name",
+                    "identifier": "treesitter",
+                    "qualifier": {
+                        "type": "Name",
+                        "identifier": "serenade",
+                        "qualifier": {
+                            "type": "Name",
+                            "identifier": "ai"
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "type": "ImportDeclaration",
+            "isAsterisk": "false",
+            "isStatic": "false",
+            "name": {
+                "type": "Name",
+                "identifier": "Tree",
+                "qualifier": {
+                    "type": "Name",
+                    "identifier": "treesitter",
+                    "qualifier": {
+                        "type": "Name",
+                        "identifier": "serenade",
+                        "qualifier": {
+                            "type": "Name",
+                            "identifier": "ai"
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "type": "ImportDeclaration",
+            "isAsterisk": "false",
+            "isStatic": "false",
+            "name": {
+                "type": "Name",
+                "identifier": "Slf4j",
+                "qualifier": {
+                    "type": "Name",
+                    "identifier": "slf4j",
+                    "qualifier": {
+                        "type": "Name",
+                        "identifier": "extern",
+                        "qualifier": {
+                            "type": "Name",
+                            "identifier": "lombok"
+                        }
+                    }
+                }
+            }
+        }
+    ],
+    "types": [
+        {
+            "type": "ClassOrInterfaceDeclaration",
+            "isInterface": "false",
+            "name": {
+                "type": "SimpleName",
+                "identifier": "App"
+            },
+            "members": [
+                {
+                    "type": "MethodDeclaration",
+                    "body": {
+                        "type": "BlockStmt",
+                        "statements": [
+                            {
+                                "type": "ExpressionStmt",
+                                "expression": {
+                                    "type": "MethodCallExpr",
+                                    "name": {
+                                        "type": "SimpleName",
+                                        "identifier": "println"
+                                    },
+                                    "scope": {
+                                        "type": "FieldAccessExpr",
+                                        "name": {
+                                            "type": "SimpleName",
+                                            "identifier": "out"
+                                        },
+                                        "scope": {
+                                            "type": "NameExpr",
+                                            "name": {
+                                                "type": "SimpleName",
+                                                "identifier": "System"
+                                            }
+                                        }
+                                    },
+                                    "arguments": [
+                                        {
+                                            "type": "EnclosedExpr",
+                                            "inner": {
+                                                "type": "StringLiteralExpr",
+                                                "value": "foo"
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    },
+                    "type": {
+                        "type": "VoidType"
+                    },
+                    "name": {
+                        "type": "SimpleName",
+                        "identifier": "main"
+                    },
+                    "comment": {
+                        "type": "BlockComment",
+                        "content":"   static {
+                        // or on a Mac, libjava-tree-sitter.dylib
+                        //System.load("/home/vicuna/js/tree-sitter/libjava-tree-sitter.so");
+              System.load("/home/vicuna/js/tree-sitter/libtree-sitter.so");
+                    }
+"},"parameters":[{"type":"Parameter","isVarArgs":"false","name":{"type":"SimpleName","identifier":"args"},"type":{"type":"ArrayType","origin":"NAME","componentType":{"type":"ClassOrInterfaceType","name":{"type":"SimpleName","identifier":"String"}}}}]}],"annotations":[{"type":"MarkerAnnotationExpr","name":{"type":"Name","identifier":"Slf4j"}}]}]}
