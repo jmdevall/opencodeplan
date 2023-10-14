@@ -12,8 +12,11 @@ import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.ImportDeclaration;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.FieldAccessExpr;
 import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import com.github.javaparser.resolution.SymbolResolver;
@@ -67,8 +70,9 @@ public class AstConstructorJavaParser {
                    Node domainNode=toDomainNode(rootnode, subpathFromRoot);
                    forest.put(subpathFromRoot, domainNode);
                    
-                   ChildParentRelFinder cprf=new ChildParentRelFinder(subpathFromRoot);
-                   cprf.visit(compilationUnit.getResult().get(), rels);
+                   //ChildParentRelFinder rf=new ChildParentRelFinder(subpathFromRoot);
+                   ImportsRelFinder rf=new ImportsRelFinder(subpathFromRoot);
+                   rf.visit(compilationUnit.getResult().get(), rels);
                    
                    
                }else {
@@ -192,34 +196,71 @@ public class AstConstructorJavaParser {
 		}
 	}
 
+
 	
-	private List<Rel> findRelsParentChildren1(com.github.javaparser.ast.Node node,String file) {
+	
+	private class ImportsRelFinder extends VoidVisitorAdapter<List<Rel>>{
 		
-		if(node instanceof MethodDeclaration) {
-			MethodDeclaration methodDeclaration=(MethodDeclaration) node;
-			
-			System.out.println("padre "+methodDeclaration.getParentNode());
-			
-			Optional<com.github.javaparser.ast.Node> parent=node.getParentNode();
-			if(parent.isPresent()) {
-				Rel childToParent=Rel.builder()
-				.origin(toNodeId(node, file))
-				.destiny(toNodeId(node.getParentNode().get(),file))
-				.label(Label.CHILD_OF)
-				.build();
-				
-				Rel parentToChild=Rel.builder()
-				.origin(toNodeId(node, file))
-				.destiny(toNodeId(node.getParentNode().get(),file))
-				.label(Label.CHILD_OF)
-				.build();
-				
-				return Arrays.asList(childToParent,parentToChild);
-			}
+		private String file;
+		
+		private List<ImportDeclaration> importDeclarations;
+		private MethodDeclaration currentMethod;
+		
+		public ImportsRelFinder(String file) {
+			super();
+			this.file = file;
+			this.importDeclarations=new ArrayList<ImportDeclaration>();
 		}
-		return Collections.emptyList();
+
+		
+		
+		@Override
+		public void visit(ImportDeclaration n, List<Rel> arg) {
+			importDeclarations.add(n);
+			
+			super.visit(n, arg);
+		}
+
+		
+
+		@Override
+		public void visit(FieldAccessExpr n, List<Rel> arg) {
+			System.out.println("fieldAccessExpre "+file+" "+n);
+			// Get the name of the field access expression
+		    String fieldName = n.getName().asString();
+
+		    // Check if the field name is in the list of imports
+		    for (ImportDeclaration importDeclaration : importDeclarations) {
+		        String importName = importDeclaration.getNameAsString();
+		        if (importName.endsWith("." + fieldName)) {
+		            System.out.println("Field access " + fieldName + " uses import " + importName);
+		        }
+		    }
+		}
+
+
+
+		@Override
+		public void visit(MethodDeclaration n, List<Rel> arg) {
+			currentMethod=n;
+			
+			super.visit(n, arg);
+		}
+
+
+
+		@Override
+		public void visit(ClassOrInterfaceDeclaration n, List<Rel> arg) {
+			n.getex
+			// TODO Auto-generated method stub
+			super.visit(n, arg);
+		}
+		
+		
+		
 	}
 
+	
 
 	private void obtenerTipoDeExpresion(com.github.javaparser.ast.Node node,String file) {
 		// https://tomassetti.me/wp-content/uploads/2017/12/JavaParser-JUG-Milano.pdf
