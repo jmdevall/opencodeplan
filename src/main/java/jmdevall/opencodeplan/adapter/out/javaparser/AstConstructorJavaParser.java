@@ -33,8 +33,6 @@ import jmdevall.opencodeplan.adapter.out.file.FileUtil;
 import jmdevall.opencodeplan.adapter.out.file.direxplorer.DirExplorer;
 import jmdevall.opencodeplan.domain.Label;
 import jmdevall.opencodeplan.domain.Node;
-import jmdevall.opencodeplan.domain.NodeId;
-import jmdevall.opencodeplan.domain.Position;
 import jmdevall.opencodeplan.domain.Rel;
 import lombok.extern.slf4j.Slf4j;
 
@@ -94,14 +92,7 @@ public class AstConstructorJavaParser {
  
 
 
-	private Position toDomainPosition( com.github.javaparser.Position position) {
-    	return Position.builder()
-    	.line(position.line)
-    	.column(position.column)
-    	.build();
-    }
-    
-    private jmdevall.opencodeplan.domain.Node toDomainNode(com.github.javaparser.ast.Node node, String file){
+	private jmdevall.opencodeplan.domain.Node toDomainNode(com.github.javaparser.ast.Node node, String file){
     	ArrayList<Node> children=new ArrayList<Node>();
     	
     	//getTypeDeclaration(node);
@@ -115,7 +106,7 @@ public class AstConstructorJavaParser {
         }
        
         Node domainNode=Node.builder()
-    		.id(toNodeId(node, file))
+    		.id(Util.toNodeId(node, file))
     		.type(node.getMetaModel().getTypeName())
     		.content(node.toString())
     		.children(children)
@@ -123,16 +114,6 @@ public class AstConstructorJavaParser {
 
         return domainNode;
     }
-
-
-
-	private NodeId toNodeId(com.github.javaparser.ast.Node node, String file) {
-		return NodeId.builder()
-			.file(file)
-			.begin(toDomainPosition(node.getBegin().get()))
-			.end(toDomainPosition(node.getEnd().get()))
-			.build();
-	}
 
 
 
@@ -180,14 +161,14 @@ public class AstConstructorJavaParser {
 			Optional<com.github.javaparser.ast.Node> parent=n.getParentNode();
 			if(parent.isPresent()) {
 				Rel childToParent=Rel.builder()
-				.origin(toNodeId(n, file))
-				.destiny(toNodeId(n.getParentNode().get(),file))
+				.origin(Util.toNodeId(n, file))
+				.destiny(Util.toNodeId(n.getParentNode().get(),file))
 				.label(Label.CHILD_OF)
 				.build();
 				
 				Rel parentToChild=Rel.builder()
-				.origin(toNodeId(n.getParentNode().get(),file))
-				.destiny(toNodeId(n, file))
+				.origin(Util.toNodeId(n.getParentNode().get(),file))
+				.destiny(Util.toNodeId(n, file))
 				.label(Label.PARENT_OF)
 				.build();
 
@@ -251,7 +232,7 @@ public class AstConstructorJavaParser {
 
 		@Override
 		public void visit(ClassOrInterfaceDeclaration n, List<Rel> arg) {
-			n.getex
+			//n.getex
 			// TODO Auto-generated method stub
 			super.visit(n, arg);
 		}
