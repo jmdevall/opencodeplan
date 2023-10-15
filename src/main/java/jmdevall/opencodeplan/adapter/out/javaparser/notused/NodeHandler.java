@@ -1,4 +1,4 @@
-package jmdevall.opencodeplan.adapter.out.javaparser;
+package jmdevall.opencodeplan.adapter.out.javaparser.notused;
 
 import com.github.javaparser.ast.Node;
 

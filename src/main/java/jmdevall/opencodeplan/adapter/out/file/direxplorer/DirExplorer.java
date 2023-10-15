@@ -19,7 +19,7 @@ public class DirExplorer {
 	private void explore(int level, String path, File file) {
 		if (file.isDirectory()) {
 			for (File child : file.listFiles()) {
-				explore(level + 1, path + "/" + child.getName(), child);
+				explore(level + 1, path + "/" + child.getName(), child); //TODO: windows? 
 			}
 		} else {
 			if (filter.interested(level, path, file)) {
