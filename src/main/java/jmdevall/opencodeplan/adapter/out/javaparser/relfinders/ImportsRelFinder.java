@@ -12,7 +12,7 @@ import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import jmdevall.opencodeplan.domain.Rel;
 
 
-//TODO:
+//TODO: no se en java  a que se refiere exactamente. Lo dejo por el momento
 public class ImportsRelFinder extends VoidVisitorAdapter<List<Rel>>{
 	
 	private String file;
