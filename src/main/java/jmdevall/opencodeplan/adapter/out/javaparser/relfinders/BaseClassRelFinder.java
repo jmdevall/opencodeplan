@@ -35,15 +35,19 @@ public class BaseClassRelFinder extends VoidVisitorAdapter<List<Rel>>{
 		NodeList<ClassOrInterfaceType> types;
 		
 		types=n.getExtendedTypes();
-		for(ClassOrInterfaceType type:types) {
-			System.out.println("La clase "+n.getName()+" extiende "+type.getName());
-		}
-
+		addRels(n, types, rels);
+		
 		types=n.getImplementedTypes();
+		addRels(n, types, rels);
+		super.visit(n, rels);
+	}
+
+	private void addRels(ClassOrInterfaceDeclaration classOrInterfaceDecNode, NodeList<ClassOrInterfaceType> types,
+			List<Rel> rels) {
 		for(ClassOrInterfaceType type:types) {
-			log.debug("La clase "+n.getName()+" implementa "+type.getName());
+			log.debug("La clase "+classOrInterfaceDecNode.getName()+" implementa o extiende "+type.getName());
 			//Util.getTypeDeclaration(type);
-			SymbolResolver solver=n.getSymbolResolver();
+			SymbolResolver solver=classOrInterfaceDecNode.getSymbolResolver();
 			//String foo=solver.toResolvedType(type, null);
 			ResolvedType resuelto = solver.toResolvedType(type, ResolvedType.class);
 			log.debug("resolvedReferenceType "+resuelto.toString());
@@ -57,12 +61,17 @@ public class BaseClassRelFinder extends VoidVisitorAdapter<List<Rel>>{
 			
 			rels.add(Rel.builder()
 					.label(Label.BASE_CLASS_OF)
-					.origin(Util.toNodeId(n))
-					.destiny(Util.toNodeId(n))
+					.origin(Util.toNodeId(basenode))
+					.destiny(Util.toNodeId(classOrInterfaceDecNode))
+					.build());
+			
+			rels.add(Rel.builder()
+					.label(Label.DERIVED_CLASS_OF)
+					.origin(Util.toNodeId(classOrInterfaceDecNode))
+					.destiny(Util.toNodeId(basenode))
 					.build());
 
 		}
-		super.visit(n, rels);
 	}
 	
 	
