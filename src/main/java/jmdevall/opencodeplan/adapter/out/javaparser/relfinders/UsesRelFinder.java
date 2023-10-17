@@ -206,8 +206,8 @@ public class UsesRelFinder extends VoidVisitorAdapter<List<Rel>>{
 			
 			Optional<Node> cosa=foo.toAst();
 			if(cosa.isPresent()) {
-				System.out.println("name "+n.getNameAsString());
-				System.out.println("declaracion es="+cosa.get());
+				System.out.println("name "+n.getNameAsString()+" "+n.getBegin());
+				System.out.println("declaracion es="+cosa.get() +" "+cosa.get().getBegin());
 				System.out.println("en el cu "+Util.getFileNameOfCompilationUnit(cosa.get().findCompilationUnit().get()));
 				System.out.println("");
 				/*if(cosa.get().equals(f)) {
