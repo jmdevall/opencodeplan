@@ -10,16 +10,27 @@ public class ExampleClass{
 		System.out.println("hello "+foo);
 	}
 	
+	public void example2() {
+		int other;
+		
+		System.out.println("hello "+this.foo);
+	}
+	
 	public void otro() {
 		String foo="bar";
 		
 		System.out.println("hello "+foo);
 	}
-	
+		
 	public void otromas() {
 		String foo="bar";
 		this.foo="ooo";
 		System.out.println("hello "+foo);
+	}
+	
+	public void yotromas() {
+		String foo="bar";
+		System.out.println("hello "+this.foo);
 	}
 	
 	public void otromasaun() {
