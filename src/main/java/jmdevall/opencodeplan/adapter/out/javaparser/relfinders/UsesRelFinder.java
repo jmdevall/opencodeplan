@@ -4,13 +4,16 @@ import java.util.List;
 import java.util.Optional;
 
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.expr.FieldAccessExpr;
 import com.github.javaparser.ast.expr.NameExpr;
+import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 
 import jmdevall.opencodeplan.adapter.out.javaparser.Util;
+import jmdevall.opencodeplan.domain.Label;
 import jmdevall.opencodeplan.domain.Rel;
 import lombok.extern.slf4j.Slf4j;
 
@@ -26,63 +29,65 @@ public class UsesRelFinder extends VoidVisitorAdapter<List<Rel>>{
 		super();
 	}
 	
-	//TODO: usar este método en lugar
-	public Optional<ResolvedValueDeclaration> tryResolve(NameExpr n) {
-	    try {
-	        return Optional.of(n.resolve());
-	    } catch (UnsolvedSymbolException e) {
-	        return Optional.empty();
-	    }
+	@Override
+	public void visit(NameExpr n, List<Rel> rels) {
+		super.visit(n, rels);
+		
+		findRelsOfNameExprOrFieldAccessExpr(n, rels);
 	}
 	
 	@Override
-	public void visit(NameExpr n, List<Rel> arg) {
-		super.visit(n, arg);
+	public void visit(FieldAccessExpr n, List<Rel> rels) {
+		super.visit(n, rels);
+		
+		findRelsOfNameExprOrFieldAccessExpr(n, rels);
+	}
 
-		//n.isSolved(); //no existe pero me lo sugiere phind
-	
-		ResolvedValueDeclaration resolved;
-		try {
-			resolved = n.resolve();
-		} catch (Exception e) {
+	private void findRelsOfNameExprOrFieldAccessExpr(Node n, List<Rel> rels) {
+		Optional<Node> ofieldDeclaration = tryResolveFieldDeclaration(n);
+		if(!ofieldDeclaration.isPresent()) {
+			return;
+		}
+		Optional<Statement> ostmt=findStatementAncestor(n);
+		if(!ostmt.isPresent()) {
+			//TODO: should not ocurr: all access expression is inside a stmt
 			return;
 		}
 		
-		// el método continua....
+		Node fieldDeclaration=ofieldDeclaration.get();
+		Statement stmt=ostmt.get();
 		
-		Optional<Node> declaracion=resolved.toAst();
-		if(declaracion.isPresent()) {
-			System.out.println("name "+n.getNameAsString()+" "+n.getBegin());
-			System.out.println("name en compilationUnit"+Util.getFileNameOfCompilationUnit(Util.getCompilationUnit(n)));
+		rels.add(Rel.builder()
+				.label(Label.USES)
+				.origin(Util.toNodeId(stmt))
+				.destiny(Util.toNodeId(fieldDeclaration))
+				.build());
+		
+		rels.add(Rel.builder()
+				.label(Label.USED_BY)
+				.origin(Util.toNodeId(fieldDeclaration))
+				.destiny(Util.toNodeId(stmt))
+				.build());
+	}
+	
+	private Optional<Node> tryResolveFieldDeclaration(Node n) {
+		try {
+			ResolvedValueDeclaration resolved = n.getSymbolResolver().resolveDeclaration(n, ResolvedValueDeclaration.class);
+			
 			if(resolved.isField()) {
-				System.out.println("es field");
+				return resolved.toAst();
 			}
-			System.out.println("declaracion="+declaracion.get() +" "+declaracion.get().getBegin());
-			System.out.println("declaración en el cu "+Util.getFileNameOfCompilationUnit(declaracion.get().findCompilationUnit().get()));
-			System.out.println("");
+			else {
+				return Optional.empty();
+			}
+			
+		} catch (UnsolvedSymbolException e) {
+			return Optional.empty();
 		}
-
 	}
 
-	@Override
-	public void visit(FieldAccessExpr n, List<Rel> arg) {
-		// TODO Auto-generated method stub
-		super.visit(n, arg);
-		ResolvedValueDeclaration resolved=n.resolve();
-		
-		Optional<Node> declaracion=resolved.toAst();
-		if(declaracion.isPresent()) {
-			System.out.println("fae "+n.getNameAsString()+" "+n.getBegin());
-			System.out.println("fae en compilationUnit"+Util.getFileNameOfCompilationUnit(Util.getCompilationUnit(n)));
-			if(resolved.isField()) {
-				System.out.println("es field");
-			}
-			System.out.println("declaracion="+declaracion.get() +" "+declaracion.get().getBegin());
-			System.out.println("declaración en el cu "+Util.getFileNameOfCompilationUnit(declaracion.get().findCompilationUnit().get()));
-			System.out.println("");
-		}
-
+	private Optional<Statement> findStatementAncestor(Node n) {
+		return n.findAncestor(Statement.class);
 	}
-
 	
 }

@@ -17,7 +17,7 @@ public class UsesRelFinderTest {
 	private TestUtil testUtil=new TestUtil();
 
 	@Test
-	public void nose() {
+	public void findUsesRels() {
 		UsesRelFinder sut=new UsesRelFinder();
 		CuRelFinderVisitProcessor vp=new CuRelFinderVisitProcessor(sut);
 		
@@ -30,7 +30,7 @@ public class UsesRelFinderTest {
 		List<Rel> rels = vp.getRels();
 		logRels(rels);
 		
-		//assertEquals(4,rels.size());
+		assertEquals(22,rels.size());
 	}
 
 	private void logRels(List<Rel> rels) {
