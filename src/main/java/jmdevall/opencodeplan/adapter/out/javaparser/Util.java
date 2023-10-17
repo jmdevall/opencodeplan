@@ -45,12 +45,16 @@ public class Util {
 	//---------------------
 	
 	 public static CompilationUnit getCompilationUnit(Node node) {
+		//return node.findAncestor(CompilationUnit.class).orElse(null);
+		
         Node currentNode = node;
         while (!(currentNode instanceof CompilationUnit)) {
             currentNode = currentNode.getParentNode().orElse(null);
         }
         return (CompilationUnit) currentNode;
 	}
+	
+	
 
 
 	public static String getPackageDeclarationOrEmptyString(CompilationUnit compilationUnit) {
