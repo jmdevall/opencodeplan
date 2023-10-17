@@ -28,14 +28,10 @@ public class ChildParentRelFinderTest {
 				.explore(testUtil.getRootTestbenchFolder());
 		
 		List<Rel> rels = vp.getRels();
-		logRels(rels);
+		LogRelUtil.logRels(rels);
 		
 		assertEquals(4,rels.size());
 	}
 
-	private void logRels(List<Rel> rels) {
-		for(Rel rel:rels) {
-			System.out.println("rel="+rel);
-		}
-	}
+
 }

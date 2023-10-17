@@ -12,16 +12,17 @@ import jmdevall.opencodeplan.adapter.out.javaparser.CuRelFinderVisitProcessor;
 import jmdevall.opencodeplan.adapter.out.javaparser.util.TestUtil;
 import jmdevall.opencodeplan.domain.Rel;
 
-public class UsesRelFinderTest {
+
+public class CallsRelFinderTest {
 
 	private TestUtil testUtil=new TestUtil();
 
 	@Test
-	public void findUsesRels() {
-		UsesRelFinder sut=new UsesRelFinder();
+	public void findCalls() {
+		CallsRelFinder sut=new CallsRelFinder();
 		CuRelFinderVisitProcessor vp=new CuRelFinderVisitProcessor(sut);
 		
-		String startfolder=",testbench,testutil,uses".replaceAll(",", File.separator);
+		String startfolder=",testbench,testutil,calls".replaceAll(",", File.separator);
 
 		new CuExplorer(vp,
 				(int level, String path, File file)->path.startsWith(startfolder))
@@ -30,7 +31,9 @@ public class UsesRelFinderTest {
 		List<Rel> rels = vp.getRels();
 		LogRelUtil.logRels(rels);
 		
-		assertEquals(22,rels.size());
+		assertEquals(2,rels.size());
+		assertEquals("Rel(origin=NodeId(file=testbench.testutil.calls.ExampleClass, begin=Position(line=7, column=3), end=Position(line=7, column=7)), destiny=NodeId(file=testbench.testutil.calls.ExampleClass, begin=Position(line=10, column=2), end=Position(line=12, column=2)), label=CALLS)",rels.get(0).toString());
 	}
+
 
 }

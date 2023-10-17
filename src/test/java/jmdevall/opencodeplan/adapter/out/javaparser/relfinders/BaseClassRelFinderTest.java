@@ -28,7 +28,7 @@ public class BaseClassRelFinderTest {
 				.explore(testUtil.getRootTestbenchFolder());
 		
 		List<Rel> rels = vp.getRels();
-		logRels(rels);
+		LogRelUtil.logRels(rels);
 		
 		assertEquals(2,rels.size());
 		assertEquals("Rel(origin=NodeId(file=testbench.testutil.implementation.ExampleInterface, begin=Position(line=3, column=1), end=Position(line=5, column=1)), destiny=NodeId(file=testbench.testutil.implementation.ExampleImpl, begin=Position(line=3, column=1), end=Position(line=8, column=1)), label=BASE_CLASS_OF)",rels.get(0).toString());
@@ -46,18 +46,11 @@ public class BaseClassRelFinderTest {
 				.explore(testUtil.getRootTestbenchFolder());
 		
 		List<Rel> rels = vp.getRels();
-		logRels(rels);
+		LogRelUtil.logRels(rels);
 		
 		assertEquals(2,rels.size());
 		assertEquals(
 				"Rel(origin=NodeId(file=testbench.testutil.extension.BaseExample, begin=Position(line=3, column=1), end=Position(line=7, column=1)), destiny=NodeId(file=testbench.testutil.extension.ExtensionExample, begin=Position(line=3, column=1), end=Position(line=12, column=1)), label=BASE_CLASS_OF)"
 				,rels.get(0).toString());
-	}
-	
-
-	private void logRels(List<Rel> rels) {
-		for(Rel rel:rels) {
-			System.out.println("rel="+rel);
-		}
 	}
 }
