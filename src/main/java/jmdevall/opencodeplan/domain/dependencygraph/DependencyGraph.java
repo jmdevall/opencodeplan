@@ -1,11 +1,14 @@
 package jmdevall.opencodeplan.domain.dependencygraph;
 
+import java.util.HashMap;
 import java.util.List;
 
 import jmdevall.opencodeplan.CodePlan;
 import jmdevall.opencodeplan.domain.BlockCode;
 import jmdevall.opencodeplan.domain.Fragment;
 import jmdevall.opencodeplan.domain.Label;
+import jmdevall.opencodeplan.domain.Node;
+import jmdevall.opencodeplan.domain.Rel;
 import jmdevall.opencodeplan.domain.repository.Repository;
 import lombok.Builder;
 
@@ -30,17 +33,15 @@ field it uses.
  */
 public class DependencyGraph {
 
-    Repository r;
-
-    public DependencyGraph(Repository r) {
-        this.r = r;
-    }
-
-    
+	private HashMap<String,Node> forest;
+	private List<Rel> rels;
+	
+	
 
     public DependencyGraph updateDependencyGraph(List<Label> labels, Fragment fragment, Fragment newFragment, BlockCode b) {
         // TODO:
-        return new DependencyGraph(this.r);
+        //return new DependencyGraph(this.r);
+    	return null;
     }
 
     @Builder
