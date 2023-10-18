@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.body.MethodDeclaration;
+import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 import com.github.javaparser.resolution.SymbolResolver;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
@@ -29,24 +30,40 @@ public class OverridesRelFinder extends VoidVisitorAdapter<List<Rel>>{
 		super();
 	}
 	
-	private Optional<Node> tryResolveMethodDeclaration(MethodDeclaration n){
+	
+	private Optional<ResolvedMethodDeclaration> findMethod(ResolvedReferenceType type, String methodName,String descriptor){
+		List<ResolvedMethodDeclaration> methods=type.getAllMethodsVisibleToInheritors();
+		for(ResolvedMethodDeclaration method:methods) {
+			if(method.getName().equals(methodName) && method.toDescriptor().equals(descriptor)) {
+				return Optional.of(method);
+			}
+		}
+		return Optional.empty();
+	}
+	
+	private Optional<Node> tryResolveMethodDeclaration(MethodDeclaration m){
+
 		
 		try {
-			SymbolResolver solver=n.getSymbolResolver();
-			//solver.toTypeDeclaration(n);
-			
-			ResolvedMethodDeclaration resolved=n.resolve();
+
+			ResolvedMethodDeclaration resolved=m.resolve();
+			log.debug("descriptor="+resolved.toDescriptor());
 			
 			List<ResolvedReferenceType> ancestors=resolved.declaringType(). getAllAncestors();
+			
 			for(ResolvedReferenceType a:ancestors) {
-				System.out.println("a "+a.getId());
+				Optional<ResolvedMethodDeclaration> metodoEnPadre=findMethod(a,m.getName().toString(),m.toDescriptor());
+				if(metodoEnPadre.isPresent()) {
+					return metodoEnPadre.get().toAst();
+				}
+				log.debug("a "+a.getId()+ " "+ a.getQualifiedName());
 			}
 			
 			
-			return resolved.toAst();
 		} catch (UnsolvedSymbolException e) {
 			return Optional.empty();
 		}
+		return Optional.empty();
 	}
 	
 	@Override

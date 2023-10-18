@@ -31,8 +31,8 @@ public class OverridesRelFinderTest {
 		List<Rel> rels = vp.getRels();
 		LogRelUtil.logRels(rels);
 		
-		assertEquals(2,rels.size());
-		assertEquals("Rel(origin=NodeId(file=testbench.testutil.calls.ExampleClass, begin=Position(line=7, column=3), end=Position(line=7, column=7)), destiny=NodeId(file=testbench.testutil.calls.ExampleClass, begin=Position(line=10, column=2), end=Position(line=12, column=2)), label=CALLS)",rels.get(0).toString());
+		assertEquals(4,rels.size());
+		assertEquals("Rel(origin=NodeId(file=testbench.testutil.overrides.B, begin=Position(line=6, column=2), end=Position(line=8, column=2)), destiny=NodeId(file=testbench.testutil.overrides.A, begin=Position(line=6, column=2), end=Position(line=8, column=2)), label=OVERRIDES)",rels.get(0).toString());
 	}
 
 
