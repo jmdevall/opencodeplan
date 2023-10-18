@@ -15,9 +15,12 @@ import jmdevall.opencodeplan.domain.I;
 import jmdevall.opencodeplan.domain.Label;
 import jmdevall.opencodeplan.domain.Node;
 import jmdevall.opencodeplan.domain.dependencygraph.DependencyGraph;
-import jmdevall.opencodeplan.domain.repository.Repository;
+import jmdevall.opencodeplan.port.out.ConstructDependencyGraph;
+import jmdevall.opencodeplan.port.out.repository.Repository;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+@AllArgsConstructor
 public class CodePlan {
 
     class Llm {
@@ -111,16 +114,22 @@ public class CodePlan {
      * specifications, Theta is an oracle and L is an LLM.
      */
 
+    ConstructDependencyGraph constructDependencyGraph;
+    
+    
 /**
  * 
  * @param r source code of a repository
  * @param DeltaSeeds
  * @param theta oracle
  * @param l:llm 
+ * 
+ * 
  */
+    
 void codePlan(Repository r, DeltaSeeds deltaSeeds, Llm llm){
     PlanGraph g = new PlanGraph();
-    DependencyGraph d = new DependencyGraph(r);
+    DependencyGraph d = constructDependencyGraph.construct(r);
      while (!deltaSeeds.isEmpty()){
         initializePlanGraph(g, deltaSeeds);
         adaptivePlanAndExecute(r, d, g,llm);

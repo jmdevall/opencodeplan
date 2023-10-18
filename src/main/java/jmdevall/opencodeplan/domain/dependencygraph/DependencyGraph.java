@@ -9,7 +9,7 @@ import jmdevall.opencodeplan.domain.Fragment;
 import jmdevall.opencodeplan.domain.Label;
 import jmdevall.opencodeplan.domain.Node;
 import jmdevall.opencodeplan.domain.Rel;
-import jmdevall.opencodeplan.domain.repository.Repository;
+import jmdevall.opencodeplan.port.out.repository.Repository;
 import lombok.Builder;
 
 /**
@@ -36,9 +36,14 @@ public class DependencyGraph {
 	private HashMap<String,Node> forest;
 	private List<Rel> rels;
 	
-	
 
-    public DependencyGraph updateDependencyGraph(List<Label> labels, Fragment fragment, Fragment newFragment, BlockCode b) {
+    public DependencyGraph(HashMap<String, Node> forest, List<Rel> rels) {
+		super();
+		this.forest = forest;
+		this.rels = rels;
+	}
+
+	public DependencyGraph updateDependencyGraph(List<Label> labels, Fragment fragment, Fragment newFragment, BlockCode b) {
         // TODO:
         //return new DependencyGraph(this.r);
     	return null;
