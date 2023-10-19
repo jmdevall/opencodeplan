@@ -2,6 +2,7 @@ package jmdevall.opencodeplan;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import jmdevall.opencodeplan.CodePlan.BlockRelationPairs;
 import jmdevall.opencodeplan.CodePlan.DeltaSeeds;
@@ -14,6 +15,7 @@ import jmdevall.opencodeplan.domain.I;
 import jmdevall.opencodeplan.domain.dependencygraph.DependencyGraph;
 import jmdevall.opencodeplan.domain.dependencygraph.Label;
 import jmdevall.opencodeplan.domain.dependencygraph.Node;
+import jmdevall.opencodeplan.domain.plangraph.Obligation;
 import jmdevall.opencodeplan.domain.plangraph.PlanGraph;
 import jmdevall.opencodeplan.port.out.ConstructDependencyGraph;
 import jmdevall.opencodeplan.port.out.repository.Repository;
@@ -139,33 +141,33 @@ void codePlan(Repository r, DeltaSeeds deltaSeeds, Llm llm){
 
     void initializePlanGraph(PlanGraph g, DeltaSeeds deltaSeeds) {
         deltaSeeds.getBIs().forEach(bi -> {
-            g.addRoot(bi, true);
+            g.addPendingRoot(bi);
         });
     }
 
     void adaptivePlanAndExecute(Repository r, DependencyGraph d, PlanGraph g, Llm llm) {
         while (g.hasNodesWithPendingStatus()) {
 
-            BI bi = g.getNextPending();
+            BI bi = g.getNextPending().get().getBi();
             // First step: extract fragment of code
             Fragment fragment = r.extractCodeFragment(bi);
             // Second step: gather context of the edit
-            Context context = gatherContext(bi.b, r, d);
+            Context context = gatherContext(bi.getB(), r, d);
             // Third step: use the LLM to get edited code fragment
-            Prompt prompt = makePrompt(fragment, bi.i, context);
+            Prompt prompt = makePrompt(fragment, bi.getI(), context);
             Fragment newFragment = llm.invoke(prompt);
             // Fourth step: merge the updated code fragment into R
 
-            r = r.merge(newFragment, bi.b);
+            r = r.merge(newFragment, bi.getB());
             List<Label> labels = classifyChanges(fragment, newFragment);
-            DependencyGraph dp = d.updateDependencyGraph(labels, fragment, newFragment, bi.b);
+            DependencyGraph dp = d.updateDependencyGraph(labels, fragment, newFragment, bi.getB());
 
             // Fifth step: adaptively plan and propogate the effect of the edit on dependant
             // code
-            BlockRelationPairs blockRelationPairs = getAffectedBlocks(labels, bi.b, d, dp);
-            g.markCompleted(bi.b);
+            BlockRelationPairs blockRelationPairs = getAffectedBlocks(labels, bi.getB(), d, dp);
+            g.markCompleted(bi.getB());
             blockRelationPairs.get().forEach(br -> {
-                Node n = bi.b;
+                Node n = bi.getB();
                 Node m = selectOrAddNode(br.b, true);
                 addEdge(g, m, n, br.rel);
             });

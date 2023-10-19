@@ -1,5 +1,8 @@
 package jmdevall.opencodeplan.domain.plangraph;
 
+import java.util.ArrayList;
+import java.util.Optional;
+
 import jmdevall.opencodeplan.domain.BI;
 import jmdevall.opencodeplan.domain.dependencygraph.Node;
 
@@ -12,23 +15,44 @@ import jmdevall.opencodeplan.domain.dependencygraph.Node;
 
 public class PlanGraph {
 
-	// TODO
-	public void addRoot(BI bi, boolean pending) {
-
+	private ArrayList<Obligation> obligationRoots=new ArrayList<Obligation>();
+	
+	public void addPendingRoot(BI bi) {
+		obligationRoots.add(
+				Obligation.builder()
+				.b(bi.getB())
+				.i(bi.getI())
+				.cmi(null)
+				.status(Status.PENDING)
+				.build());
+				
 	}
 
-	public BI getNextPending() {
-		// TODO
-		return new BI();
+	public Optional<Obligation> getNextPending() {
+		for(Obligation o:obligationRoots) {
+			Optional<Obligation> found=o.findNextPendingRecursive();
+			if(found.isPresent()) {
+				return found;
+			}
+		}
+		return Optional.empty();
 	}
 
 	public boolean hasNodesWithPendingStatus() {
-		// TODO:
-		return true;
+		for(Obligation o:obligationRoots) {
+			if(o.isPendingRecursive()) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public void markCompleted(Node b) {
-		// TODO:
-
+		for(Obligation o:obligationRoots) {
+			if(o.searchRecursiveToMarkCompleted(b)) {
+				return;
+			}
+		}
 	}
+
 }
