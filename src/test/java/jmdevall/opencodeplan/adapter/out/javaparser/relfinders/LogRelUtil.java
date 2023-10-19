@@ -2,7 +2,7 @@ package jmdevall.opencodeplan.adapter.out.javaparser.relfinders;
 
 import java.util.List;
 
-import jmdevall.opencodeplan.domain.Rel;
+import jmdevall.opencodeplan.domain.dependencygraph.Rel;
 
 public class LogRelUtil {
 

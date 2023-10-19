@@ -5,7 +5,7 @@ import java.util.HashMap;
 
 import com.github.javaparser.ast.CompilationUnit;
 
-import jmdevall.opencodeplan.domain.Node;
+import jmdevall.opencodeplan.domain.dependencygraph.Node;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -16,7 +16,7 @@ public class AstConstructorJavaParser implements CuProcessor{
 		forest=new HashMap<String,Node>();
 	}
 
-	private jmdevall.opencodeplan.domain.Node toDomainNode(com.github.javaparser.ast.Node node){
+	private jmdevall.opencodeplan.domain.dependencygraph.Node toDomainNode(com.github.javaparser.ast.Node node){
     	ArrayList<Node> children=new ArrayList<Node>();
     	
         for(com.github.javaparser.ast.Node child: node.getChildNodes()) {

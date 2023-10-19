@@ -13,9 +13,9 @@ import jmdevall.opencodeplan.adapter.out.javaparser.relfinders.ChildParentRelFin
 import jmdevall.opencodeplan.adapter.out.javaparser.relfinders.InstantiateRelFinder;
 import jmdevall.opencodeplan.adapter.out.javaparser.relfinders.OverridesRelFinder;
 import jmdevall.opencodeplan.adapter.out.javaparser.relfinders.UsesRelFinder;
-import jmdevall.opencodeplan.domain.Node;
-import jmdevall.opencodeplan.domain.Rel;
 import jmdevall.opencodeplan.domain.dependencygraph.DependencyGraph;
+import jmdevall.opencodeplan.domain.dependencygraph.Node;
+import jmdevall.opencodeplan.domain.dependencygraph.Rel;
 import jmdevall.opencodeplan.port.out.ConstructDependencyGraph;
 import jmdevall.opencodeplan.port.out.repository.Repository;
 

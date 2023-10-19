@@ -6,7 +6,7 @@ import java.util.List;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
-import jmdevall.opencodeplan.domain.Rel;
+import jmdevall.opencodeplan.domain.dependencygraph.Rel;
 import lombok.Getter;
 
 public class CuRelFinderVisitProcessor implements CuProcessor{

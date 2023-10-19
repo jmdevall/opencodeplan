@@ -1,7 +1,7 @@
 package jmdevall.opencodeplan;
 
 import jmdevall.opencodeplan.domain.BI;
-import jmdevall.opencodeplan.domain.BlockCode;
+import jmdevall.opencodeplan.domain.dependencygraph.Node;
 
 /**
      * a directed acyclic graph with multiple root nodes
@@ -27,7 +27,7 @@ import jmdevall.opencodeplan.domain.BlockCode;
             return true;
         }
 
-        void markCompleted(BlockCode b) {
+        void markCompleted(Node b) {
             // TODO:
 
         }

@@ -7,7 +7,7 @@ import java.util.HashMap;
 import org.junit.jupiter.api.Test;
 
 import jmdevall.opencodeplan.adapter.out.javaparser.util.TestUtil;
-import jmdevall.opencodeplan.domain.Node;
+import jmdevall.opencodeplan.domain.dependencygraph.Node;
 
 public class AstConstructorJavaParserTest {
 

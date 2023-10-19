@@ -1,4 +1,4 @@
-package jmdevall.opencodeplan.domain;
+package jmdevall.opencodeplan.domain.dependencygraph;
 
 
 public enum Label{

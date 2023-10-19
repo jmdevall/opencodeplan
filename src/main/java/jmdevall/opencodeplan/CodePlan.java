@@ -8,13 +8,12 @@ import jmdevall.opencodeplan.CodePlan.DeltaSeeds;
 import jmdevall.opencodeplan.CodePlan.Labels;
 import jmdevall.opencodeplan.CodePlan.Llm;
 import jmdevall.opencodeplan.CodePlan.Prompt;
-import jmdevall.opencodeplan.domain.BlockCode;
 import jmdevall.opencodeplan.domain.BI;
 import jmdevall.opencodeplan.domain.Fragment;
 import jmdevall.opencodeplan.domain.I;
-import jmdevall.opencodeplan.domain.Label;
-import jmdevall.opencodeplan.domain.Node;
 import jmdevall.opencodeplan.domain.dependencygraph.DependencyGraph;
+import jmdevall.opencodeplan.domain.dependencygraph.Label;
+import jmdevall.opencodeplan.domain.dependencygraph.Node;
 import jmdevall.opencodeplan.port.out.ConstructDependencyGraph;
 import jmdevall.opencodeplan.port.out.repository.Repository;
 import lombok.AllArgsConstructor;
@@ -34,7 +33,7 @@ public class CodePlan {
 
     }
 
-    Node selectOrAddNode(BlockCode b, boolean pending) {
+    Node selectOrAddNode(Node b, boolean pending) {
         // TODO:
         //return new Node();
         return null;
@@ -45,7 +44,7 @@ public class CodePlan {
     }
 
     class BlockRelationPair {
-        public BlockCode b;
+        public Node b;
         public Relation rel;
     }
 
@@ -55,7 +54,7 @@ public class CodePlan {
         }
     }
 
-    BlockRelationPairs getAffectedBlocks(List<Label> labels, BlockCode b, DependencyGraph d, DependencyGraph dp) {
+    BlockRelationPairs getAffectedBlocks(List<Label> labels, Node b, DependencyGraph d, DependencyGraph dp) {
         // TODO:
         return new BlockRelationPairs();
     }
@@ -82,7 +81,7 @@ public class CodePlan {
         return new Prompt();
     }
 
-    Context gatherContext(BlockCode b, Repository r, DependencyGraph d) {
+    Context gatherContext(Node b, Repository r, DependencyGraph d) {
         // TODO:
         return new Context();
     }
@@ -165,7 +164,7 @@ void codePlan(Repository r, DeltaSeeds deltaSeeds, Llm llm){
             BlockRelationPairs blockRelationPairs = getAffectedBlocks(labels, bi.b, d, dp);
             g.markCompleted(bi.b);
             blockRelationPairs.get().forEach(br -> {
-                Node n = bi.b.getNode();
+                Node n = bi.b;
                 Node m = selectOrAddNode(br.b, true);
                 addEdge(g, m, n, br.rel);
             });

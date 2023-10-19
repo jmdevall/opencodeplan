@@ -3,8 +3,8 @@ package jmdevall.opencodeplan.adapter.out;
 import java.io.File;
 
 import jmdevall.opencodeplan.domain.BI;
-import jmdevall.opencodeplan.domain.BlockCode;
 import jmdevall.opencodeplan.domain.Fragment;
+import jmdevall.opencodeplan.domain.dependencygraph.Node;
 import jmdevall.opencodeplan.port.out.repository.Repository;
 
 public class RepositoryFile implements Repository{
@@ -28,7 +28,7 @@ public class RepositoryFile implements Repository{
 	}
 
 	@Override
-	public Repository merge(Fragment newFragment, BlockCode b) {
+	public Repository merge(Fragment newFragment, Node b) {
 		// TODO Auto-generated method stub
 		return null;
 	}

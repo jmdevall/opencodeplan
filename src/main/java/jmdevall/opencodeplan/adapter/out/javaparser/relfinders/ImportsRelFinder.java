@@ -9,7 +9,7 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.FieldAccessExpr;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
-import jmdevall.opencodeplan.domain.Rel;
+import jmdevall.opencodeplan.domain.dependencygraph.Rel;
 
 
 //TODO: no se en java  a que se refiere exactamente. Lo dejo por el momento

@@ -25,8 +25,8 @@ import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 
 import jmdevall.opencodeplan.adapter.out.javaparser.Util;
-import jmdevall.opencodeplan.domain.Label;
-import jmdevall.opencodeplan.domain.Rel;
+import jmdevall.opencodeplan.domain.dependencygraph.Label;
+import jmdevall.opencodeplan.domain.dependencygraph.Rel;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

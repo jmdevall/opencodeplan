@@ -8,8 +8,8 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
 import jmdevall.opencodeplan.adapter.out.javaparser.Util;
-import jmdevall.opencodeplan.domain.Label;
-import jmdevall.opencodeplan.domain.Rel;
+import jmdevall.opencodeplan.domain.dependencygraph.Label;
+import jmdevall.opencodeplan.domain.dependencygraph.Rel;
 
 public class ChildParentRelFinder extends VoidVisitorAdapter<List<Rel>>{
 	

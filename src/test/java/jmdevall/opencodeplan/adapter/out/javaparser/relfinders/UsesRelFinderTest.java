@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import jmdevall.opencodeplan.adapter.out.javaparser.CuExplorer;
 import jmdevall.opencodeplan.adapter.out.javaparser.CuRelFinderVisitProcessor;
 import jmdevall.opencodeplan.adapter.out.javaparser.util.TestUtil;
-import jmdevall.opencodeplan.domain.Rel;
+import jmdevall.opencodeplan.domain.dependencygraph.Rel;
 
 public class UsesRelFinderTest {
 
