@@ -14,6 +14,7 @@ import jmdevall.opencodeplan.domain.I;
 import jmdevall.opencodeplan.domain.dependencygraph.DependencyGraph;
 import jmdevall.opencodeplan.domain.dependencygraph.Label;
 import jmdevall.opencodeplan.domain.dependencygraph.Node;
+import jmdevall.opencodeplan.domain.plangraph.PlanGraph;
 import jmdevall.opencodeplan.port.out.ConstructDependencyGraph;
 import jmdevall.opencodeplan.port.out.repository.Repository;
 import lombok.AllArgsConstructor;
