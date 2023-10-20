@@ -1,102 +1,47 @@
 package jmdevall.opencodeplan;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
-import jmdevall.opencodeplan.CodePlan.BlockRelationPairs;
-import jmdevall.opencodeplan.CodePlan.DeltaSeeds;
-import jmdevall.opencodeplan.CodePlan.Labels;
-import jmdevall.opencodeplan.CodePlan.Llm;
-import jmdevall.opencodeplan.CodePlan.Prompt;
+import jmdevall.opencodeplan.adapter.out.llm.Llm;
 import jmdevall.opencodeplan.domain.BI;
+import jmdevall.opencodeplan.domain.Context;
 import jmdevall.opencodeplan.domain.Fragment;
-import jmdevall.opencodeplan.domain.I;
 import jmdevall.opencodeplan.domain.dependencygraph.DependencyGraph;
 import jmdevall.opencodeplan.domain.dependencygraph.Label;
 import jmdevall.opencodeplan.domain.dependencygraph.Node;
-import jmdevall.opencodeplan.domain.plangraph.Obligation;
 import jmdevall.opencodeplan.domain.plangraph.PlanGraph;
+import jmdevall.opencodeplan.domain.promptmaker.PromptMaker;
 import jmdevall.opencodeplan.port.out.ConstructDependencyGraph;
 import jmdevall.opencodeplan.port.out.repository.Repository;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 
 @AllArgsConstructor
 public class CodePlan {
 
-    class Llm {
-        Fragment invoke(Prompt prompt) {
-            // TODO:
-            return new Fragment();
-        }
-    }
+ 
 
-    class DeltaSeed {
+    List<BlockRelationPair> getAffectedBlocks(List<Label> labels, Node b, DependencyGraph d, DependencyGraph dp) {
+    	//TODO:
+    	return new ArrayList<BlockRelationPair>();
 
     }
 
-    Node selectOrAddNode(Node b, boolean pending) {
-        // TODO:
-        //return new Node();
-        return null;
-    }
-
-    void addEdge(PlanGraph g, Node m, Node n, Relation rel) {
-        // TODO:
-    }
-
-    class BlockRelationPair {
-        public Node b;
-        public Relation rel;
-    }
-
-    class BlockRelationPairs {
-        List<BlockRelationPair> get() {
-            return Collections.emptyList();
-        }
-    }
-
-    BlockRelationPairs getAffectedBlocks(List<Label> labels, Node b, DependencyGraph d, DependencyGraph dp) {
-        // TODO:
-        return new BlockRelationPairs();
-    }
-
-    class Context {
-
-    }
-
-    class Prompt {
-
-    }
-
-    class Labels {
-
-    }
 
     List<Label> classifyChanges(Fragment fragment, Fragment newFragment) {
         // TODO:
         return Collections.<Label>emptyList();
     }
 
-    Prompt makePrompt(Fragment fragment, I i, Context context) {
-        // TODO:
-        return new Prompt();
-    }
 
-    Context gatherContext(Node b, Repository r, DependencyGraph d) {
-        // TODO:
-        return new Context();
-    }
 
     // TODO: oracle
     DeltaSeeds oracle(Repository r) {
         return new DeltaSeeds();
     }
 
-    class Relation {
 
-    }
 
     class DeltaSeeds {
         boolean isEmpty() {
@@ -129,12 +74,12 @@ public class CodePlan {
  * 
  */
     
-void codePlan(Repository r, DeltaSeeds deltaSeeds, Llm llm){
+void codePlan(Repository r, DeltaSeeds deltaSeeds, Llm llm, PromptMaker pm){
     PlanGraph g = new PlanGraph();
     DependencyGraph d = constructDependencyGraph.construct(r);
      while (!deltaSeeds.isEmpty()){
         initializePlanGraph(g, deltaSeeds);
-        adaptivePlanAndExecute(r, d, g,llm);
+        adaptivePlanAndExecute(r, d, g,llm, pm);
         deltaSeeds = oracle(r);
      }
 }
@@ -145,31 +90,32 @@ void codePlan(Repository r, DeltaSeeds deltaSeeds, Llm llm){
         });
     }
 
-    void adaptivePlanAndExecute(Repository r, DependencyGraph d, PlanGraph g, Llm llm) {
+    void adaptivePlanAndExecute(Repository r, DependencyGraph d, PlanGraph g, Llm llm, PromptMaker promptMaker) {
         while (g.hasNodesWithPendingStatus()) {
 
             BI bi = g.getNextPending().get().getBi();
             // First step: extract fragment of code
             Fragment fragment = r.extractCodeFragment(bi);
             // Second step: gather context of the edit
-            Context context = gatherContext(bi.getB(), r, d);
+            Context context = Context.gatherContext(bi.getB(), r, d);
             // Third step: use the LLM to get edited code fragment
-            Prompt prompt = makePrompt(fragment, bi.getI(), context);
+            String prompt = promptMaker.makePrompt(fragment, bi.getI(), context);
             Fragment newFragment = llm.invoke(prompt);
             // Fourth step: merge the updated code fragment into R
 
             r = r.merge(newFragment, bi.getB());
+            
             List<Label> labels = classifyChanges(fragment, newFragment);
             DependencyGraph dp = d.updateDependencyGraph(labels, fragment, newFragment, bi.getB());
 
             // Fifth step: adaptively plan and propogate the effect of the edit on dependant
             // code
-            BlockRelationPairs blockRelationPairs = getAffectedBlocks(labels, bi.getB(), d, dp);
+            List<BlockRelationPair> blockRelationPairs = getAffectedBlocks(labels, bi.getB(), d, dp);
             g.markCompleted(bi.getB());
-            blockRelationPairs.get().forEach(br -> {
+            
+            blockRelationPairs.forEach(br -> {
                 Node n = bi.getB();
-                Node m = selectOrAddNode(br.b, true);
-                addEdge(g, m, n, br.rel);
+                g.addPendingChild(n, br.b, br.cmi);
             });
 
             d = dp;

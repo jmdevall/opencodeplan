@@ -1,6 +1,7 @@
 package jmdevall.opencodeplan.domain;
 
 import jmdevall.opencodeplan.domain.dependencygraph.Node;
+import jmdevall.opencodeplan.domain.instruction.I;
 import lombok.Builder;
 import lombok.Getter;
 

@@ -54,5 +54,12 @@ public class PlanGraph {
 			}
 		}
 	}
+	
+	public void addPendingChild(Node parent, Node child, CMI cmi){
+		for(Obligation o:obligationRoots) {
+			o.searchRecursiveToAddPendingChild(parent,child,cmi);
+		}
+		
+	}
 
 }

@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Optional;
 
 import jmdevall.opencodeplan.domain.BI;
-import jmdevall.opencodeplan.domain.I;
 import jmdevall.opencodeplan.domain.dependencygraph.Node;
+import jmdevall.opencodeplan.domain.instruction.I;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -86,5 +86,23 @@ public class Obligation {
 			}
 		}
 		return false;
+	}
+
+	public void searchRecursiveToAddPendingChild(Node parent, Node child, CMI elcmi) {
+		if(this.b==parent) {
+			Obligation o=
+					Obligation.builder()
+					.b(child)
+					.i(null)
+					.cmi(elcmi)
+					.status(Status.PENDING)
+					.build();
+		
+			this.childrens.add(o);
+		}
+		for(Obligation o:this.childrens) {
+			searchRecursiveToAddPendingChild(parent,child,elcmi);
+		}
+		
 	}
 }
