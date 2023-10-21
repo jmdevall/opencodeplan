@@ -32,7 +32,7 @@ public class InstantiateRelFinderTest {
 		LogRelUtil.logRels(rels);
 		
 		assertEquals(2,rels.size());
-		assertEquals("Rel(origin=NodeId(file=testbench.testutil.instantiate.ExampleClass, begin=Position(line=11, column=3), end=Position(line=11, column=20)), destiny=NodeId(file=testbench.testutil.instantiate.ExampleClass, begin=Position(line=5, column=2), end=Position(line=8, column=2)), label=CONSTRUCTS)",rels.get(0).toString());
+		assertEquals("Rel(origin=NodeId(file=testbench/testutil/instantiate/ExampleClass.java, range=[11,3]->[11,20]), destiny=NodeId(file=testbench/testutil/instantiate/ExampleClass.java, range=[5,2]->[8,2]), label=CONSTRUCTS)",rels.get(0).toString());
 	}
 
 

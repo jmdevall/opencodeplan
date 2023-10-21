@@ -31,7 +31,7 @@ public class BaseClassRelFinderTest {
 		LogRelUtil.logRels(rels);
 		
 		assertEquals(2,rels.size());
-		assertEquals("Rel(origin=NodeId(file=testbench.testutil.implementation.ExampleInterface, begin=Position(line=3, column=1), end=Position(line=5, column=1)), destiny=NodeId(file=testbench.testutil.implementation.ExampleImpl, begin=Position(line=3, column=1), end=Position(line=8, column=1)), label=BASE_CLASS_OF)",rels.get(0).toString());
+		assertEquals("Rel(origin=NodeId(file=testbench/testutil/implementation/ExampleInterface.java, range=[3,1]->[5,1]), destiny=NodeId(file=testbench/testutil/implementation/ExampleImpl.java, range=[3,1]->[8,1]), label=BASE_CLASS_OF)",rels.get(0).toString());
 	}
 	
 	@Test
@@ -50,7 +50,7 @@ public class BaseClassRelFinderTest {
 		
 		assertEquals(2,rels.size());
 		assertEquals(
-				"Rel(origin=NodeId(file=testbench.testutil.extension.BaseExample, begin=Position(line=3, column=1), end=Position(line=7, column=1)), destiny=NodeId(file=testbench.testutil.extension.ExtensionExample, begin=Position(line=3, column=1), end=Position(line=12, column=1)), label=BASE_CLASS_OF)"
+				"Rel(origin=NodeId(file=testbench/testutil/extension/BaseExample.java, range=[3,1]->[7,1]), destiny=NodeId(file=testbench/testutil/extension/ExtensionExample.java, range=[3,1]->[12,1]), label=BASE_CLASS_OF)"
 				,rels.get(0).toString());
 	}
 }

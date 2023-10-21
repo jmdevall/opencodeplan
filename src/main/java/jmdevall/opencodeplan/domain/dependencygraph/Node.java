@@ -18,17 +18,15 @@ public class Node {
 	public void debugRecursive(int level) {
     	printlevel(level);
     	if(this.getChildren().isEmpty()) {
-        	System.out.println(String.format("%s %s: [%d,%d]->[%d,%d] , %s"
+        	System.out.println(String.format("%s %s: %s , %s"
         			,this.getType(), id.getFile()
-        			,id.getBegin().getLine(),id.getBegin().getColumn()
-        			,id.getEnd().getLine(),id.getEnd().getColumn()
+        			,this.id.getRange().toString()
         			,this.getContent()));
     	}
     	else {
-        	System.out.println(String.format("%s %s: [%d,%d]->[%d,%d]"
+        	System.out.println(String.format("%s %s: %s"
         			,this.getType(), id.getFile()
-        			,id.getBegin().getLine(),id.getBegin().getColumn()
-        			,id.getEnd().getLine(),id.getEnd().getColumn()));
+        			,this.id.getRange().toString()));
     	}
     	
     	
@@ -36,6 +34,7 @@ public class Node {
     		child.debugRecursive(level+1);
     	}
     }
+	
     
     private void printlevel(int level) {
     	for(int i=0;i<level;i++) {
@@ -60,30 +59,6 @@ public class Node {
 		return Objects.equals(id, other.id);
 	}
     
-	/*
-	public Node extractCodeFragment(Node root, Node blockB) {
-	    // Crear un nuevo nodo que representará el fragmento de código
-	    Node codeFragment = new Node();
-	    codeFragment.type = root.type;
-	    codeFragment.content = root.content;
-	    codeFragment.children = new ArrayList<>();
 
-	    // Recorrer el árbol AST y procesar cada nodo
-	    for (Node child : root.children) {
-	        if (child.equals(blockB)) {
-	            // Si el nodo es el bloque de código B, agregarlo al fragmento de código
-	            codeFragment.children.add(child);
-	        } else {
-	            // Si el nodo no es el bloque de código B, "plegar" el subárbol
-	            Node foldedSubtree = extractCodeFragment(child, blockB);
-	            if (foldedSubtree != null) {
-	                codeFragment.children.add(foldedSubtree);
-	            }
-	        }
-	    }
-
-	    return codeFragment;
-	}
-    */
     
 }

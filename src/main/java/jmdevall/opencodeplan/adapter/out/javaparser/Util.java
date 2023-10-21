@@ -20,6 +20,7 @@ import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeS
 
 import jmdevall.opencodeplan.domain.dependencygraph.NodeId;
 import jmdevall.opencodeplan.domain.dependencygraph.Position;
+import jmdevall.opencodeplan.domain.dependencygraph.Range;
 
 public class Util {
 
@@ -37,8 +38,11 @@ public class Util {
 		
 		return NodeId.builder()
 			.file(filename)
-			.begin(toDomainPosition(node.getBegin().get()))
-			.end(toDomainPosition(node.getEnd().get()))
+			.range(Range.builder()
+					.begin(toDomainPosition(node.getBegin().get()))
+					.end(toDomainPosition(node.getEnd().get()))
+					.build()
+				   )
 			.build();
 	}
 	

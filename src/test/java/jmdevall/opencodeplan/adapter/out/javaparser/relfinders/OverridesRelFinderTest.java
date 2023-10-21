@@ -32,7 +32,7 @@ public class OverridesRelFinderTest {
 		LogRelUtil.logRels(rels);
 		
 		assertEquals(4,rels.size());
-		assertEquals("Rel(origin=NodeId(file=testbench.testutil.overrides.B, begin=Position(line=6, column=2), end=Position(line=8, column=2)), destiny=NodeId(file=testbench.testutil.overrides.A, begin=Position(line=6, column=2), end=Position(line=8, column=2)), label=OVERRIDES)",rels.get(0).toString());
+		assertEquals("Rel(origin=NodeId(file=testbench/testutil/overrides/C.java, range=[6,2]->[8,2]), destiny=NodeId(file=testbench/testutil/overrides/B.java, range=[6,2]->[8,2]), label=OVERRIDES)",rels.get(0).toString());
 	}
 
 

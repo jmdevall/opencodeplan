@@ -11,6 +11,5 @@ import lombok.ToString;
 @ToString
 public class NodeId {
 	private String file;
-	private Position begin;
-	private Position end;
+	private Range range;
 }
