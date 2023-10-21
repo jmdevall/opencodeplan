@@ -62,7 +62,7 @@ public class CodePlan {
      */
 
     ConstructDependencyGraph constructDependencyGraph;
-    
+    PromptMaker promptMaker;
     
 /**
  * 
@@ -79,7 +79,7 @@ void codePlan(Repository r, DeltaSeeds deltaSeeds, Llm llm, PromptMaker pm){
     DependencyGraph d = constructDependencyGraph.construct(r);
      while (!deltaSeeds.isEmpty()){
         initializePlanGraph(g, deltaSeeds);
-        adaptivePlanAndExecute(r, d, g,llm, pm);
+        adaptivePlanAndExecute(r, d, g,llm);
         deltaSeeds = oracle(r);
      }
 }
@@ -90,7 +90,7 @@ void codePlan(Repository r, DeltaSeeds deltaSeeds, Llm llm, PromptMaker pm){
         });
     }
 
-    void adaptivePlanAndExecute(Repository r, DependencyGraph d, PlanGraph g, Llm llm, PromptMaker promptMaker) {
+    void adaptivePlanAndExecute(Repository r, DependencyGraph d, PlanGraph g, Llm llm) {
         while (g.hasNodesWithPendingStatus()) {
 
             BI bi = g.getNextPending().get().getBi();
