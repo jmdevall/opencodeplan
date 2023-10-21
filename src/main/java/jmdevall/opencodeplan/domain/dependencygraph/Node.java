@@ -60,6 +60,30 @@ public class Node {
 		return Objects.equals(id, other.id);
 	}
     
-    
+	/*
+	public Node extractCodeFragment(Node root, Node blockB) {
+	    // Crear un nuevo nodo que representará el fragmento de código
+	    Node codeFragment = new Node();
+	    codeFragment.type = root.type;
+	    codeFragment.content = root.content;
+	    codeFragment.children = new ArrayList<>();
+
+	    // Recorrer el árbol AST y procesar cada nodo
+	    for (Node child : root.children) {
+	        if (child.equals(blockB)) {
+	            // Si el nodo es el bloque de código B, agregarlo al fragmento de código
+	            codeFragment.children.add(child);
+	        } else {
+	            // Si el nodo no es el bloque de código B, "plegar" el subárbol
+	            Node foldedSubtree = extractCodeFragment(child, blockB);
+	            if (foldedSubtree != null) {
+	                codeFragment.children.add(foldedSubtree);
+	            }
+	        }
+	    }
+
+	    return codeFragment;
+	}
+    */
     
 }

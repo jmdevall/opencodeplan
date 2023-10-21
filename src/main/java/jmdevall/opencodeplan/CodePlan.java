@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.List;
 
 import jmdevall.opencodeplan.adapter.out.llm.Llm;
-import jmdevall.opencodeplan.adapter.out.oracle.OracleDefault;
 import jmdevall.opencodeplan.domain.BI;
 import jmdevall.opencodeplan.domain.Context;
 import jmdevall.opencodeplan.domain.Fragment;
@@ -21,7 +20,6 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class CodePlan {
-
  
 
     List<BlockRelationPair> getAffectedBlocks(List<Label> labels, Node b, DependencyGraph d, DependencyGraph dp) {

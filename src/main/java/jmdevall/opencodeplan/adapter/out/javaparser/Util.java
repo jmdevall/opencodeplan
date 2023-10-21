@@ -121,7 +121,7 @@ public class Util {
 		if(packageDeclaration.isEmpty()) {
 			return publicType;
 		}
-		return String.format("%s.%s",packageDeclaration,publicType);
+		return String.format("%s.%s",packageDeclaration,publicType).replace(".", File.separator) + ".java";
 		
 	}
 
