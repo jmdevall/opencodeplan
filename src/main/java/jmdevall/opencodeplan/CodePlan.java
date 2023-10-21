@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import jmdevall.opencodeplan.adapter.out.llm.Llm;
+import jmdevall.opencodeplan.adapter.out.oracle.OracleDefault;
 import jmdevall.opencodeplan.domain.BI;
 import jmdevall.opencodeplan.domain.Context;
 import jmdevall.opencodeplan.domain.Fragment;
@@ -14,6 +15,7 @@ import jmdevall.opencodeplan.domain.dependencygraph.Node;
 import jmdevall.opencodeplan.domain.plangraph.PlanGraph;
 import jmdevall.opencodeplan.domain.promptmaker.PromptMaker;
 import jmdevall.opencodeplan.port.out.ConstructDependencyGraph;
+import jmdevall.opencodeplan.port.out.oracle.Oracle;
 import jmdevall.opencodeplan.port.out.repository.Repository;
 import lombok.AllArgsConstructor;
 
@@ -33,28 +35,7 @@ public class CodePlan {
         // TODO:
         return Collections.<Label>emptyList();
     }
-
-
-
-    // TODO: oracle
-    DeltaSeeds oracle(Repository r) {
-        return new DeltaSeeds();
-    }
-
-
-
-    class DeltaSeeds {
-        boolean isEmpty() {
-            // TODO:
-            return true;
-        }
-
-        List<BI> getBIs() {
-            // TODO:
-            return Collections.emptyList();
-        }
-
-    }
+   
 
     /*
      * Inputs: R is the , Delta_seeds is a set of seed edit
@@ -63,6 +44,7 @@ public class CodePlan {
 
     ConstructDependencyGraph constructDependencyGraph;
     PromptMaker promptMaker;
+    Oracle oracle;
     
 /**
  * 
@@ -80,7 +62,7 @@ void codePlan(Repository r, DeltaSeeds deltaSeeds, Llm llm, PromptMaker pm){
      while (!deltaSeeds.isEmpty()){
         initializePlanGraph(g, deltaSeeds);
         adaptivePlanAndExecute(r, d, g,llm);
-        deltaSeeds = oracle(r);
+        deltaSeeds = oracle.oracle(r);
      }
 }
 
