@@ -1,7 +1,16 @@
 package jmdevall.opencodeplan.domain;
 
-import jmdevall.opencodeplan.domain.dependencygraph.Node;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import jmdevall.opencodeplan.domain.dependencygraph.Node;
+import lombok.Builder;
+import lombok.Getter;
+
+
+@Getter
+@Builder
 public class Fragment {
 
 	/**
@@ -15,30 +24,37 @@ public class Fragment {
 	*/
 	private Node node;
 	
-	/*
-	public Node extractCodeFragment(Node root, Node blockB) {
-	    // Crear un nuevo nodo que representará el fragmento de código
-	    Node codeFragment = new Node();
-	    codeFragment.type = root.type;
-	    codeFragment.content = root.content;
-	    codeFragment.children = new ArrayList<>();
-
-	    // Recorrer el árbol AST y procesar cada nodo
-	    for (Node child : root.children) {
-	        if (child.equals(blockB)) {
-	            // Si el nodo es el bloque de código B, agregarlo al fragmento de código
-	            codeFragment.children.add(child);
-	        } else {
-	            // Si el nodo no es el bloque de código B, "plegar" el subárbol
-	            Node foldedSubtree = extractCodeFragment(child, blockB);
-	            if (foldedSubtree != null) {
-	                codeFragment.children.add(foldedSubtree);
-	            }
-	        }
-	    }
-
-	    return codeFragment;
+	
+	public static Fragment newFragment(Node cu, Node block) {
+		return Fragment.builder()
+				.node(extractCodeFragment(cu,block))
+				.build();
 	}
-    */
+	
+	public static Node extractCodeFragment(Node root, Node block) {
+	    
+	    Stream<Node> consideredChildren;
+	    
+	    if(root.getType().equals("MethodDeclaration") && !root.containsByPosition(block)) {
+	    	consideredChildren=root.getChildren()
+	    			.stream().filter(
+	    					(c)->!c.getType().equals("BlockStmt"));
+	    }else {
+	    	consideredChildren=root.getChildren().stream();
+	    }
+	    
+	    List<Node> prunedChildren=consideredChildren
+	    		.map(c->extractCodeFragment(c,block))
+	    		.collect(Collectors.toList());
+	
+	    return Node.builder()
+	    		.id(root.getId())
+	    		.type(root.getType())
+	    		.content(root.getContent())
+	    		.children(prunedChildren)
+	    		.build();
+	
+	}
+	
 
 }

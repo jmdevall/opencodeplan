@@ -8,6 +8,6 @@ public class LlmDummy implements Llm {
     @Override
 	public Fragment invoke(String prompt) {
         // TODO:
-        return new Fragment();
+        return null;
     }
 }

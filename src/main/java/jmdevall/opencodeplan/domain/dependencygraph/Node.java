@@ -35,6 +35,9 @@ public class Node {
     	}
     }
 	
+	public boolean containsByPosition(Node other) {
+		return this.id.getRange().contains(other.id.getRange());
+	}
     
     private void printlevel(int level) {
     	for(int i=0;i<level;i++) {
