@@ -101,7 +101,7 @@ public class Obligation {
 			this.childrens.add(o);
 		}
 		for(Obligation o:this.childrens) {
-			searchRecursiveToAddPendingChild(parent,child,elcmi);
+			o.searchRecursiveToAddPendingChild(parent,child,elcmi);
 		}
 		
 	}

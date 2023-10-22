@@ -6,7 +6,7 @@ import java.util.Objects;
 import lombok.Builder;
 import lombok.Getter;
 
-@Builder
+@Builder(toBuilder=true)
 @Getter
 public class Node {
     private NodeId id;
@@ -27,6 +27,7 @@ public class Node {
         	System.out.println(String.format("%s %s: %s"
         			,this.getType(), id.getFile()
         			,this.id.getRange().toString()));
+        	System.out.println(this.getContent());
     	}
     	
     	
@@ -62,6 +63,9 @@ public class Node {
 		return Objects.equals(id, other.id);
 	}
     
-
-    
+/*
+    public String prompt() {
+    	this.getContent();
+    	
+    }*/
 }

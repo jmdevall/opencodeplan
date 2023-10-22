@@ -56,5 +56,13 @@ public class Fragment {
 	
 	}
 	
+	/**
+	private Node skipNode(Node n) {
+		n.toBuilder()
+		.type("Skip"+n.getType())
+		.content(n.content)
+		Node.builder().id(n.getId().builder())
+	}
+	*/
 
 }

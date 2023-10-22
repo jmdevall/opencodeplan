@@ -53,7 +53,6 @@ public class PlanGraph {
 		for (Obligation o : obligationRoots) {
 			o.searchRecursiveToAddPendingChild(parent, child, cmi);
 		}
-
 	}
 
 	public TemporalContext getTemporalContext(Node targetNode) {
