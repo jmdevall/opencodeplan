@@ -8,8 +8,15 @@ import lombok.ToString;
 @Builder(toBuilder = true)
 @Getter
 @EqualsAndHashCode
-@ToString
 public class NodeId {
+	
 	private String file;
 	private Range range;
+	
+	@Override
+	public String toString() {
+		return "NodeId(file=" + file + ", range=" + range + ")";
+	}
+	
+	
 }

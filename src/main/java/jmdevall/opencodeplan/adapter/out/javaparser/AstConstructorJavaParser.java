@@ -17,20 +17,26 @@ public class AstConstructorJavaParser implements CuProcessor{
 	}
 
 	private jmdevall.opencodeplan.domain.dependencygraph.Node toDomainNode(com.github.javaparser.ast.Node node){
-    	ArrayList<Node> children=new ArrayList<Node>();
+    	return toDomainNode(node,null);
+    }
+
+	private jmdevall.opencodeplan.domain.dependencygraph.Node toDomainNode(com.github.javaparser.ast.Node node,jmdevall.opencodeplan.domain.dependencygraph.Node parent) {
+
+        Node domainNode=Node.builder()
+    		.id(Util.toNodeId(node))
+    		.type(node.getMetaModel().getTypeName())
+    		.content(node.toString())
+    		.parent(parent)
+    	    .build();
+
+		ArrayList<Node> children=new ArrayList<Node>();
     	
         for(com.github.javaparser.ast.Node child: node.getChildNodes()) {
         	Node childomain=toDomainNode(child);
             children.add(childomain);
         }
        
-        Node domainNode=Node.builder()
-    		.id(Util.toNodeId(node))
-    		.type(node.getMetaModel().getTypeName())
-    		.content(node.toString())
-    		.children(children)
-    	    .build();
-
+        domainNode.setChildren(children);
         return domainNode;
     }
 

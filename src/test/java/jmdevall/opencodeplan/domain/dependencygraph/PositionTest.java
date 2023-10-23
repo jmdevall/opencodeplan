@@ -56,4 +56,14 @@ public class PositionTest {
 	public void nose() {
 		assertEquals(1, Integer.compare(10, 9));
 	}
+	
+	@Test
+	public void positionAbsolute() {
+		String text="12345\n789";
+		
+		assertEquals(0,Position.newPosition(1, 1).absolute(text));
+		assertEquals(2,Position.newPosition(1, 3).absolute(text));
+		assertEquals(6,Position.newPosition(2, 1).absolute(text));
+		
+	}
 }

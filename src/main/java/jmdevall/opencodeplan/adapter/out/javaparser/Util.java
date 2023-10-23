@@ -36,13 +36,30 @@ public class Util {
 		CompilationUnit compilationUnit = getCompilationUnit(node);
 		String filename = getFileNameOfCompilationUnit(compilationUnit);
 		
+		Range absoluteNode=Range.builder()
+				.begin(toDomainPosition(node.getBegin().get()))
+				.end(toDomainPosition(node.getEnd().get()))
+				.build();
+
+		/*
+		Range relative;
+		if(node.hasParentNode()) {
+			Range absoluteParent=Range.builder()
+					.begin(toDomainPosition(node.getParentNode().get().getBegin().get()))
+					.end(toDomainPosition(node.getParentNode().get().getEnd().get()))
+					.build();
+		   
+			relative=absoluteParent.minus(absoluteNode);
+		}
+		else {
+		   
+			relative=absoluteNode.minus(absoluteNode);
+		}
+		*/
 		return NodeId.builder()
 			.file(filename)
-			.range(Range.builder()
-					.begin(toDomainPosition(node.getBegin().get()))
-					.end(toDomainPosition(node.getEnd().get()))
-					.build()
-				   )
+			.range(absoluteNode)
+			//.relative(relative)
 			.build();
 	}
 	

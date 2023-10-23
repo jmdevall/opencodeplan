@@ -14,8 +14,6 @@ public class FragmentTest {
 		
 	}
 	
-	
-	
 	private String str1=
 			"abcde casidro\n"+
 	        "foo bar\n"+
@@ -68,5 +66,11 @@ public class FragmentTest {
 	"lala\n"+
 	"mem mm";
 	      
+	@Test
+	public void nosE() {
+		StringBuilder original = new StringBuilder("abcdefghij");
+		original.replace(3, 6, "foo");
+		System.out.println(original); // Imprime "abcfooghij"
+	}
 			
 }

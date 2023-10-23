@@ -12,22 +12,34 @@ public class Node {
     private NodeId id;
     
 	public String type;
-	public String content;
+	public Node parent;
 	public List<Node> children;
+	private String content;
+	private Arange arange=null;
+	
+	public Arange getArange(){
+		if(this.arange==null) {
+			arange=new Arange(
+					this.range.getBegin().absolute(content),
+					this.range.getEnd().absolute(content));
+		}
+		return this.arange;
+	}
+	
 	
 	public void debugRecursive(int level) {
     	printlevel(level);
     	if(this.getChildren().isEmpty()) {
-        	System.out.println(String.format("%s %s: %s , %s"
+        	System.out.println(String.format("[%s]+[%s]: A%s , \n%s"
         			,this.getType(), id.getFile()
         			,this.id.getRange().toString()
         			,this.getContent()));
     	}
     	else {
-        	System.out.println(String.format("%s %s: %s"
+        	System.out.println(String.format("[%s]+[%s]: A%s , "
         			,this.getType(), id.getFile()
-        			,this.id.getRange().toString()));
-        	System.out.println(this.getContent());
+        			,this.id.getRange().toString()
+        	,this.getContent()));
     	}
     	
     	
@@ -62,10 +74,24 @@ public class Node {
 		Node other = (Node) obj;
 		return Objects.equals(id, other.id);
 	}
+
+	public void setChildren(List<Node> children) {
+		this.children = children;
+	}
     
+
+
 /*
     public String prompt() {
-    	this.getContent();
     	
-    }*/
+    	StringBuilder original = new StringBuilder(this.getContent());
+    	for(Node child:this.children) {
+    		int from=convertirLineaColumnaAIndice(content, child.getId().getRelative().getBegin().getLine(), child.getId().getRelative().getBegin().getColumn());
+    		int to=convertirLineaColumnaAIndice(content, child.getId().getRelative().getEnd().getLine(), child.getId().getRelative().getEnd().getColumn());
+    		original.replace(from, to, child.prompt());
+    	}
+    	return original.toString();
+
+    }
+    */
 }

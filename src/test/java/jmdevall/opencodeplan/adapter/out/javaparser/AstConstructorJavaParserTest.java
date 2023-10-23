@@ -1,5 +1,6 @@
 package jmdevall.opencodeplan.adapter.out.javaparser;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
@@ -41,6 +42,8 @@ public class AstConstructorJavaParserTest {
 		ArrayList<String> ficheros=new ArrayList<String>(forest.keySet());
 		Node cu=forest.get(ficheros.get(0));
 		cu.debugRecursive(0);
+		
+		//assertEquals(cu.getContent(),cu.prompt());
 		
 	}
 	

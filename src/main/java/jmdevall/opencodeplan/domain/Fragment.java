@@ -50,13 +50,13 @@ public class Fragment {
 	    return Node.builder()
 	    		.id(root.getId())
 	    		.type(root.getType())
-	    		.content(root.getContent())
+	    		//.content(root.getId().getContent())
 	    		.children(prunedChildren)
 	    		.build();
 	
 	}
 	
-	/**
+	/*
 	private Node skipNode(Node n) {
 		n.toBuilder()
 		.type("Skip"+n.getType())

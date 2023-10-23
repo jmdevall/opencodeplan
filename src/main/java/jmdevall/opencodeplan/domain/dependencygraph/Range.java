@@ -35,6 +35,13 @@ public class Range {
         return Position.comparator().compare(this.begin, r.begin) <= 0 
         		&& Position.comparator().compare(this.end, r.end) >= 0;
 	}
+
+	public Range minus(Range absoluteNode) {
+		int beglin = absoluteNode.begin.getLine()- this.begin.getLine();
+		return Range.newRange(
+				beglin, beglin==0?absoluteNode.begin.getColumn()-this.begin.getColumn():absoluteNode.begin.getColumn()
+			  , absoluteNode.end.getLine()  - this.begin.getLine(), absoluteNode.end.getColumn() -this.begin.getColumn());
+	}
 	
 
 }

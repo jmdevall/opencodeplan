@@ -29,4 +29,22 @@ public class Position {
             }
         };
     }
+    
+	public int absolute(String texto) {
+	    int indice = 0;
+	    int lineaActual = 1;
+	    int columnaActual = 1;
+
+	    while (indice < texto.length() && (lineaActual < line || (lineaActual == line && columnaActual < column))) {
+	        if (texto.charAt(indice) == '\n') {
+	            lineaActual++;
+	            columnaActual = 1;
+	        } else {
+	            columnaActual++;
+	        }
+	        indice++;
+	    }
+
+	    return indice;
+	}
 }

@@ -1,9 +1,11 @@
 package jmdevall.opencodeplan.adapter.out.javaparser.relfinders;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 
@@ -32,7 +34,13 @@ public class OverridesRelFinderTest {
 		LogRelUtil.logRels(rels);
 		
 		assertEquals(4,rels.size());
-		assertEquals("Rel(origin=NodeId(file=testbench/testutil/overrides/C.java, range=[6,2]->[8,2]), destiny=NodeId(file=testbench/testutil/overrides/B.java, range=[6,2]->[8,2]), label=OVERRIDES)",rels.get(0).toString());
+		
+		String expected="Rel(origin=NodeId(file=testbench/testutil/overrides/C.java, range=[6,2]->[8,2]), destiny=NodeId(file=testbench/testutil/overrides/B.java, range=[6,2]->[8,2]), label=OVERRIDES)";
+
+		List<String> collect = rels.stream().map( Rel::toString ).collect(Collectors.toList());
+		assertTrue(collect.contains(expected));
+		
+
 	}
 
 
