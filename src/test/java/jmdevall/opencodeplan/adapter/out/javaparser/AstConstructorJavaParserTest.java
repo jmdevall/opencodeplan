@@ -43,7 +43,7 @@ public class AstConstructorJavaParserTest {
 		Node cu=forest.get(ficheros.get(0));
 		cu.debugRecursive(0);
 		
-		//assertEquals(cu.getContent(),cu.prompt());
+		assertEquals(cu.getContent(),cu.prompt());
 		
 	}
 	

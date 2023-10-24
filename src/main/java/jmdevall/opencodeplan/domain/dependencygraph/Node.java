@@ -5,9 +5,11 @@ import java.util.Objects;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 @Builder(toBuilder=true)
 @Getter
+@Slf4j
 public class Node {
     private NodeId id;
     
@@ -15,31 +17,24 @@ public class Node {
 	public Node parent;
 	public List<Node> children;
 	private String content;
-	private Arange arange=null;
-	
-	public Arange getArange(){
-		if(this.arange==null) {
-			arange=new Arange(
-					this.range.getBegin().absolute(content),
-					this.range.getEnd().absolute(content));
-		}
-		return this.arange;
-	}
+	private Rrange rrange;
 	
 	
 	public void debugRecursive(int level) {
     	printlevel(level);
     	if(this.getChildren().isEmpty()) {
-        	System.out.println(String.format("[%s]+[%s]: A%s , \n%s"
+        	System.out.println(String.format("[%s]+[%s]: A%s R%s, \n[%s]"
         			,this.getType(), id.getFile()
         			,this.id.getRange().toString()
+        			,this.rrange.toString()
         			,this.getContent()));
     	}
     	else {
-        	System.out.println(String.format("[%s]+[%s]: A%s , "
+        	System.out.println(String.format("[%s]+[%s]: A%s R[%s], \n[%s]"
         			,this.getType(), id.getFile()
         			,this.id.getRange().toString()
-        	,this.getContent()));
+        			,this.rrange.toString()
+        	        ,this.getContent()));
     	}
     	
     	
@@ -81,17 +76,22 @@ public class Node {
     
 
 
-/*
     public String prompt() {
-    	
+  
+    	log.debug(this.getType()+" ["+this.getContent()+"] "+this.getContent().length());
     	StringBuilder original = new StringBuilder(this.getContent());
+    	
+    	
     	for(Node child:this.children) {
-    		int from=convertirLineaColumnaAIndice(content, child.getId().getRelative().getBegin().getLine(), child.getId().getRelative().getBegin().getColumn());
-    		int to=convertirLineaColumnaAIndice(content, child.getId().getRelative().getEnd().getLine(), child.getId().getRelative().getEnd().getColumn());
-    		original.replace(from, to, child.prompt());
+       		String childprompt = child.prompt();
+       		log.info("childprompt="+childprompt);
+			original.replace(child.getRrange().getBegin(), child.getRrange().getEnd(), childprompt);
     	}
-    	return original.toString();
+    	String string = original.toString();
+    	
+    	log.info("sustituido="+string);
+		return string;
 
     }
-    */
+    
 }

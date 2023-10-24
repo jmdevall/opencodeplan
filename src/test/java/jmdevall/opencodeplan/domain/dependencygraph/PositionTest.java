@@ -66,4 +66,39 @@ public class PositionTest {
 		assertEquals(6,Position.newPosition(2, 1).absolute(text));
 		
 	}
+	
+	@Test
+	public void positionAbsolute2() {
+		String text="12345";
+		
+		assertEquals(0,Position.newPosition(1, 1).absolute(text));
+		assertEquals(2,Position.newPosition(1, 3).absolute(text));
+		
+	}
+	
+	@Test
+	public void positionAbsolute3() {
+		String text="12345\n789\n012";
+		
+		assertEquals(0,Position.newPosition(1, 1).absolute(text));
+		assertEquals(2,Position.newPosition(1, 3).absolute(text));
+		
+	}
+	
+	String clase=
+	  "package testbench.testutil.overrides;\n"
+	+ "\n"
+	+ "public class A {\n"
+	+ "\n"
+	+ "public void foo() {\n"
+	+ "    System.out.println(\"foo\");\n"
+	+ "    \n}"
+	+ "\n}";
+	@Test
+	public void positionAbsoluteClase() {
+		
+		assertEquals(0,Position.newPosition(1, 1).absolute(clase));
+		
+	}
+	
 }

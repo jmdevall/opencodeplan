@@ -30,13 +30,14 @@ public class Position {
         };
     }
     
+    /*
 	public int absolute(String texto) {
 	    int indice = 0;
 	    int lineaActual = 1;
 	    int columnaActual = 1;
 
 	    while (indice < texto.length() && (lineaActual < line || (lineaActual == line && columnaActual < column))) {
-	        if (texto.charAt(indice) == '\n') {
+	        if (texto.charAt(indice) == '\n' ) {
 	            lineaActual++;
 	            columnaActual = 1;
 	        } else {
@@ -47,4 +48,60 @@ public class Position {
 
 	    return indice;
 	}
+	*/
+    /*
+	public int absolute(String texto) {
+	    int indice = 0;
+	    int lineaActual = 1;
+	    int columnaActual = 1;
+
+	    while (indice < texto.length() && (lineaActual < line || (lineaActual == line && columnaActual < column))) {
+	        if (texto.charAt(indice) == '\r' && indice + 1 < texto.length() && texto.charAt(indice + 1) == '\n') {
+	            lineaActual++;
+	            columnaActual = 1;
+	            indice += 2;
+	        } else if (texto.charAt(indice) == '\n') {
+	            lineaActual++;
+	            columnaActual = 1;
+	            indice++;
+	        } else {
+	            columnaActual++;
+	            indice++;
+	        }
+	    }
+
+	    return indice;
+	}
+	*/
+	
+	
+	public int absolute(String texto) {
+	    int indice = 0;
+	    int lineaActual = 1;
+	    int columnaActual = 1;
+
+	    while (indice < texto.length() && (lineaActual < line || (lineaActual == line && columnaActual < column))) {
+	        if (texto.charAt(indice) == '\r') {
+	            if (indice + 1 < texto.length() && texto.charAt(indice + 1) == '\n') {
+	                lineaActual++;
+	                columnaActual = 1;
+	                indice += 2;
+	            } else {
+	                lineaActual++;
+	                columnaActual = 1;
+	                indice++;
+	            }
+	        } else if (texto.charAt(indice) == '\n') {
+	            lineaActual++;
+	            columnaActual = 1;
+	            indice++;
+	        } else {
+	            columnaActual++;
+	            indice++;
+	        }
+	    }
+
+	    return indice;
+	}
+
 }
