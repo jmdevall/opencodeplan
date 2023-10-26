@@ -21,8 +21,9 @@ public class AstConstructorJavaParserTest {
 	@Test
 	public void canFindCompilationUnits() {
 		
-		AstConstructorJavaParser sut=new AstConstructorJavaParser();
-		new CuExplorer(sut).explore(testUtil.getRootTestbenchFolder());
+		CuSource cuSource=CuSource.newFromFile(testUtil.getRootTestbenchFolder());
+		
+		AstConstructorJavaParser sut=new AstConstructorJavaParser(cuSource);
 		HashMap<String, Node> forest=sut.getForest();
 		String expectedName = "testbench.testutil.Multiclass".replace(".", File.separator)+".java";
 		log.debug("expectedname="+expectedName);
@@ -35,8 +36,9 @@ public class AstConstructorJavaParserTest {
 	@Test
 	public void foo() {
 		
-		AstConstructorJavaParser sut=new AstConstructorJavaParser();
-		new CuExplorer(sut).explore(testUtil.getRootTestbenchFolder());
+		CuSource cuSource=CuSource.newFromFile(testUtil.getRootTestbenchFolder());
+		
+		AstConstructorJavaParser sut=new AstConstructorJavaParser(cuSource);
 		HashMap<String, Node> forest=sut.getForest();
 		
 		ArrayList<String> ficheros=new ArrayList<String>(forest.keySet());

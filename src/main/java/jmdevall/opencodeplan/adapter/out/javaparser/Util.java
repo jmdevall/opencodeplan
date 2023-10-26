@@ -35,7 +35,7 @@ public class Util {
 		
 		CompilationUnit compilationUnit = getCompilationUnit(node);
 		String filename = getFileNameOfCompilationUnit(compilationUnit);
-		
+
 		Range absoluteNode=Range.builder()
 				.begin(toDomainPosition(node.getBegin().get()))
 				.end(toDomainPosition(node.getEnd().get()))

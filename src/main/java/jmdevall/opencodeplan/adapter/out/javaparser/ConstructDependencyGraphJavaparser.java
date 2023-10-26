@@ -45,24 +45,24 @@ public class ConstructDependencyGraphJavaparser implements ConstructDependencyGr
 	public DependencyGraph construct(Repository repository) {
 		File srcRoot=repository.getSrcRoot();
 		
-		AstConstructorJavaParser sut=new AstConstructorJavaParser();
-		new CuExplorer(sut).explore(srcRoot);
-		HashMap<String, Node> forest=sut.getForest();
+		CuSource cuSource=CuSource.newFromFile(srcRoot);
+		
+		AstConstructorJavaParser astcreator=new AstConstructorJavaParser(cuSource);
+		
+		CuSourceProcessor.process(cuSource, astcreator);
+		HashMap<String, Node> forest=astcreator.getForest();
 
 		ArrayList<Rel> rels=new ArrayList<Rel>();
 		for(VoidVisitorAdapter<List<Rel>> relfinder:relfinders) {
-			rels.addAll(findRels(relfinder,srcRoot));
+			rels.addAll(findRels(relfinder,cuSource));
 		}
 		
 		return new DependencyGraph(forest, rels);
 	}
 	
-	private List<Rel> findRels(VoidVisitorAdapter<List<Rel>> relfinder,File srcRoot) {
+	private List<Rel> findRels(VoidVisitorAdapter<List<Rel>> relfinder,CuSource cuSource) {
 		CuRelFinderVisitProcessor vp=new CuRelFinderVisitProcessor(relfinder);
-		
-		new CuExplorer(vp,
-				(int level, String path, File file)-> file.getName().endsWith(".java"))
-				.explore(srcRoot);
+		CuSourceProcessor.process(cuSource, vp);
 		
 		return vp.getRels();
 	}

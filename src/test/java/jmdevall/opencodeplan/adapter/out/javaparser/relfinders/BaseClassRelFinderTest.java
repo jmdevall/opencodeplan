@@ -7,8 +7,9 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import jmdevall.opencodeplan.adapter.out.javaparser.CuExplorer;
 import jmdevall.opencodeplan.adapter.out.javaparser.CuRelFinderVisitProcessor;
+import jmdevall.opencodeplan.adapter.out.javaparser.CuSource;
+import jmdevall.opencodeplan.adapter.out.javaparser.CuSourceProcessor;
 import jmdevall.opencodeplan.adapter.out.javaparser.util.TestUtil;
 import jmdevall.opencodeplan.domain.dependencygraph.Rel;
 
@@ -19,13 +20,14 @@ public class BaseClassRelFinderTest {
 	@Test
 	public void findImplementations() {
 		BaseClassRelFinder sut=new BaseClassRelFinder();
-		CuRelFinderVisitProcessor vp=new CuRelFinderVisitProcessor(sut);
 		
+		CuRelFinderVisitProcessor vp=new CuRelFinderVisitProcessor(sut);
 		String startfolder=",testbench,testutil,implementation".replaceAll(",", File.separator);
+		
+		CuSource cuSource=CuSource.newFromFileAndFilter(testUtil.getRootTestbenchFolder(),
+				(int level, String path, File file)->path.startsWith(startfolder));
 
-		new CuExplorer(vp,
-				(int level, String path, File file)->path.startsWith(startfolder))
-				.explore(testUtil.getRootTestbenchFolder());
+		CuSourceProcessor.process(cuSource, vp);
 		
 		List<Rel> rels = vp.getRels();
 		LogRelUtil.logRels(rels);
@@ -37,15 +39,16 @@ public class BaseClassRelFinderTest {
 	@Test
 	public void findExtensions() {
 		BaseClassRelFinder sut=new BaseClassRelFinder();
-		CuRelFinderVisitProcessor vp=new CuRelFinderVisitProcessor(sut);
 		
-		String startfolder=",testbench,testutil,extension".replaceAll(",", File.separator);
+		CuRelFinderVisitProcessor vp=new CuRelFinderVisitProcessor(sut);
+		String startfolder=",testbench,testutil,extension".replaceAll(",", File.separator);		
+		CuSource cuSource=CuSource.newFromFileAndFilter(testUtil.getRootTestbenchFolder(),
+				(int level, String path, File file)->path.startsWith(startfolder));
 
-		new CuExplorer(vp,
-				(int level, String path, File file)->path.startsWith(startfolder))
-				.explore(testUtil.getRootTestbenchFolder());
+		CuSourceProcessor.process(cuSource, vp);
 		
 		List<Rel> rels = vp.getRels();
+
 		LogRelUtil.logRels(rels);
 		
 		assertEquals(2,rels.size());

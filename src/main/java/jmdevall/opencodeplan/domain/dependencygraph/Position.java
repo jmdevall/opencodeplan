@@ -31,13 +31,22 @@ public class Position {
     }
     
     /*
+    
 	public int absolute(String texto) {
 	    int indice = 0;
 	    int lineaActual = 1;
 	    int columnaActual = 1;
+	    
+//	    if(texto.contains("ystem.out.println(\"default implementation\");")) {
+//	    	int jjjj=0;
+//	    }
 
 	    while (indice < texto.length() && (lineaActual < line || (lineaActual == line && columnaActual < column))) {
-	        if (texto.charAt(indice) == '\n' ) {
+	        char charAt = texto.charAt(indice);
+//	        if(lineaActual>=5) {
+//	        	System.out.println("linea "+ lineaActual+"indice "+indice+" chartAt=["+charAt+"]");
+//	        }
+			if (charAt == '\n' ) {
 	            lineaActual++;
 	            columnaActual = 1;
 	        } else {
@@ -49,6 +58,7 @@ public class Position {
 	    return indice;
 	}
 	*/
+    
     /*
 	public int absolute(String texto) {
 	    int indice = 0;
@@ -74,6 +84,7 @@ public class Position {
 	}
 	*/
 	
+    
 	
 	public int absolute(String texto) {
 	    int indice = 0;
