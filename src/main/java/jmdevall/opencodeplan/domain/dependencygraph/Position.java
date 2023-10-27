@@ -30,7 +30,7 @@ public class Position {
         };
     }
     
-    /*
+    
     
 	public int absolute(String texto) {
 	    int indice = 0;
@@ -40,6 +40,9 @@ public class Position {
 //	    if(texto.contains("ystem.out.println(\"default implementation\");")) {
 //	    	int jjjj=0;
 //	    }
+	    if(texto==null) {
+	    	int jjjj=0;
+	    }
 
 	    while (indice < texto.length() && (lineaActual < line || (lineaActual == line && columnaActual < column))) {
 	        char charAt = texto.charAt(indice);
@@ -57,7 +60,7 @@ public class Position {
 
 	    return indice;
 	}
-	*/
+	
     
     /*
 	public int absolute(String texto) {
@@ -84,7 +87,7 @@ public class Position {
 	}
 	*/
 	
-    
+    /*
 	
 	public int absolute(String texto) {
 	    int indice = 0;
@@ -114,5 +117,5 @@ public class Position {
 
 	    return indice;
 	}
-
+*/
 }

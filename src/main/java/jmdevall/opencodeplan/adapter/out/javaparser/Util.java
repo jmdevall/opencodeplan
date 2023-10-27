@@ -139,10 +139,12 @@ public class Util {
 		
 		String packageDeclaration = getPackageDeclarationOrEmptyString(compilationUnit);
 		String publicType = getPublicTypeOfCompilationUnit(compilationUnit);
+
+
 		if(packageDeclaration.isEmpty()) {
-			return publicType;
+			return String.format(".%s",publicType).replace(".", File.separator) + ".java";
 		}
-		return String.format("%s.%s",packageDeclaration,publicType).replace(".", File.separator) + ".java";
+		return String.format(".%s.%s",packageDeclaration,publicType).replace(".", File.separator) + ".java";
 		
 	}
 

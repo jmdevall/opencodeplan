@@ -76,10 +76,10 @@ public class Node {
     
 
 
-    public String prompt() {
+    public String prompt(String cucontent) {
   
     	log.debug(this.getType()+" ["+this.getContent()+"] "+this.getContent().length());
-    	StringBuilder original = new StringBuilder(this.getContent());
+    	StringBuilder original = new StringBuilder(cucontent);
     	
     	
     	for(Node child:this.children) {
