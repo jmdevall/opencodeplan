@@ -24,8 +24,10 @@ public class AstConstructorJavaParserTest {
 		CuSource cuSource=CuSource.newFromFile(testUtil.getRootTestbenchFolder());
 		
 		AstConstructorJavaParser sut=new AstConstructorJavaParser(cuSource);
+		CuSourceProcessor.process(cuSource, sut);
+
 		HashMap<String, Node> forest=sut.getForest();
-		String expectedName = "testbench.testutil.Multiclass".replace(".", File.separator)+".java";
+		String expectedName = ".testbench.testutil.Multiclass".replace(".", File.separator)+".java";
 		log.debug("expectedname="+expectedName);
 		assertTrue(forest.containsKey(expectedName));
 		

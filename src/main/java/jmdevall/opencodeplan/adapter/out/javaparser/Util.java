@@ -41,32 +41,15 @@ public class Util {
 				.end(toDomainPosition(node.getEnd().get()))
 				.build();
 
-		/*
-		Range relative;
-		if(node.hasParentNode()) {
-			Range absoluteParent=Range.builder()
-					.begin(toDomainPosition(node.getParentNode().get().getBegin().get()))
-					.end(toDomainPosition(node.getParentNode().get().getEnd().get()))
-					.build();
-		   
-			relative=absoluteParent.minus(absoluteNode);
-		}
-		else {
-		   
-			relative=absoluteNode.minus(absoluteNode);
-		}
-		*/
 		return NodeId.builder()
 			.file(filename)
 			.range(absoluteNode)
-			//.relative(relative)
 			.build();
 	}
 	
 	//---------------------
 	
 	 public static CompilationUnit getCompilationUnit(Node node) {
-		//return node.findAncestor(CompilationUnit.class).orElse(null);
 		
         Node currentNode = node;
         while (!(currentNode instanceof CompilationUnit)) {
@@ -96,12 +79,11 @@ public class Util {
 		try {
 			ResolvedReferenceTypeDeclaration foo;
 			foo = symbolResolver.toTypeDeclaration(node);
-			//System.out.println("foo "+foo);
 			
-			Optional<com.github.javaparser.ast.Node> otronode=foo.containerType().get().toAst();
-			if(otronode.isPresent()) {
-				System.out.println("foo "+otronode.get());
-			}
+//			Optional<com.github.javaparser.ast.Node> otronode=foo.containerType().get().toAst();
+//			if(otronode.isPresent()) {
+//				System.out.println("foo "+otronode.get());
+//			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			// TODO Auto-generated catch block

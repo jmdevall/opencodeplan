@@ -16,8 +16,9 @@ public class Node {
 	public String type;
 	public Node parent;
 	public List<Node> children;
-	private String content;
+	
 	private Rrange rrange;
+	private String content;
 	
 	
 	public void debugRecursive(int level) {
@@ -43,15 +44,17 @@ public class Node {
     	}
     }
 	
-	public boolean containsByPosition(Node other) {
-		return this.id.getRange().contains(other.id.getRange());
-	}
-    
     private void printlevel(int level) {
     	for(int i=0;i<level;i++) {
     		System.out.print("-");
     	}
     }
+	
+	public boolean containsByPosition(Node other) {
+		return this.id.getRange().contains(other.id.getRange());
+	}
+    
+
 
 	@Override
 	public int hashCode() {
@@ -74,24 +77,30 @@ public class Node {
 		this.children = children;
 	}
     
+	public Rrange relativeRange() {
+		if(parent==null) {
+			return this.rrange;
+		}
+		else { 
+			Rrange arangeparent=parent.rrange;
+			return rrange.minus(arangeparent);
+		}
+	}
 
+	public String prompt() {
+		return this.prompt(new StringBuffer());
+	}
+	
+    public String prompt(StringBuffer sb) {
+    
+    	sb.replace(rrange.getBegin(), rrange.getEnd(), content);
 
-    public String prompt(String cucontent) {
-  
-    	log.debug(this.getType()+" ["+this.getContent()+"] "+this.getContent().length());
-    	StringBuilder original = new StringBuilder(cucontent);
-    	
-    	
-    	for(Node child:this.children) {
-       		String childprompt = child.prompt();
-       		log.info("childprompt="+childprompt);
-			original.replace(child.getRrange().getBegin(), child.getRrange().getEnd(), childprompt);
+    	for( Node child:this.children ) {
+    		child.prompt(sb);
     	}
-    	String string = original.toString();
     	
-    	log.info("sustituido="+string);
-		return string;
-
+    	return sb.toString();
     }
+    
     
 }
