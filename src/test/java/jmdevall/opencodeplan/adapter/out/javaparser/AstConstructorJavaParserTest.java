@@ -35,7 +35,7 @@ public class AstConstructorJavaParserTest {
 	
 	
 	@Test
-	public void foo() {
+	public void elResultadoDeHacerParseSobreCuEsElPropioContenidoDelCu() {
 		
 		CuSource cuSource=CuSource.newFromFile(testUtil.getRootTestbenchFolder());
 		
@@ -51,6 +51,23 @@ public class AstConstructorJavaParserTest {
 		assertEquals(cu.getContent(),cu.prompt());
 		
 	}
+	
+	@Test
+	public void testComportamientoStringBuffer() {
+		StringBuffer sut=new StringBuffer("cabeza");
+		sut.replace(2, 3, "rp");
+		
+		assertEquals(sut.toString(),"carpeza");
+	}
+	
+	@Test
+	public void testComportamientoStringBufferQuitando() {
+		StringBuffer sut=new StringBuffer("cabeza");
+		sut.replace(2, 4, "l");
+		
+		assertEquals("calza",sut.toString());
+	}
+	
 	
 
 }
