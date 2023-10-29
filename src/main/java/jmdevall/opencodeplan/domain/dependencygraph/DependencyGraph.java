@@ -5,6 +5,7 @@ import java.util.List;
 
 import jmdevall.opencodeplan.domain.Fragment;
 import lombok.Builder;
+import lombok.Getter;
 
 /**
  * Dependency analysis [12] is used for tracking syntactic and semantic relations
@@ -25,6 +26,7 @@ relations (Instantiates and InstantiatedBy) between a statement and the construc
 creates, and (7) field use relations (Uses and UsedBy) between a statement and the declaration of a
 field it uses.
  */
+@Getter
 public class DependencyGraph {
 
 	private HashMap<String,Node> forest;
@@ -43,12 +45,13 @@ public class DependencyGraph {
     	return null;
     }
 
+	/*
     @Builder
     public static class ClassNode{
         String className;
     }
     
-    /*@Builder
+    @Builder
     public class MethodNode{
         String methodName;
     }*/

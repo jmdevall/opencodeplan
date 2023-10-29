@@ -18,11 +18,11 @@ public class PromptMakerDefault implements PromptMaker {
 	
 	String p3 = " Causes for Change: The change is required due to\n";
 	
-	
+	p4 Related Code (Spatial Context): The following code maybe related -
+«related_code_block-1»
 	*/
 	
-			
-			
+	private static final String p4="Related Code (Spatial Context): The following code maybe related";
 			
 			
 	@Override
@@ -31,9 +31,6 @@ public class PromptMakerDefault implements PromptMaker {
 		StringBuilder sb=new StringBuilder();
 		sb.append(String.format(p1, i.getSpecificInstruction()));
 		return sb.toString();
-		
-		
-
 		
 	}
 }
