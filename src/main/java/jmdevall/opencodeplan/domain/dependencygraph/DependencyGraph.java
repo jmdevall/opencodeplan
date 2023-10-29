@@ -1,7 +1,10 @@
 package jmdevall.opencodeplan.domain.dependencygraph;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 import jmdevall.opencodeplan.domain.Fragment;
 import lombok.Builder;
@@ -38,12 +41,21 @@ public class DependencyGraph {
 		this.forest = forest;
 		this.rels = rels;
 	}
+    
+    public Optional<Node> findByNodeId(NodeId nodeid) {
+    	if(!forest.containsKey(nodeid.getFile())) {
+    		return Optional.empty();
+    	}
+    	Node cu=forest.get(nodeid.getFile());
+    	return cu.toStream().filter(n->n.getId().equals(nodeid)).findFirst();
+    }
 
 	public DependencyGraph updateDependencyGraph(List<Label> labels, Fragment fragment, Fragment newFragment, Node b) {
         // TODO:
         //return new DependencyGraph(this.r);
     	return null;
     }
+
 
 	/*
     @Builder

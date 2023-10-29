@@ -33,7 +33,7 @@ public class Context {
 		
 		List<Rel> rels=d.getRels();
 		rels.forEach(rel->{
-			rel.
+			
 			
 		});
 		

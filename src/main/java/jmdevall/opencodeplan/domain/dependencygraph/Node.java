@@ -1,7 +1,10 @@
 package jmdevall.opencodeplan.domain.dependencygraph;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -44,6 +47,15 @@ public class Node {
     	}
     }
 	
+	public Node getRootParent() {
+		if(this.parent==null) {
+			return this;
+		}
+		else {
+			return this.parent.getRootParent();
+		}
+	}
+	
     private void printlevel(int level) {
     	for(int i=0;i<level;i++) {
     		System.out.print("-");
@@ -53,8 +65,6 @@ public class Node {
 	public boolean containsByPosition(Node other) {
 		return this.id.getRange().contains(other.id.getRange());
 	}
-    
-
 
 	@Override
 	public int hashCode() {
@@ -102,6 +112,21 @@ public class Node {
     	
     	return sb.toString();
     }
+
+    public Stream<Node> toStream(){
+    	java.util.stream.Stream.Builder<Node> s=Stream.<Node>builder();
+    	addRecursive(s);
+    	return s.build();
+    }
+    
+	private void addRecursive(java.util.stream.Stream.Builder<Node> s) {
+		s.add(this);
+		for(Node child:children){
+			child.addRecursive(s);
+		}
+	}
+
+
     
     
 }
