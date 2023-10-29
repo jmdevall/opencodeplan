@@ -4,73 +4,58 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-public class FragmentTest {
-	@Test
-	public void nose() {
-		String texto = "hola\nmundo\n";
-		String[] lineas = texto.split("\n");
-		long numLineas = lineas.length;
-		assertEquals(2,numLineas);
-		
-	}
-	
-	private String str1=
-			"abcde casidro\n"+
-	        "foo bar\n"+
-			"ddd mm"		;
-	
-	private String str2=
-			"manolo\n"+
-	        "lala\n"+
-			"mem";
-	
-	String machaca(String str1, String str2, int line, int col) {
-	    String[] lines1 = str1.split("\n");
-	    String[] lines2 = str2.split("\n");
-	    StringBuilder resultado = new StringBuilder();
-	    for (int i = 0; i < lines1.length; i++) {
-	        if (i == line) {
-	            String[] cols1 = lines1[i].split(" ");
-	            String[] cols2 = lines2[i].split(" ");
-	            StringBuilder lineResult = new StringBuilder();
-	            for (int j = 0; j < cols1.length; j++) {
-	                if (j == col) {
-	                    lineResult.append(cols2[j]);
-	                } else {
-	                    lineResult.append(cols1[j]);
-	                }
-	                if (j < cols1.length - 1) {
-	                    lineResult.append(" ");
-	                }
-	            }
-	            resultado.append(lineResult.toString());
-	        } else {
-	            resultado.append(lines1[i]);
-	        }
-	        if (i < lines1.length - 1) {
-	            resultado.append("\n");
-	        }
-	    }
-	    return resultado.toString();
-	}
+import com.github.javaparser.JavaParser;
 
+import jmdevall.opencodeplan.adapter.out.javaparser.AstConstructorJavaParser;
+import jmdevall.opencodeplan.adapter.out.javaparser.CuSource;
+import jmdevall.opencodeplan.adapter.out.javaparser.CuSourceProcessor;
+import jmdevall.opencodeplan.domain.dependencygraph.Node;
+import jmdevall.opencodeplan.domain.dependencygraph.NodeId;
+import jmdevall.opencodeplan.domain.dependencygraph.Range;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+public class FragmentTest {
 	
+	String javaCompileUnit=
+  "package test;\n"                               //1
++ "\n"                                            //2
++ "public class Foo{\n"                           //3
++ "   public void hello(String who){\n"           //4
++ "       System.out.println(\"hello \"+who);\n"  //5
++ "   }\n"
++ "\n"
++ "   public void addnumbers(int a, int b){\n"
++ "      return a+b;\n"
++ "   }\n"
++ "}\n";
+	
+	String expected=
+ "package test;\n"                               //1
++ "\n"                                            //2
++ "public class Foo{\n"                           //3
++ "   public void hello(String who){\n"           //4
++ "       System.out.println(\"hello \"+who);\n"  //5
++ "   }\n"
++ "\n"
++ "   public void addnumbers(int a, int b)\n"
++ "}\n";
+
 	@Test
-	public void testMachaca() {
-		assertEquals(expected,machaca(str1,str2,0,7));
-	}
-	//resultado esperado de invocar con estos parametros:
-	//	(str1, str2, 0, 7)....
+	public void eliminaBloquesDeMetodosNoAfectados() {
+		CuSource testingCuSource=new CuSourceSingleFileJavaTesting("/test/Foo.java", javaCompileUnit);
+				
+		AstConstructorJavaParser acjp=new AstConstructorJavaParser(testingCuSource);
+		CuSourceProcessor.process(testingCuSource, acjp, new JavaParser());
+		Node compilationUnit=acjp.getForest().get("/test/Foo.java");
 		
-	String expected="abcde manolo\n"+
-	"lala\n"+
-	"mem mm";
-	      
-	@Test
-	public void nosE() {
-		StringBuilder original = new StringBuilder("abcdefghij");
-		original.replace(3, 6, "foo");
-		System.out.println(original); // Imprime "abcfooghij"
+		Node sentencia=Node.builder().id( NodeId.builder().range(Range.newRange(5, 1, 5, 6)).build()).build();
+		Fragment f=Fragment.newFragment(compilationUnit, sentencia);
+		String prompt = f.getNode().prompt();
+		log.debug("resultado fragmento="+prompt);
+		assertEquals(expected,prompt);
+		
 	}
+	
 			
 }

@@ -12,6 +12,7 @@ import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ast.CompilationUnit;
 
+import jmdevall.opencodeplan.adapter.out.javaparser.JavaParserFactory;
 import jmdevall.opencodeplan.adapter.out.javaparser.Util;
 
 public class UtilTest {
@@ -33,7 +34,7 @@ public class UtilTest {
 
 	@Test
 	public void getPublicClassOfCompilationUnit() {
-		JavaParser javaparser=Util.newDefaultJavaParser(testUtil.getRootTestbenchFolder());
+		JavaParser javaparser=JavaParserFactory.newDefaultJavaParser(testUtil.getRootTestbenchFolder());
 		
 		ParseResult<CompilationUnit> cu=javaparser.parse(testUtil.readFileFromTestbench("/testbench/testbench/testutil/Multiclass.java"));
 		assertTrue(cu.isSuccessful());
@@ -43,7 +44,7 @@ public class UtilTest {
 	
 	@Test
 	public void getFileNameOfCompilationUnitWithPackage() {
-		JavaParser javaparser=Util.newDefaultJavaParser(testUtil.getRootTestbenchFolder());
+		JavaParser javaparser=JavaParserFactory.newDefaultJavaParser(testUtil.getRootTestbenchFolder());
 		
 		ParseResult<CompilationUnit> cu=javaparser.parse(testUtil.readFileFromTestbench("/testbench/testbench/testutil/Multiclass.java"));
 		String filename=Util.getFileNameOfCompilationUnit(cu.getResult().get());
@@ -53,7 +54,7 @@ public class UtilTest {
 
 	@Test
 	public void getFileNameOfCompilationUnitWithoutPackage() {
-		JavaParser javaparser=Util.newDefaultJavaParser(testUtil.getRootTestbenchFolder());
+		JavaParser javaparser=JavaParserFactory.newDefaultJavaParser(testUtil.getRootTestbenchFolder());
 		
 		ParseResult<CompilationUnit> cu=javaparser.parse(testUtil.readFileFromTestbench("/testbench/CanRead.java"));
 		String filename=Util.getFileNameOfCompilationUnit(cu.getResult().get());

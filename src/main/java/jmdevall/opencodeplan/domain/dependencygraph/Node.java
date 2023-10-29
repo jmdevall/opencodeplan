@@ -77,6 +77,7 @@ public class Node {
 		this.children = children;
 	}
     
+	//TODO: no se usa
 	public Rrange relativeRange() {
 		if(parent==null) {
 			return this.rrange;

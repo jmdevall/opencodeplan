@@ -34,7 +34,7 @@ public class AstConstructorJavaParser implements CuProcessor{
 		
 		NodeId nodeId = Util.toNodeId(node);
 		
-		String cucontent=cuSource.getSource(nodeId.getFile());
+		String cucontent=this.cuSource.getSource(nodeId.getFile());
 		
 		Range range = nodeId.getRange();
 		Rrange rrange=absoluterange(range, cucontent);

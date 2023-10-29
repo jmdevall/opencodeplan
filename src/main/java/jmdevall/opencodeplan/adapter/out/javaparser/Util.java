@@ -4,19 +4,12 @@ import java.io.File;
 import java.util.List;
 import java.util.Optional;
 
-import com.github.javaparser.JavaParser;
-import com.github.javaparser.ParserConfiguration;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.resolution.SymbolResolver;
-import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
-import com.github.javaparser.symbolsolver.JavaSymbolSolver;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.JavaParserTypeSolver;
-import com.github.javaparser.symbolsolver.resolution.typesolvers.ReflectionTypeSolver;
 
 import jmdevall.opencodeplan.domain.dependencygraph.NodeId;
 import jmdevall.opencodeplan.domain.dependencygraph.Position;
@@ -90,20 +83,6 @@ public class Util {
 			//e.printStackTrace();
 		}
 		
-	}
-
-	public static JavaParser newDefaultJavaParser(File rootDir) {
-		TypeSolver typeSolver = new CombinedTypeSolver(
-	            new ReflectionTypeSolver(),
-	            //new JarTypeSolver("jars/library3.jar"),
-	            new JavaParserTypeSolver(rootDir)
-	            //new JavaParserTypeSolver(new File("generated_code"))
-	    );
-	 	JavaSymbolSolver symbolSolver = new JavaSymbolSolver(typeSolver); 
-	
-		ParserConfiguration parserConfiguration = new ParserConfiguration().setSymbolResolver(symbolSolver);
-		JavaParser parser=new JavaParser(parserConfiguration);
-		return parser;
 	}
 
 	public static String getPublicTypeOfCompilationUnit(CompilationUnit cu) {
