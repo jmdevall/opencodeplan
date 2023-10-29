@@ -1,4 +1,4 @@
-package jmdevall.opencodeplan.domain;
+package jmdevall.opencodeplan.domain.promptmaker;
 
 import jmdevall.opencodeplan.domain.dependencygraph.DependencyGraph;
 import jmdevall.opencodeplan.domain.dependencygraph.Node;

@@ -1,6 +1,5 @@
 package jmdevall.opencodeplan.domain.promptmaker;
 
-import jmdevall.opencodeplan.domain.Context;
 import jmdevall.opencodeplan.domain.Fragment;
 import jmdevall.opencodeplan.domain.instruction.I;
 
@@ -30,9 +29,9 @@ public class PromptMakerDefault implements PromptMaker {
 	public String makePrompt(Fragment fragment, I i, Context context){
 		
 		StringBuilder sb=new StringBuilder();
-		
 		sb.append(String.format(p1, i.getSpecificInstruction()));
-		
 		return sb.toString();
+
+		
 	}
 }
