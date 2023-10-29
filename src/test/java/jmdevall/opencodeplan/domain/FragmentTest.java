@@ -54,8 +54,8 @@ public class FragmentTest {
 		String prompt = f.getNode().prompt();
 		log.debug("resultado fragmento="+prompt);
 		assertEquals(expected,prompt);
-		
 	}
+	
 	
 			
 }

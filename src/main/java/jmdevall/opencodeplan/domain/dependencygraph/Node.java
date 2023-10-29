@@ -1,9 +1,9 @@
 package jmdevall.opencodeplan.domain.dependencygraph;
 
-import java.util.Iterator;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import lombok.Builder;
@@ -23,6 +23,15 @@ public class Node {
 	private Rrange rrange;
 	private String content;
 	
+	public Node newCopyWithoutChildren() {
+		return Node.builder()
+		.id(this.getId())
+		.type(this.getType())
+		.parent(this.getParent())
+		.rrange(this.getRrange())
+		.content(this.getContent())
+		.build();
+	}
 	
 	public void debugRecursive(int level) {
     	printlevel(level);
@@ -124,6 +133,40 @@ public class Node {
 		for(Node child:children){
 			child.addRecursive(s);
 		}
+	}
+
+	public static Node extractCodeFragment(Node root, Node block, Node parent) {
+	    
+	    Stream<Node> consideredChildren=root.getChildren().stream();
+	    
+	    //otros métodos diferentes al afectado: se sustituye el BlockStmt por uno nodo vacio
+	    if(root.getType().equals("MethodDeclaration") && !root.containsByPosition(block)) {
+	    	consideredChildren=consideredChildren
+					.map(c->{
+							return (c.getType().equals("BlockStmt"))?
+								builder()
+								.id(root.getId())
+								.type("SkipedBlockFragment")
+								.parent(root)
+								.children(Collections.emptyList())
+								.rrange(c.getRrange())
+								.content("")
+								.build()
+								:
+								c;
+					});
+	    }
+	    
+	    Node newNode=root.newCopyWithoutChildren();
+	    
+	    List<Node> prunedChildren=consideredChildren
+	    		.map(c->extractCodeFragment(c,block,newNode))
+	    		.collect(Collectors.toList());
+	
+	    newNode.setChildren(prunedChildren);
+	    
+	    return newNode;
+	
 	}
 
 

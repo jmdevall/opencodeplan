@@ -1,10 +1,5 @@
 package jmdevall.opencodeplan.domain;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import jmdevall.opencodeplan.domain.dependencygraph.Node;
 import jmdevall.opencodeplan.domain.dependencygraph.NodeId;
 import jmdevall.opencodeplan.domain.dependencygraph.Rrange;
@@ -30,7 +25,7 @@ public class Fragment {
 	
 	public static Fragment newFragment(Node cu, Node block) {
 		return Fragment.builder()
-				.node(extractCodeFragment(cu,block,null))
+				.node(Node.extractCodeFragment(cu,block,null))
 				.build();
 	}
 	
@@ -65,45 +60,7 @@ public class Fragment {
 	}
 	*/
 	
-	public static Node extractCodeFragment(Node root, Node block, Node parent) {
-	    
-	    Stream<Node> consideredChildren=root.getChildren().stream();
-	    
-	    //otros métodos diferentes al afectado: se sustituye el BlockStmt por uno nodo vacio
-	    if(root.getType().equals("MethodDeclaration") && !root.containsByPosition(block)) {
-	    	consideredChildren=consideredChildren
-					.map(c->{
-							return (c.getType().equals("BlockStmt"))?
-								Node.builder()
-								.id(root.getId())
-								.type("SkipedBlockFragment")
-								.parent(root)
-								.children(Collections.emptyList())
-								.rrange(c.getRrange())
-								.content("")
-								.build()
-								:
-								c;
-					});
-	    }
-	    
-	    Node newNode=Node.builder()
-		.id(root.getId())
-		.type(root.getType())
-		.parent(root.getParent())
-		.rrange(root.getRrange())
-		.content(root.getContent())
-		.build();
-	    
-	    List<Node> prunedChildren=consideredChildren
-	    		.map(c->extractCodeFragment(c,block,newNode))
-	    		.collect(Collectors.toList());
-	
-	    newNode.setChildren(prunedChildren);
-	    
-	    return newNode;
-	
-	}
+
 	
 	
 	/*
