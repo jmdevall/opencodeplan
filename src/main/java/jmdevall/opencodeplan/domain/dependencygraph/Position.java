@@ -3,12 +3,14 @@ package jmdevall.opencodeplan.domain.dependencygraph;
 import java.util.Comparator;
 
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
 @Builder
 @Getter
 @ToString
+@EqualsAndHashCode
 public class Position {
 	private int line;
 	private int column;

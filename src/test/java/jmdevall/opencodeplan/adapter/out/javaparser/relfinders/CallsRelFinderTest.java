@@ -35,7 +35,7 @@ public class CallsRelFinderTest {
 		LogRelUtil.logRels(rels);
 		
 		assertEquals(2,rels.size());
-		assertEquals("Rel(origin=NodeId(file=testbench/testutil/calls/ExampleClass.java, range=[7,3]->[7,7]), destiny=NodeId(file=testbench/testutil/calls/ExampleClass.java, range=[10,2]->[12,2]), label=CALLS)",rels.get(0).toString());
+		assertEquals("Rel(origin=NodeId(file=/testbench/testutil/calls/ExampleClass.java, range=[7,3]->[7,7]), destiny=NodeId(file=/testbench/testutil/calls/ExampleClass.java, range=[10,2]->[12,2]), label=CALLS)",rels.get(0).toString());
 	}
 
 

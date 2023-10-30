@@ -49,7 +49,7 @@ public class UtilTest {
 		ParseResult<CompilationUnit> cu=javaparser.parse(testUtil.readFileFromTestbench("/testbench/testbench/testutil/Multiclass.java"));
 		String filename=Util.getFileNameOfCompilationUnit(cu.getResult().get());
 		
-		assertEquals("testbench/testutil/Multiclass.java",filename);
+		assertEquals("/testbench/testutil/Multiclass.java",filename);
 	}
 
 	@Test
@@ -59,7 +59,7 @@ public class UtilTest {
 		ParseResult<CompilationUnit> cu=javaparser.parse(testUtil.readFileFromTestbench("/testbench/CanRead.java"));
 		String filename=Util.getFileNameOfCompilationUnit(cu.getResult().get());
 		
-		assertEquals("CanRead",filename);
+		assertEquals("/CanRead.java",filename);
 	}
 
 	

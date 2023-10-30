@@ -1,10 +1,12 @@
 package jmdevall.opencodeplan.domain.dependencygraph;
 
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 @Builder
 @Getter
+@EqualsAndHashCode
 public class Range {
 	private Position begin;
 	private Position end;

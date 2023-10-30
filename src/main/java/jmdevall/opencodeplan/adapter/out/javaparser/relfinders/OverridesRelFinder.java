@@ -34,8 +34,14 @@ public class OverridesRelFinder extends VoidVisitorAdapter<List<Rel>>{
 	private Optional<ResolvedMethodDeclaration> findMethod(ResolvedReferenceType type, String methodName,String descriptor){
 		List<ResolvedMethodDeclaration> methods=type.getAllMethodsVisibleToInheritors();
 		for(ResolvedMethodDeclaration method:methods) {
-			if(method.getName().equals(methodName) && method.toDescriptor().equals(descriptor)) {
-				return Optional.of(method);
+		
+			try {
+				if(method.getName().equals(methodName) && method.toDescriptor().equals(descriptor)) {
+					return Optional.of(method);
+				}
+			} catch (Exception e) {
+				//TODO: en ciertos casos salta excepción no se por que
+				return Optional.empty();
 			}
 		}
 		return Optional.empty();
@@ -89,7 +95,5 @@ public class OverridesRelFinder extends VoidVisitorAdapter<List<Rel>>{
 		}
 
 	}
-
-
 	
 }

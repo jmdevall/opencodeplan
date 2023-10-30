@@ -1,6 +1,8 @@
 package jmdevall.opencodeplan.domain.promptmaker;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import jmdevall.opencodeplan.domain.dependencygraph.DependencyGraph;
 import jmdevall.opencodeplan.domain.dependencygraph.Node;
@@ -30,12 +32,33 @@ public class Context {
 		graph empowers CodePlan to make context-aware code modifications that are consistent with the
 		code’s spatial organization, enhancing the accuracy and reliability of its code editing capabilities.
 		*/
+		List<String> spatialContext=new ArrayList<String>();
+		
+		//d. findByNo>deId(b);
+		Optional<Node> found=d.findFinalNodeContaining(b.getId());
+		Node node=found.get();
+		
+		//find the method
+		Node method=node.getRootParent().toStream()
+				.filter(n->n.isMethodContaining(node)).findFirst().get();
 		
 		List<Rel> rels=d.getRels();
-		rels.forEach(rel->{
-			
-			
-		});
+		for(Rel rel:rels) {
+			if(method.getId().getRange().contains(rel.getOrigin().getRange())) {
+				Node nodeRelacionado=d.findByNodeId(rel.getDestiny()).get();
+				spatialContext.add(
+						"El método está relacionado con otra parte del código del proyecto:\n"
+						+ " tipo de relacion=" + rel.getLabel()
+						+ " con este código: \n"
+						+ "```java\n"+nodeRelacionado.getContent()+"\n```");
+			}
+		}
+
+		
+		for(String cosa:spatialContext) {
+			System.out.println(cosa);
+		}
+		
 		
 		/*
 		The plan graph records all change obligations and their inter-dependences.

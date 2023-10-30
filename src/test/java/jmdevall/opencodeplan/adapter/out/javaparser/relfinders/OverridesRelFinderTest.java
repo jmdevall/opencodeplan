@@ -39,7 +39,7 @@ public class OverridesRelFinderTest {
 		
 		assertEquals(4,rels.size());
 		
-		String expected="Rel(origin=NodeId(file=testbench/testutil/overrides/C.java, range=[6,2]->[8,2]), destiny=NodeId(file=testbench/testutil/overrides/B.java, range=[6,2]->[8,2]), label=OVERRIDES)";
+		String expected="Rel(origin=NodeId(file=/testbench/testutil/overrides/C.java, range=[6,2]->[8,2]), destiny=NodeId(file=/testbench/testutil/overrides/B.java, range=[6,2]->[8,2]), label=OVERRIDES)";
 
 		List<String> collect = rels.stream().map( Rel::toString ).collect(Collectors.toList());
 		assertTrue(collect.contains(expected));

@@ -134,26 +134,22 @@ public class Node {
 			child.addRecursive(s);
 		}
 	}
+	
+	public boolean isMethodContaining(Node other){
+		return this.isMethodDeclaration() && this.containsByPosition(other);
+	}
+	
 
 	public static Node extractCodeFragment(Node root, Node block, Node parent) {
 	    
 	    Stream<Node> consideredChildren=root.getChildren().stream();
 	    
-	    //otros métodos diferentes al afectado: se sustituye el BlockStmt por uno nodo vacio
-	    if(root.getType().equals("MethodDeclaration") && !root.containsByPosition(block)) {
+	    //otros métodos diferentes al afectado: se sustituye el BlockStmt por un nodo vacio
+	    if(root.isMethodDeclaration() && !root.containsByPosition(block)) {
 	    	consideredChildren=consideredChildren
 					.map(c->{
 							return (c.getType().equals("BlockStmt"))?
-								builder()
-								.id(root.getId())
-								.type("SkipedBlockFragment")
-								.parent(root)
-								.children(Collections.emptyList())
-								.rrange(c.getRrange())
-								.content("")
-								.build()
-								:
-								c;
+								skipedNode(c):c;
 					});
 	    }
 	    
@@ -166,10 +162,21 @@ public class Node {
 	    newNode.setChildren(prunedChildren);
 	    
 	    return newNode;
-	
 	}
 
+	private boolean isMethodDeclaration() {
+		return this.type.equals("MethodDeclaration");
+	}
+	
 
-    
-    
+	private static Node skipedNode(Node c) {
+		return builder()
+		.id(c.getId())
+		.type("SkipedBlockFragment")
+		.parent(c.parent)
+		.children(Collections.emptyList())
+		.rrange(c.getRrange())
+		.content("")
+		.build();
+	}
 }

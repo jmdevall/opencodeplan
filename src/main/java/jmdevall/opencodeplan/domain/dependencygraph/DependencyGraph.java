@@ -5,10 +5,12 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import jmdevall.opencodeplan.domain.Fragment;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Dependency analysis [12] is used for tracking syntactic and semantic relations
@@ -30,6 +32,7 @@ creates, and (7) field use relations (Uses and UsedBy) between a statement and t
 field it uses.
  */
 @Getter
+@Slf4j
 public class DependencyGraph {
 
 	private HashMap<String,Node> forest;
@@ -48,6 +51,25 @@ public class DependencyGraph {
     	}
     	Node cu=forest.get(nodeid.getFile());
     	return cu.toStream().filter(n->n.getId().equals(nodeid)).findFirst();
+    }
+    
+    public Optional<Node> findFinalNodeContaining(NodeId nodeid){
+    	if(!forest.containsKey(nodeid.getFile())) {
+    		return Optional.empty();
+    	}
+    	Node cu=forest.get(nodeid.getFile());
+    	
+    	
+    	//List<Node> lista= 
+    			return cu.toStream()
+    			.filter(n->n.getId().getRange().contains(nodeid.getRange()))
+    			.filter(n->n.children.isEmpty())
+
+    			//.collect(Collectors.toList());
+    			.findAny();
+    	//log.debug(lista.toString());		
+
+    	//return Optional.empty();
     }
 
 	public DependencyGraph updateDependencyGraph(List<Label> labels, Fragment fragment, Fragment newFragment, Node b) {
