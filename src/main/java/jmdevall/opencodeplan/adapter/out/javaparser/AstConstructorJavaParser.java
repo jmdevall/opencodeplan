@@ -25,7 +25,9 @@ public class AstConstructorJavaParser implements CuProcessor{
 	}
 
 	private jmdevall.opencodeplan.domain.dependencygraph.Node toDomainNode(com.github.javaparser.ast.Node node){
-    	return toDomainNode(node,null);
+    	Node domainNode = toDomainNode(node,null);
+    	fix(domainNode);
+		return domainNode;
     }
 	
 
@@ -67,20 +69,29 @@ public class AstConstructorJavaParser implements CuProcessor{
 	public void fix(Node node) {
 		Node parent=node.parent;
 		
+		if(node.getContent().equals("int") 
+				&& node.getRrange().getBegin()==181) {
+			System.out.println("encontrado");
+		}
 		if(parent!=null) {
 			Node grandparent=parent.parent;
-			if(grandparent==null){
-				throw new IllegalStateException("cant fix");
-			}
-			
-			if(!parent.getId().containsByPosition(node.getId())) {
-				List<Node> brothers=parent.getChildren();
-				List<Node> exbrothers=brothers.stream().filter(n->!n.getId().equals(node.getId())).collect(Collectors.toList());
-				parent.setChildren(exbrothers);
+			if(grandparent!=null) {
 				
-				ArrayList<Node> tios=new ArrayList<Node>(grandparent.getChildren());
-				tios.add(node);
-				grandparent.setChildren(tios);
+			
+				if(!parent.getId().containsByPosition(node.getId())) {
+					
+					List<Node> brothers=parent.getChildren();
+					List<Node> exbrothers=brothers.stream()
+							.filter(n->!n.getId().equals(node.getId()))
+							.collect(Collectors.toList());
+					parent.setChildren(exbrothers);
+					
+					/*
+					ArrayList<Node> tios=new ArrayList<Node>(grandparent.getChildren());
+					tios.add(node);
+					grandparent.setChildren(tios);
+					*/
+				}
 			}
 		}
 		for(Node n:node.children) {

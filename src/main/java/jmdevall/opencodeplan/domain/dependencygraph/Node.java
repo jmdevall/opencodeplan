@@ -132,6 +132,9 @@ public class Node {
        		child.prompt2(original);
     	}
     	Rrange relativeRange = this.relativeRange();
+    	if(relativeRange.getBegin()<0) {
+    		System.out.println("mal");
+    	}
 		sbpadre.replace(relativeRange.getBegin(), relativeRange.getEnd(), original.toString());
     	return sbpadre.toString();
 
