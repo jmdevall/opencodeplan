@@ -23,11 +23,12 @@ public class FragmentTest {
 + "public class Foo{\n"                           //3
 + "   public void hello(String who){\n"           //4
 + "       System.out.println(\"hello \"+who);\n"  //5
-+ "   }\n"
-+ "\n"
-+ "   public void addnumbers(int a, int b){\n"
-+ "      return a+b;\n"
-+ "   }\n"
++ "   }\n"                                        //6
++ "\n"                                            //7
++ "   public void addnumbers(int a, int b){\n"    //8
++ "      return a+b;\n"                           //9
++ "   }\n"                                        //10
++ "   int a;"                                     //11
 + "}\n";
 	
 	String expected=
@@ -49,12 +50,18 @@ public class FragmentTest {
 		CuSourceProcessor.process(testingCuSource, acjp, new JavaParser());
 		Node compilationUnit=acjp.getForest().get("/test/Foo.java");
 		
-		Node sentencia=Node.builder().id( NodeId.builder().range(Range.newRange(5, 1, 5, 6)).build()).build();
+		Node sentencia=Node.builder()
+				.id( NodeId.builder()
+						.file("/test/Foo.java")
+						.range(Range.newRange(5, 1, 5, 6)).build()).build();
 		Fragment f=Fragment.newFragment(compilationUnit, sentencia);
 		String prompt = f.getNode().prompt();
 		log.debug("resultado fragmento="+prompt);
 		assertEquals(expected,prompt);
 	}
+	
+	
+	
 	
 	
 			

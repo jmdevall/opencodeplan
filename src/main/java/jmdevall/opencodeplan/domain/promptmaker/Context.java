@@ -1,9 +1,13 @@
 package jmdevall.opencodeplan.domain.promptmaker;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import jmdevall.opencodeplan.domain.Fragment;
 import jmdevall.opencodeplan.domain.dependencygraph.DependencyGraph;
 import jmdevall.opencodeplan.domain.dependencygraph.Node;
 import jmdevall.opencodeplan.domain.dependencygraph.Rel;
@@ -43,6 +47,7 @@ public class Context {
 				.filter(n->n.isMethodContaining(node)).findFirst().get();
 		
 		List<Rel> rels=d.getRels();
+		/*
 		for(Rel rel:rels) {
 			if(method.getId().getRange().contains(rel.getOrigin().getRange())) {
 				Node nodeRelacionado=d.findByNodeId(rel.getDestiny()).get();
@@ -52,12 +57,33 @@ public class Context {
 						+ " con este código: \n"
 						+ "```java\n"+nodeRelacionado.getContent()+"\n```");
 			}
+		}*/
+		
+		List<Node> affectedBlocks=new ArrayList<Node>();
+		
+		for(Rel rel:rels) {
+			if(method.getId().getRange().contains(rel.getOrigin().getRange())) {
+				Node nodeRelacionado=d.findByNodeId(rel.getDestiny()).get();
+				affectedBlocks.add(nodeRelacionado);
+			}
 		}
 
+		Stream<Node> affectedCus=affectedBlocks.stream()
+			.map(n->n.getId().getFile())
+			.distinct()
+			.map( file ->d.getForest().get(file));
+				
+		List<Node> fragmentos=affectedCus
+				.map(cu->Node.extractCodeFragment(cu, affectedBlocks, null))
+				.collect(Collectors.toList());
+			
 		
-		for(String cosa:spatialContext) {
-			System.out.println(cosa);
-		}
+
+		fragmentos.forEach(n->System.out.println("codigo relacionado:" + n.prompt()));
+		
+		/*for(String cosa:spatialContext) {
+		/*	System.out.println(cosa);
+		/*}
 		
 		
 		/*

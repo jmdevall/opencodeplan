@@ -1,5 +1,7 @@
 package jmdevall.opencodeplan.domain;
 
+import java.util.Arrays;
+
 import jmdevall.opencodeplan.domain.dependencygraph.Node;
 import jmdevall.opencodeplan.domain.dependencygraph.NodeId;
 import jmdevall.opencodeplan.domain.dependencygraph.Rrange;
@@ -25,7 +27,7 @@ public class Fragment {
 	
 	public static Fragment newFragment(Node cu, Node block) {
 		return Fragment.builder()
-				.node(Node.extractCodeFragment(cu,block,null))
+				.node(Node.extractCodeFragment(cu,Arrays.asList(block),null))
 				.build();
 	}
 	

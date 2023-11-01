@@ -72,7 +72,9 @@ public class Node {
     }
 	
 	public boolean containsByPosition(Node other) {
-		return this.id.getRange().contains(other.id.getRange());
+		return this.id.isSameFile(other.getId()) 
+				&& 
+				this.id.getRange().contains(other.id.getRange());
 	}
 
 	@Override
@@ -113,6 +115,9 @@ public class Node {
 	
     public String prompt(StringBuffer sb) {
     
+    	if(rrange.getBegin()>sb.length()) {
+    		System.out.println("mal");
+    	}
     	sb.replace(rrange.getBegin(), rrange.getEnd(), content);
 
     	for( Node child:this.children ) {
@@ -139,13 +144,21 @@ public class Node {
 		return this.isMethodDeclaration() && this.containsByPosition(other);
 	}
 	
+	public boolean containsByPosition(List<Node> blocks){
+		for(Node node:blocks) {
+			if(this.containsByPosition(node)) {
+				return true;
+			}
+		}
+		return false;
+	}
 
-	public static Node extractCodeFragment(Node root, Node block, Node parent) {
+	public static Node extractCodeFragment(Node root, List<Node> affectedBlocks, Node parent) {
 	    
 	    Stream<Node> consideredChildren=root.getChildren().stream();
 	    
 	    //otros métodos diferentes al afectado: se sustituye el BlockStmt por un nodo vacio
-	    if(root.isMethodDeclaration() && !root.containsByPosition(block)) {
+	    if(root.isMethodDeclaration() && !root.containsByPosition(affectedBlocks)) {
 	    	consideredChildren=consideredChildren
 					.map(c->{
 							return (c.getType().equals("BlockStmt"))?
@@ -156,7 +169,7 @@ public class Node {
 	    Node newNode=root.newCopyWithoutChildren();
 	    
 	    List<Node> prunedChildren=consideredChildren
-	    		.map(c->extractCodeFragment(c,block,newNode))
+	    		.map(c->extractCodeFragment(c,affectedBlocks,newNode))
 	    		.collect(Collectors.toList());
 	
 	    newNode.setChildren(prunedChildren);
