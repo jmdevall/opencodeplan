@@ -40,6 +40,7 @@ public class FragmentTest {
 + "   }\n"
 + "\n"
 + "   public void addnumbers(int a, int b)\n"
++ "   int a;"                                     //11
 + "}\n";
 
 	@Test
