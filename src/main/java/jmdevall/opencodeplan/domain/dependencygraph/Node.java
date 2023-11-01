@@ -23,6 +23,8 @@ public class Node {
 	private Rrange rrange;
 	private String content;
 	
+
+	
 	public Node newCopyWithoutChildren() {
 		return Node.builder()
 		.id(this.getId())
@@ -104,9 +106,9 @@ public class Node {
 			return rrange.minus(arangeparent);
 		}
 	}
-
+	
 	public String prompt() {
-		return this.prompt(new StringBuffer());
+		return this.prompt2(new StringBuffer(this.content));
 	}
 	
     public String prompt(StringBuffer sb) {
@@ -121,6 +123,18 @@ public class Node {
     	}
     	
     	return sb.toString();
+    }
+    
+    public String prompt2(StringBuffer sbpadre) {
+    	StringBuffer original = new StringBuffer(content);
+    	
+    	for(Node child:this.children) {
+       		child.prompt2(original);
+    	}
+    	Rrange relativeRange = this.relativeRange();
+		sbpadre.replace(relativeRange.getBegin(), relativeRange.getEnd(), original.toString());
+    	return sbpadre.toString();
+
     }
 
     public Stream<Node> toStream(){

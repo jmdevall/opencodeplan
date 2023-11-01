@@ -3,6 +3,8 @@ package jmdevall.opencodeplan.adapter.out.javaparser;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import com.github.javaparser.ast.CompilationUnit;
 
@@ -61,17 +63,30 @@ public class AstConstructorJavaParser implements CuProcessor{
         return domainNode;
     }
 	
-	/*
-	public void nose(Node node) {
+	
+	public void fix(Node node) {
 		Node parent=node.parent;
+		
 		if(parent!=null) {
-			if(parent.containsByPosition(parent))
+			Node grandparent=parent.parent;
+			if(grandparent==null){
+				throw new IllegalStateException("cant fix");
+			}
+			
+			if(!parent.getId().containsByPosition(node.getId())) {
+				List<Node> brothers=parent.getChildren();
+				List<Node> exbrothers=brothers.stream().filter(n->!n.getId().equals(node.getId())).collect(Collectors.toList());
+				parent.setChildren(exbrothers);
+				
+				ArrayList<Node> tios=new ArrayList<Node>(grandparent.getChildren());
+				tios.add(node);
+				grandparent.setChildren(tios);
+			}
 		}
 		for(Node n:node.children) {
-			if(n.getId().)
+			fix(n);
 		}
-		
-	}*/
+	}
 
 
 
