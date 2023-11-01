@@ -47,6 +47,7 @@ public class Context {
 				.filter(n->n.isMethodContaining(node)).findFirst().get();
 		
 		List<Rel> rels=d.getRels();
+		
 		/*
 		for(Rel rel:rels) {
 			if(method.getId().getRange().contains(rel.getOrigin().getRange())) {

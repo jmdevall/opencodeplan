@@ -71,11 +71,7 @@ public class Node {
     	}
     }
 	
-	public boolean containsByPosition(Node other) {
-		return this.id.isSameFile(other.getId()) 
-				&& 
-				this.id.getRange().contains(other.id.getRange());
-	}
+
 
 	@Override
 	public int hashCode() {
@@ -141,24 +137,17 @@ public class Node {
 	}
 	
 	public boolean isMethodContaining(Node other){
-		return this.isMethodDeclaration() && this.containsByPosition(other);
+		return this.isMethodDeclaration() && this.id.containsByPosition(other.getId());
 	}
 	
-	public boolean containsByPosition(List<Node> blocks){
-		for(Node node:blocks) {
-			if(this.containsByPosition(node)) {
-				return true;
-			}
-		}
-		return false;
-	}
+
 
 	public static Node extractCodeFragment(Node root, List<Node> affectedBlocks, Node parent) {
 	    
 	    Stream<Node> consideredChildren=root.getChildren().stream();
 	    
 	    //otros métodos diferentes al afectado: se sustituye el BlockStmt por un nodo vacio
-	    if(root.isMethodDeclaration() && !root.containsByPosition(affectedBlocks)) {
+	    if(root.isMethodDeclaration() && !root.getId().containsByPosition(affectedBlocks.stream().map(n->n.getId()).collect(Collectors.toList()))) {
 	    	consideredChildren=consideredChildren
 					.map(c->{
 							return (c.getType().equals("BlockStmt"))?

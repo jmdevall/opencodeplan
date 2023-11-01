@@ -60,6 +60,18 @@ public class AstConstructorJavaParser implements CuProcessor{
         domainNode.setChildren(children);
         return domainNode;
     }
+	
+	/*
+	public void nose(Node node) {
+		Node parent=node.parent;
+		if(parent!=null) {
+			if(parent.containsByPosition(parent))
+		}
+		for(Node n:node.children) {
+			if(n.getId().)
+		}
+		
+	}*/
 
 
 
