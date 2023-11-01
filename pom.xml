@@ -13,8 +13,8 @@
 		<lambok-version>1.18.30</lambok-version>
 		<slf4jVersion>1.7.5</slf4jVersion>
 		<javaparser-version>3.25.5</javaparser-version>
-		<maven.compiler.source>1.8</maven.compiler.source>
-		<maven.compiler.target>1.8</maven.compiler.target>
+		<maven.compiler.source>11</maven.compiler.source>
+		<maven.compiler.target>11</maven.compiler.target>
 	</properties>
 
 
@@ -71,21 +71,21 @@
 		</dependency>
 
 
-		<dependency>
-			<groupId>com.github.serenadeai</groupId>
-			<artifactId>java-tree-sitter</artifactId>
-			<version>1.1.2</version>
-		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>com.github.serenadeai</groupId>-->
+<!--			<artifactId>java-tree-sitter</artifactId>-->
+<!--			<version>1.1.2</version>-->
+<!--		</dependency>-->
 
 	</dependencies>
 
-	<repositories>
-		<repository>
-			<id>my-repo1</id>
-			<name>your custom repo</name>
-			<url>https://jitpack.io</url>
-		</repository>
-	</repositories>
+<!--	<repositories>-->
+<!--		<repository>-->
+<!--			<id>my-repo1</id>-->
+<!--			<name>your custom repo</name>-->
+<!--			<url>https://jitpack.io</url>-->
+<!--		</repository>-->
+<!--	</repositories>-->
 
 
 	<build>
@@ -95,8 +95,8 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.6.0</version>
 				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
+					<source>11</source>
+					<target>11</target>
 					<annotationProcessorPaths>
 						<path>
 							<groupId>org.projectlombok</groupId>

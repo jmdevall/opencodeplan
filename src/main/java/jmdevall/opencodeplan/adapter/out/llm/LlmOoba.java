@@ -1,6 +1,40 @@
 package jmdevall.opencodeplan.adapter.out.llm;
 
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+
 public class LlmOoba {
+	
+	private static final String TARGET_URL = "http://localhost:5000/api";
+
+	public String generate(String prompt) throws Exception{
+
+		String bodyRequest=
+				"{   \"prompt\": \"2+2\",\n"
+        		+ "        \"max_new_tokens\": 250,\n"
+        		+ "        \"auto_max_new_tokens\": false,\n"
+        		+ "        \"max_tokens_second\": 0"
+        		+ "}";
+		
+        URI targetURI = new URI(TARGET_URL+"/v1/generate");
+        HttpRequest httpRequest = HttpRequest.newBuilder()
+                .uri(targetURI)
+                .POST(HttpRequest.BodyPublishers.ofString(bodyRequest))
+                .header("Content-Type", "application/json")
+                .build();
+        //HttpRequest.BodyPublishers.ofString("{\"action\":\"hello\"}")
+        
+        HttpClient httpClient = HttpClient.newHttpClient();
+        
+        HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+        
+        return response.body();
+	}
+	
+	
+	
 	
 	/**
 	 * 
@@ -11,6 +45,11 @@ cd text-generation-webui
 export ROC_ENABLE_PRE_VEGA=1
 export HIP_VISIBLE_DEVICES=0
 python server.py --model phind-codellama-34b-v2.Q5_K_M.gguf --threads 12 --n_ctx 16384 --extensions openai --verbose
+
+https://huggingface.co/TheBloke/Mistral-7B-codealpaca-lora-GGUF
+python server.py --model mistral-7b-codealpaca-lora.Q4_K_M.gguf --threads 4 --n_ctx 32768 --api --verbose
+
+python server.py --model mistral-7b-codealpaca-lora.Q4_K_M.gguf --threads 4 --n_ctx 32768 --extensions openai --verbose
 ---------------prompt de phind
 ### System Prompt
 You are an intelligent programming assistant.
