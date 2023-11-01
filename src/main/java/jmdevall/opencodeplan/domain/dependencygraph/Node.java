@@ -1,5 +1,6 @@
 package jmdevall.opencodeplan.domain.dependencygraph;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -126,16 +127,17 @@ public class Node {
     }
     
     public String prompt2(StringBuffer sbpadre) {
-    	StringBuffer original = new StringBuffer(content);
+    	StringBuffer sbyo = new StringBuffer(content);
     	
-    	for(Node child:this.children) {
-       		child.prompt2(original);
+    	//es necesario ordenador los hijos y hacer las sustituciones desde el final hasta el principio para que no se descuadre.
+    	ArrayList<Node> consideredChildren=new ArrayList<Node>(this.children);
+    	consideredChildren.sort((o1, o2) -> o2.relativeRange().getBegin() - o1.relativeRange().getBegin());
+    	
+    	for(Node child:consideredChildren) {
+       		child.prompt2(sbyo);
     	}
     	Rrange relativeRange = this.relativeRange();
-    	if(relativeRange.getBegin()<0) {
-    		System.out.println("mal");
-    	}
-		sbpadre.replace(relativeRange.getBegin(), relativeRange.getEnd(), original.toString());
+		sbpadre.replace(relativeRange.getBegin(), relativeRange.getEnd(), sbyo.toString());
     	return sbpadre.toString();
 
     }

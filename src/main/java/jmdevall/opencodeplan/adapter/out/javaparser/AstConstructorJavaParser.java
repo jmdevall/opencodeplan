@@ -55,11 +55,12 @@ public class AstConstructorJavaParser implements CuProcessor{
     	    .build();
 
 		ArrayList<Node> children=new ArrayList<Node>();
-    	
-        for(com.github.javaparser.ast.Node child: node.getChildNodes()) {
-        	Node childomain=toDomainNode(child,domainNode);
-            children.add(childomain);
-        }
+    	if(!domainNode.getType().equals("FieldDeclaration")) {
+            for(com.github.javaparser.ast.Node child: node.getChildNodes()) {
+            	Node childomain=toDomainNode(child,domainNode);
+                children.add(childomain);
+            }
+    	}
        
         domainNode.setChildren(children);
         return domainNode;
