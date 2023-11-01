@@ -97,7 +97,6 @@ public class Node {
 		this.children = children;
 	}
     
-	//TODO: no se usa
 	public Rrange relativeRange() {
 		if(parent==null) {
 			return this.rrange;
@@ -109,24 +108,11 @@ public class Node {
 	}
 	
 	public String prompt() {
-		return this.prompt2(new StringBuffer(this.content));
+		return this.prompt(new StringBuffer(this.content));
 	}
 	
-    public String prompt(StringBuffer sb) {
     
-    	if(rrange.getBegin()>sb.length()) {
-    		System.out.println("mal");
-    	}
-    	sb.replace(rrange.getBegin(), rrange.getEnd(), content);
-
-    	for( Node child:this.children ) {
-    		child.prompt(sb);
-    	}
-    	
-    	return sb.toString();
-    }
-    
-    public String prompt2(StringBuffer sbpadre) {
+    public String prompt(StringBuffer sbpadre) {
     	StringBuffer sbyo = new StringBuffer(content);
     	
     	//es necesario ordenador los hijos y hacer las sustituciones desde el final hasta el principio para que no se descuadre.
@@ -134,7 +120,7 @@ public class Node {
     	consideredChildren.sort((o1, o2) -> o2.relativeRange().getBegin() - o1.relativeRange().getBegin());
     	
     	for(Node child:consideredChildren) {
-       		child.prompt2(sbyo);
+       		child.prompt(sbyo);
     	}
     	Rrange relativeRange = this.relativeRange();
 		sbpadre.replace(relativeRange.getBegin(), relativeRange.getEnd(), sbyo.toString());

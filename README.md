@@ -1,23 +1,23 @@
-Attempt to implement this paper in java
+Prueba de concepto-implementation de este paper en java:
 
+The implementation is done using a clean architecture, so you could replace all the external details. Can
+replace the repository implementation, the llm and the parser.
 
-The implementation is done using clean architecture, so it would be able to replace all the external details, you can
-replace the Repository implementation, the llm, and the parser.
+My first attempt was to use tree-setter as the parser suggests, but there is two problems:
+1) the version for java is linked using a native library that for me does not work.
+2) Para encontrar las relaciones entra For that you should need a dynamic library. The tests I do give me a core dump that I couldn't debug.
 
-My first try was to use tree-setter as the parser, but it could not be able to. For that I should need a dynamic library. The tests I do gives me a core dump that I was not able to debug.
+There are 2 layers:
+The inner and outer core.
 
-There is 2 layers:
-The internal core and the external
+The core is a domain model and services that implement the use cases and interfaces with the outside world. Interfaces are what the hexagonal architecture calls "ports." I name it in the packages port.in and port.out
 
-The core is a domain model, and services that implements the use cases and the interfaces to the outside world. The interfaces are what hexagonal architecture names "ports". I name it in packages port.in and port.out
+The outer layer is made up of adapters that implement all the details. There is a simple UI, but you can be prepared to create a plugin to integrate it into common IDEs (eclipse, vscode, etc., etc.)...
 
-The extenal layer is composed with adapters that implements all the details. There is a simple ui, but it may be prepared to create a plugin to be integrated in common IDEs (eclipse, vscode, etc etc)...
+The internal implementation is very clean and does not depend on any libraries, so it can be relatively easy to translate the implementation to another language, such as Python, etc., etc.
 
-The internal implementation is very clean and do not depends on any library so it may be relatively simple to translate the implementation to another language, like python, etc etc.
-
-
-
-The external 
-core is 
-
+FAQ: Why java and not python? 
+1 Estoy mas acostumbrado a trabajar con java
+2 Sería muy util al ser java un lenguaje ampliamente utilizado.
+2 Parece que es mas sencillo de implementar: Realmente no utilizo nada extraodinario. Para mi un llm es simplemente un servicio web externo. Lo mas complejo realmente es crear toda la infraestructura para el analizador sintáctico del lenguaje.
 

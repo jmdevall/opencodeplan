@@ -12,6 +12,7 @@ import jmdevall.opencodeplan.domain.dependencygraph.DependencyGraph;
 import jmdevall.opencodeplan.domain.dependencygraph.Node;
 import jmdevall.opencodeplan.domain.dependencygraph.Rel;
 import jmdevall.opencodeplan.port.out.repository.Repository;
+import lombok.Getter;
 
 /**
  * The context of the edit
@@ -21,7 +22,17 @@ called from the block 𝐵, and
 caused the need to edit the block 𝐵. The temporal context is formed by edits along the paths
 from the root nodes of the plan graph to 𝐵.
  */
+@Getter
 public class Context {
+
+	private List<String> spatialContext;
+
+	
+	public Context(List<String> spatialContext) {
+		super();
+		this.spatialContext = spatialContext;
+	}
+
 
 	//SpatialContext
 	
@@ -38,7 +49,6 @@ public class Context {
 		*/
 		List<String> spatialContext=new ArrayList<String>();
 		
-		//d. findByNo>deId(b);
 		Optional<Node> found=d.findFinalNodeContaining(b.getId());
 		Node node=found.get();
 		
@@ -47,18 +57,6 @@ public class Context {
 				.filter(n->n.isMethodContaining(node)).findFirst().get();
 		
 		List<Rel> rels=d.getRels();
-		
-		/*
-		for(Rel rel:rels) {
-			if(method.getId().getRange().contains(rel.getOrigin().getRange())) {
-				Node nodeRelacionado=d.findByNodeId(rel.getDestiny()).get();
-				spatialContext.add(
-						"El método está relacionado con otra parte del código del proyecto:\n"
-						+ " tipo de relacion=" + rel.getLabel()
-						+ " con este código: \n"
-						+ "```java\n"+nodeRelacionado.getContent()+"\n```");
-			}
-		}*/
 		
 		List<Node> affectedBlocks=new ArrayList<Node>();
 		
@@ -80,12 +78,7 @@ public class Context {
 			
 		
 
-		fragmentos.forEach(n->System.out.println("codigo relacionado:" + n.prompt()));
-		
-		/*for(String cosa:spatialContext) {
-		/*	System.out.println(cosa);
-		/*}
-		
+		fragmentos.forEach(n->spatialContext.add(n.prompt()));
 		
 		/*
 		The plan graph records all change obligations and their inter-dependences.
@@ -98,7 +91,7 @@ public class Context {
 		change (change to A) and the current obligation (to make a change to B).*/
 		
 		// TODO:
-        return new Context();
+        return new Context(spatialContext);
         
         
     }

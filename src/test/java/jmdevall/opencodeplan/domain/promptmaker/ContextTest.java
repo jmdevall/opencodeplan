@@ -3,17 +3,10 @@ package jmdevall.opencodeplan.domain.promptmaker;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.File;
-import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import jmdevall.opencodeplan.adapter.out.javaparser.AstConstructorJavaParser;
 import jmdevall.opencodeplan.adapter.out.javaparser.ConstructDependencyGraphJavaparser;
-import jmdevall.opencodeplan.adapter.out.javaparser.CuRelFinderVisitProcessor;
-import jmdevall.opencodeplan.adapter.out.javaparser.CuSourceFolder;
-import jmdevall.opencodeplan.adapter.out.javaparser.CuSourceProcessor;
-import jmdevall.opencodeplan.adapter.out.javaparser.relfinders.CallsRelFinder;
-import jmdevall.opencodeplan.adapter.out.javaparser.relfinders.LogRelUtil;
 import jmdevall.opencodeplan.adapter.out.javaparser.util.TestUtil;
 import jmdevall.opencodeplan.domain.BI;
 import jmdevall.opencodeplan.domain.Fragment;
@@ -21,7 +14,6 @@ import jmdevall.opencodeplan.domain.dependencygraph.DependencyGraph;
 import jmdevall.opencodeplan.domain.dependencygraph.Node;
 import jmdevall.opencodeplan.domain.dependencygraph.NodeId;
 import jmdevall.opencodeplan.domain.dependencygraph.Range;
-import jmdevall.opencodeplan.domain.dependencygraph.Rel;
 import jmdevall.opencodeplan.port.out.repository.Repository;
 
 public class ContextTest {
@@ -58,13 +50,12 @@ public class ContextTest {
 	}
 	
 	@Test
-	public void nose() {
+	public void canGatherSpatialContext() {
 		ConstructDependencyGraphJavaparser jp=ConstructDependencyGraphJavaparser.newDefault();
 		
 		FakeRepository repository = new FakeRepository(testUtil.getRootTestbenchFolder());
 		DependencyGraph d= jp.construct(repository);
 		
-		Context c=new Context();
 		Node searchNode=Node.builder()
 		.id(NodeId.builder()
 		 .file("/testbench/testutil/uses/ExampleClass.java")
@@ -72,7 +63,8 @@ public class ContextTest {
 		 .build())
 		.build();
 		
-		c.gatherContext(searchNode, repository, d);
+		Context c=Context.gatherContext(searchNode, repository, d);
+		assertEquals(5,c.getSpatialContext().size());
 		
 	}
 }
