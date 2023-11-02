@@ -1,14 +1,10 @@
 package jmdevall.opencodeplan.domain.dependencygraph;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import jmdevall.opencodeplan.domain.Fragment;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -38,7 +34,6 @@ public class DependencyGraph {
 	private HashMap<String,Node> forest;
 	private List<Rel> rels;
 	
-
     public DependencyGraph(HashMap<String, Node> forest, List<Rel> rels) {
 		super();
 		this.forest = forest;
@@ -60,16 +55,10 @@ public class DependencyGraph {
     	Node cu=forest.get(nodeid.getFile());
     	
     	
-    	//List<Node> lista= 
-    			return cu.toStream()
-    			.filter(n->n.getId().getRange().contains(nodeid.getRange()))
-    			.filter(n->n.children.isEmpty())
-
-    			//.collect(Collectors.toList());
-    			.findAny();
-    	//log.debug(lista.toString());		
-
-    	//return Optional.empty();
+		return cu.toStream()
+		.filter(n->n.getId().getRange().contains(nodeid.getRange()))
+		.filter(n->n.children.isEmpty())
+		.findAny();
     }
 
 	public DependencyGraph updateDependencyGraph(List<Label> labels, Fragment fragment, Fragment newFragment, Node b) {

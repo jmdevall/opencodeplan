@@ -1,5 +1,8 @@
 Prueba de concepto-implementation de este paper en java:
 
+
+Estructura del proyecto: se ha seguido la estructura de paquetes sugerida aquí: https://tbuss.de/posts/2023/9-how-to-do-the-package-structure-in-a-ports-and-adapter-architecture/
+
 The implementation is done using a clean architecture, so you could replace all the external details. Can
 replace the repository implementation, the llm and the parser.
 

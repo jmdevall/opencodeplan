@@ -1,9 +1,7 @@
-package jmdevall.opencodeplan;
+package jmdevall.opencodeplan.domain;
 
 import java.util.Collections;
 import java.util.List;
-
-import jmdevall.opencodeplan.domain.BI;
 
 public class DeltaSeeds {
     boolean isEmpty() {

@@ -1,6 +1,6 @@
 package jmdevall.opencodeplan.adapter.out.oracle;
 
-import jmdevall.opencodeplan.DeltaSeeds;
+import jmdevall.opencodeplan.domain.DeltaSeeds;
 import jmdevall.opencodeplan.port.out.oracle.Oracle;
 import jmdevall.opencodeplan.port.out.repository.Repository;
 

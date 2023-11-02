@@ -55,8 +55,7 @@ public class LlmOoba {
 	}
 
 	private void checkResponse(Response r) {
-		// TODO Auto-generated method stub
-		
+		// TODO: must check if response is ok
 	}
 	
 	

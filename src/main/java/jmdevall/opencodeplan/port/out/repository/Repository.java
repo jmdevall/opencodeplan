@@ -14,5 +14,4 @@ public interface Repository {
 
     Repository merge(Fragment newFragment, Node b);
 
-
 }

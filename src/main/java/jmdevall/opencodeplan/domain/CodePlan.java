@@ -1,11 +1,9 @@
-package jmdevall.opencodeplan;
+package jmdevall.opencodeplan.domain;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import jmdevall.opencodeplan.domain.BI;
-import jmdevall.opencodeplan.domain.Fragment;
 import jmdevall.opencodeplan.domain.dependencygraph.DependencyGraph;
 import jmdevall.opencodeplan.domain.dependencygraph.Label;
 import jmdevall.opencodeplan.domain.dependencygraph.Node;
