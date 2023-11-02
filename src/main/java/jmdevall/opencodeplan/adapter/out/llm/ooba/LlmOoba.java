@@ -1,36 +1,62 @@
-package jmdevall.opencodeplan.adapter.out.llm;
+package jmdevall.opencodeplan.adapter.out.llm.ooba;
 
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
+import com.google.gson.Gson;
+
+
 public class LlmOoba {
 	
-	private static final String TARGET_URL = "http://localhost:5000/api";
+	private String targetUrl;
+	
+	private Gson gson;
+	
+	public LlmOoba(String targetUrl) {
+		super();
+		this.targetUrl = targetUrl;
+		this.gson=new Gson();
+	}
+
+	private String getJsonRequest(String prompt) {
+		Request r=Request.builder()
+				.prompt(prompt)
+				.auto_max_new_tokens(false)
+				.max_new_tokens(2000)
+				.max_tokens_seconds(0)
+				.build();
+		return gson.toJson(r);
+	}
 
 	public String generate(String prompt) throws Exception{
 
-		String bodyRequest=
-				"{   \"prompt\": \"2+2\",\n"
-        		+ "        \"max_new_tokens\": 250,\n"
-        		+ "        \"auto_max_new_tokens\": false,\n"
-        		+ "        \"max_tokens_second\": 0"
-        		+ "}";
+		String bodyRequest=getJsonRequest(prompt);
 		
-        URI targetURI = new URI(TARGET_URL+"/v1/generate");
+        URI targetURI = new URI(targetUrl+"/v1/generate");
         HttpRequest httpRequest = HttpRequest.newBuilder()
                 .uri(targetURI)
                 .POST(HttpRequest.BodyPublishers.ofString(bodyRequest))
                 .header("Content-Type", "application/json")
                 .build();
-        //HttpRequest.BodyPublishers.ofString("{\"action\":\"hello\"}")
         
         HttpClient httpClient = HttpClient.newHttpClient();
         
         HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
-        
-        return response.body();
+                
+        return tryParseResponseBody(response.body());
+	}
+
+	private String tryParseResponseBody(String json) {
+		Response r=gson.fromJson(json, Response.class);
+		checkResponse(r);
+		return r.getResults().get(0).getText();
+	}
+
+	private void checkResponse(Response r) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	

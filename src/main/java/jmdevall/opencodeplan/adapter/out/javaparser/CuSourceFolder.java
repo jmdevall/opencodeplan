@@ -10,9 +10,14 @@ import jmdevall.opencodeplan.adapter.out.file.direxplorer.DirExplorer;
 import jmdevall.opencodeplan.adapter.out.file.direxplorer.Filter;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * Source of compilation units that is a simple rootFolder in the system
+ * The rootFolder contains the source code.
+ * 
+ */
+
 @Slf4j
 public class CuSourceFolder implements CuSource {
-	
 
  	private HashMap<String,String> files=new HashMap<String,String>();
 	private File rootDir;
@@ -26,11 +31,11 @@ public class CuSourceFolder implements CuSource {
 		return (level, path, file) -> path.endsWith(".java");
 	}
 	
-	public static CuSourceFolder newFromFile(File rootDir){
-        return newFromFileAndFilter(rootDir, defaultJavaExtensionFilter());
+	public static CuSourceFolder newDefaultJavaCuSourceFolder(File rootDir){
+        return newFromRootFolderAndFilter(rootDir, defaultJavaExtensionFilter());
 	}
 
-	public static CuSourceFolder newFromFileAndFilter(File rootDir, Filter defaultJavaExtensionFilter) {
+	public static CuSourceFolder newFromRootFolderAndFilter(File rootDir, Filter defaultJavaExtensionFilter) {
 		HashMap<String,String> readedfiles=new HashMap<String,String>();
 
         new DirExplorer(
@@ -59,7 +64,4 @@ public class CuSourceFolder implements CuSource {
 		return new ArrayList<String>(this.files.keySet());
 	}
         
-	
-	
-
 }

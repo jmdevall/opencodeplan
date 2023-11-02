@@ -21,7 +21,7 @@ public class AstConstructorJavaParserTest {
 	@Test
 	public void canFindCompilationUnits() {
 		
-		CuSourceFolder cuSource=CuSourceFolder.newFromFile(testUtil.getRootTestbenchFolder());
+		CuSourceFolder cuSource=CuSourceFolder.newDefaultJavaCuSourceFolder(testUtil.getRootTestbenchFolder());
 		
 		AstConstructorJavaParser sut=new AstConstructorJavaParser(cuSource);
 		CuSourceProcessor.process(cuSource, sut);
@@ -37,7 +37,7 @@ public class AstConstructorJavaParserTest {
 	@Test
 	public void elResultadoDeHacerParseSobreCuEsElPropioContenidoDelCu() {
 		
-		CuSourceFolder cuSource=CuSourceFolder.newFromFile(testUtil.getRootTestbenchFolder());
+		CuSourceFolder cuSource=CuSourceFolder.newDefaultJavaCuSourceFolder(testUtil.getRootTestbenchFolder());
 		
 		AstConstructorJavaParser sut=new AstConstructorJavaParser(cuSource);
 		CuSourceProcessor.process(cuSource, sut);

@@ -45,7 +45,7 @@ public class ConstructDependencyGraphJavaparser implements ConstructDependencyGr
 	public DependencyGraph construct(Repository repository) {
 		File srcRoot=repository.getSrcRoot();
 		
-		CuSourceFolder cuSource=CuSourceFolder.newFromFile(srcRoot);
+		CuSourceFolder cuSource=CuSourceFolder.newDefaultJavaCuSourceFolder(srcRoot);
 		
 		AstConstructorJavaParser astcreator=new AstConstructorJavaParser(cuSource);
 		

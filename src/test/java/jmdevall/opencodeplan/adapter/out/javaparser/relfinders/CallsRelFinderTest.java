@@ -24,7 +24,7 @@ public class CallsRelFinderTest {
 		
 		CuRelFinderVisitProcessor vp=new CuRelFinderVisitProcessor(sut);
 		String startfolder=",testbench,testutil,calls".replaceAll(",", File.separator);
-		CuSourceFolder cuSource=CuSourceFolder.newFromFileAndFilter(testUtil.getRootTestbenchFolder(),
+		CuSourceFolder cuSource=CuSourceFolder.newFromRootFolderAndFilter(testUtil.getRootTestbenchFolder(),
 				(int level, String path, File file)->path.startsWith(startfolder));
 
 		CuSourceProcessor.process(cuSource, vp);
