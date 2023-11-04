@@ -60,33 +60,9 @@ public class LlmOoba {
 	
 	
 	
+
 	
-	/**
-	 * 
-	 * 
-	 * 
-conda activate textgen
-cd text-generation-webui
-export ROC_ENABLE_PRE_VEGA=1
-export HIP_VISIBLE_DEVICES=0
-python server.py --model phind-codellama-34b-v2.Q5_K_M.gguf --threads 12 --n_ctx 16384 --extensions openai --verbose
-
-https://huggingface.co/TheBloke/Mistral-7B-codealpaca-lora-GGUF
-python server.py --model mistral-7b-codealpaca-lora.Q4_K_M.gguf --threads 4 --n_ctx 32768 --api --verbose
-
-python server.py --model mistral-7b-codealpaca-lora.Q4_K_M.gguf --threads 4 --n_ctx 32768 --extensions openai --verbose
----------------prompt de phind
-### System Prompt
-You are an intelligent programming assistant.
-
-### User Message
-Implement a linked list in C++
-
-### Assistant
-	 * 
-	 */
-	
-/*
+/* Ejemplo extraido del propio código de ooba
  * 
  * export const fetchGenerate = async function (prompt:string):Promise<string> {
 

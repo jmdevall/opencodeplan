@@ -74,7 +74,8 @@ public class ContextTest {
 	public void makePrompt() {
 		ConstructDependencyGraphJavaparser jp=ConstructDependencyGraphJavaparser.newDefault();
 		
-		File srcRoot = new File("%%%%/nemofinder/src/main/java");
+		String nemofinderRoot="..."; //un proyecto existente TODO: configuracion!
+		File srcRoot = new File(nemofinderRoot+"/src/main/java");
 		FakeRepository repository = new FakeRepository(srcRoot);
 		DependencyGraph d= jp.construct(repository);
 		
@@ -94,7 +95,7 @@ public class ContextTest {
 		Inatural i=new Inatural("Haz que el método devuelva un Collection");
 		String prompt=pm.makePrompt(f, i, c);
 		
-		System.out.println("prompot="+prompt);
+		System.out.println("prompt="+prompt);
 	}
 	
 	
