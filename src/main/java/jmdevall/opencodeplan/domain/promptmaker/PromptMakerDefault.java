@@ -5,7 +5,7 @@ import jmdevall.opencodeplan.domain.instruction.I;
 
 public class PromptMakerDefault implements PromptMaker {
 
-	String alpacaInstruction=
+	private static final String alpacaInstruction=
 	"Below is an instruction that describes a task. Write a response that appropriately completes the request.\n"
     +"\n"
 	+"### Instruction:\n"
@@ -60,7 +60,7 @@ public class PromptMakerDefault implements PromptMaker {
 		StringBuilder sb=new StringBuilder();
 		sb.append("```java\n");
 		sb.append(javacode);
-		sb.append("\n```");
+		sb.append("\n```\n\n");
 		return sb.toString();
 	}
 }
