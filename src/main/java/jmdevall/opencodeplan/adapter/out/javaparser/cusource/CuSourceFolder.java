@@ -1,4 +1,4 @@
-package jmdevall.opencodeplan.adapter.out.javaparser;
+package jmdevall.opencodeplan.adapter.out.javaparser.cusource;
 
 import java.io.File;
 import java.util.ArrayList;

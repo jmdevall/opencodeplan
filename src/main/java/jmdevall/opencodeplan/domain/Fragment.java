@@ -26,6 +26,14 @@ public class Fragment {
 	*/
 	private Node node;
 	
+	/**
+	 * Fragment is like a copy of the Compilation Unit node but some of the child nodes that represent the method blocks has been
+	 * replaced with empty blocks because it is not of interest.
+	 * 
+	 * @param cu
+	 * @param block
+	 * @return
+	 */
 	public static Fragment newFragment(Node cu, Node block) {
 		return Fragment.builder()
 				.node(Fragment.extractCodeFragment(cu,Arrays.asList(block),null))
@@ -36,7 +44,7 @@ public class Fragment {
 	    
 	    Stream<Node> consideredChildren=root.getChildren().stream();
 	    
-	    //otros métodos diferentes al afectado: se sustituye el BlockStmt por un nodo vacio
+	    //other methods different to the affected: replace blockStmt with other empty "SkipBlock"
 	    if(root.isMethodDeclaration() && !root.getId().containsByPosition(
 	    		affectedBlocks.stream()
 	    		.map(n->n.getId())

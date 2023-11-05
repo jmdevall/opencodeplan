@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import jmdevall.opencodeplan.application.port.out.ConstructDependencyGraph;
 import jmdevall.opencodeplan.application.port.out.oracle.Oracle;
+import jmdevall.opencodeplan.application.port.out.parser.ConstructDependencyGraph;
 import jmdevall.opencodeplan.application.port.out.repository.Repository;
 import jmdevall.opencodeplan.domain.BI;
 import jmdevall.opencodeplan.domain.BlockRelationPair;

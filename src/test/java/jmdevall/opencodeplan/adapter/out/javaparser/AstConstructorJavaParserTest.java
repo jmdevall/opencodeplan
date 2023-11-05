@@ -9,6 +9,7 @@ import java.util.HashMap;
 
 import org.junit.jupiter.api.Test;
 
+import jmdevall.opencodeplan.adapter.out.javaparser.cusource.CuSourceFolder;
 import jmdevall.opencodeplan.adapter.out.javaparser.util.TestUtil;
 import jmdevall.opencodeplan.domain.dependencygraph.Node;
 import lombok.extern.slf4j.Slf4j;

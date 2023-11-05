@@ -7,13 +7,14 @@ import java.util.List;
 
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
+import jmdevall.opencodeplan.adapter.out.javaparser.cusource.CuSourceFolder;
 import jmdevall.opencodeplan.adapter.out.javaparser.relfinders.BaseClassRelFinder;
 import jmdevall.opencodeplan.adapter.out.javaparser.relfinders.CallsRelFinder;
 import jmdevall.opencodeplan.adapter.out.javaparser.relfinders.ChildParentRelFinder;
 import jmdevall.opencodeplan.adapter.out.javaparser.relfinders.InstantiateRelFinder;
 import jmdevall.opencodeplan.adapter.out.javaparser.relfinders.OverridesRelFinder;
 import jmdevall.opencodeplan.adapter.out.javaparser.relfinders.UsesRelFinder;
-import jmdevall.opencodeplan.application.port.out.ConstructDependencyGraph;
+import jmdevall.opencodeplan.application.port.out.parser.ConstructDependencyGraph;
 import jmdevall.opencodeplan.application.port.out.repository.Repository;
 import jmdevall.opencodeplan.domain.dependencygraph.DependencyGraph;
 import jmdevall.opencodeplan.domain.dependencygraph.Node;

@@ -11,6 +11,7 @@ import com.github.javaparser.ast.CompilationUnit;
 import jmdevall.opencodeplan.domain.dependencygraph.Node;
 import jmdevall.opencodeplan.domain.dependencygraph.NodeId;
 import jmdevall.opencodeplan.domain.dependencygraph.LineColRange;
+import jmdevall.opencodeplan.adapter.out.javaparser.cusource.CuSource;
 import jmdevall.opencodeplan.domain.dependencygraph.IndexPosRange;
 import lombok.extern.slf4j.Slf4j;
 
@@ -42,7 +43,6 @@ public class AstConstructorJavaParser implements CuProcessor{
 		
 		LineColRange range = nodeId.getRange();
 		IndexPosRange rrange=absoluterange(range, cucontent);
-		
 
 		String nodecontent = cucontent.substring(rrange.getBegin(), rrange.getEnd());
 
@@ -65,6 +65,8 @@ public class AstConstructorJavaParser implements CuProcessor{
         domainNode.setChildren(children);
         return domainNode;
     }
+	
+	
 	
 	/**
 	 * TODO: por lo que he visto en algunos casos javaparser crea nodos hijos tal que el padre están fuera del padre.

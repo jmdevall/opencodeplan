@@ -4,6 +4,8 @@ import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ast.CompilationUnit;
 
+import jmdevall.opencodeplan.adapter.out.javaparser.cusource.CuSource;
+import jmdevall.opencodeplan.adapter.out.javaparser.cusource.CuSourceFolder;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

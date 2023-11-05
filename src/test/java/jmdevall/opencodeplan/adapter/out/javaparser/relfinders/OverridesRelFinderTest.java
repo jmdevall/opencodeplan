@@ -10,8 +10,8 @@ import java.util.stream.Collectors;
 import org.junit.jupiter.api.Test;
 
 import jmdevall.opencodeplan.adapter.out.javaparser.CuRelFinderVisitProcessor;
-import jmdevall.opencodeplan.adapter.out.javaparser.CuSourceFolder;
 import jmdevall.opencodeplan.adapter.out.javaparser.CuSourceProcessor;
+import jmdevall.opencodeplan.adapter.out.javaparser.cusource.CuSourceFolder;
 import jmdevall.opencodeplan.adapter.out.javaparser.util.TestUtil;
 import jmdevall.opencodeplan.domain.dependencygraph.DependencyRelation;
 

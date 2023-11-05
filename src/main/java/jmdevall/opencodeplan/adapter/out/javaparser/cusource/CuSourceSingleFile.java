@@ -1,16 +1,14 @@
-package jmdevall.opencodeplan.domain;
+package jmdevall.opencodeplan.adapter.out.javaparser.cusource;
 
 import java.util.Arrays;
 import java.util.List;
 
-import jmdevall.opencodeplan.adapter.out.javaparser.CuSource;
-
-public class CuSourceSingleFileJavaTesting implements CuSource{
+public class CuSourceSingleFile implements CuSource{
 
 	private String path;
 	private String content;
 	
-	public CuSourceSingleFileJavaTesting(String path, String content) {
+	public CuSourceSingleFile(String path, String content) {
 		this.path=path;
 		this.content=content;
 	}

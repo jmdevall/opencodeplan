@@ -7,8 +7,9 @@ import org.junit.jupiter.api.Test;
 import com.github.javaparser.JavaParser;
 
 import jmdevall.opencodeplan.adapter.out.javaparser.AstConstructorJavaParser;
-import jmdevall.opencodeplan.adapter.out.javaparser.CuSource;
 import jmdevall.opencodeplan.adapter.out.javaparser.CuSourceProcessor;
+import jmdevall.opencodeplan.adapter.out.javaparser.cusource.CuSource;
+import jmdevall.opencodeplan.adapter.out.javaparser.cusource.CuSourceSingleFile;
 import jmdevall.opencodeplan.domain.dependencygraph.Node;
 import jmdevall.opencodeplan.domain.dependencygraph.NodeId;
 import jmdevall.opencodeplan.domain.dependencygraph.LineColRange;
@@ -45,7 +46,7 @@ public class FragmentTest {
 
 	@Test
 	public void eliminaBloquesDeMetodosNoAfectados() {
-		CuSource testingCuSource=new CuSourceSingleFileJavaTesting("/test/Foo.java", javaCompileUnit);
+		CuSource testingCuSource=new CuSourceSingleFile("/test/Foo.java", javaCompileUnit);
 				
 		AstConstructorJavaParser acjp=new AstConstructorJavaParser(testingCuSource);
 		CuSourceProcessor.process(testingCuSource, acjp, new JavaParser());
@@ -60,10 +61,5 @@ public class FragmentTest {
 		log.debug("resultado fragmento="+prompt);
 		assertEquals(expected,prompt);
 	}
-	
-	
-	
-	
-	
 			
 }
