@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.List;
 
 import jmdevall.opencodeplan.application.port.out.ConstructDependencyGraph;
-import jmdevall.opencodeplan.application.port.out.llm.Llm;
 import jmdevall.opencodeplan.application.port.out.oracle.Oracle;
 import jmdevall.opencodeplan.application.port.out.repository.Repository;
 import jmdevall.opencodeplan.domain.BI;
@@ -22,21 +21,17 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class CodePlan {
- 
 
     List<BlockRelationPair> getAffectedBlocks(List<DependencyLabel> labels, Node b, DependencyGraph d, DependencyGraph dp) {
     	//TODO:
     	return new ArrayList<BlockRelationPair>();
-
     }
-
 
     List<DependencyLabel> classifyChanges(Fragment fragment, Fragment newFragment) {
         // TODO:
         return Collections.<DependencyLabel>emptyList();
     }
    
-
     /*
      * Inputs: R is the , Delta_seeds is a set of seed edit
      * specifications, Theta is an oracle and L is an LLM.
@@ -46,25 +41,25 @@ public class CodePlan {
     PromptMaker promptMaker;
     Oracle oracle;
     
-/**
- * 
- * @param r source code of a repository
- * @param DeltaSeeds
- * @param theta oracle
- * @param l:llm 
- * 
- * 
- */
-    
-void codePlan(Repository r, DeltaSeeds deltaSeeds, Llm llm, PromptMaker pm){
-    PlanGraph g = new PlanGraph();
-    DependencyGraph d = constructDependencyGraph.construct(r);
-     while (!deltaSeeds.isEmpty()){
-        initializePlanGraph(g, deltaSeeds);
-        adaptivePlanAndExecute(r, d, g,llm);
-        deltaSeeds = oracle.oracle(r);
-     }
-}
+	/**
+	 * 
+	 * @param r source code of a repository
+	 * @param DeltaSeeds
+	 * @param theta oracle
+	 * @param l:llm 
+	 * 
+	 * 
+	 */
+	    
+	void codePlan(Repository r, DeltaSeeds deltaSeeds, Llm llm, PromptMaker pm){
+	    PlanGraph g = new PlanGraph();
+	    DependencyGraph d = constructDependencyGraph.construct(r);
+	     while (!deltaSeeds.isEmpty()){
+	        initializePlanGraph(g, deltaSeeds);
+	        adaptivePlanAndExecute(r, d, g,llm);
+	        deltaSeeds = oracle.oracle(r);
+	     }
+	}
 
     void initializePlanGraph(PlanGraph g, DeltaSeeds deltaSeeds) {
         deltaSeeds.getBIs().forEach(bi -> {

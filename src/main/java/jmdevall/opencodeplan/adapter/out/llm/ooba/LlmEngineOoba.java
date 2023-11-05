@@ -1,6 +1,8 @@
 package jmdevall.opencodeplan.adapter.out.llm.ooba;
 
+import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -9,15 +11,22 @@ import com.google.gson.Gson;
 
 import jmdevall.opencodeplan.adapter.out.llm.ooba.jsonmodel.Request;
 import jmdevall.opencodeplan.adapter.out.llm.ooba.jsonmodel.Response;
+import jmdevall.opencodeplan.application.port.out.llm.LlmEngine;
+import jmdevall.opencodeplan.application.port.out.llm.LlmException;
+import lombok.extern.slf4j.Slf4j;
 
 
-public class LlmOoba {
+/**
+ * 
+ */
+@Slf4j
+public class LlmEngineOoba implements LlmEngine {
 	
 	private String targetUrl;
 	
 	private Gson gson;
 	
-	public LlmOoba(String targetUrl) {
+	public LlmEngineOoba(String targetUrl) {
 		super();
 		this.targetUrl = targetUrl;
 		this.gson=new Gson();
@@ -33,22 +42,34 @@ public class LlmOoba {
 		return gson.toJson(r);
 	}
 
-	public String generate(String prompt) throws Exception{
+	@Override
+	public String generate(String prompt) throws LlmException{
 
 		String bodyRequest=getJsonRequest(prompt);
 		
-        URI targetURI = new URI(targetUrl+"/v1/generate");
-        HttpRequest httpRequest = HttpRequest.newBuilder()
-                .uri(targetURI)
-                .POST(HttpRequest.BodyPublishers.ofString(bodyRequest))
-                .header("Content-Type", "application/json")
-                .build();
-        
-        HttpClient httpClient = HttpClient.newHttpClient();
-        
-        HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
-                
-        return tryParseResponseBody(response.body());
+        try {
+			URI targetURI = new URI(targetUrl+"/v1/generate");
+			HttpRequest httpRequest = HttpRequest.newBuilder()
+			        .uri(targetURI)
+			        .POST(HttpRequest.BodyPublishers.ofString(bodyRequest))
+			        .header("Content-Type", "application/json")
+			        .build();
+			
+			HttpClient httpClient = HttpClient.newHttpClient();
+			
+			HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+			        
+			return tryParseResponseBody(response.body());
+		} catch (URISyntaxException e) {
+			log.error("Uri Syntax Exception",e);
+			throw new LlmException(e);
+		} catch (IOException e) {
+			log.error("IO Exception",e);
+			throw new LlmException(e);
+		} catch (InterruptedException e) {
+			log.error("Interrupted exception",e);
+			throw new LlmException(e);
+		}
 	}
 
 	private String tryParseResponseBody(String json) {

@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
+import jmdevall.opencodeplan.application.port.out.llm.LlmEngine;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -12,7 +13,7 @@ public class LlmOobaIT {
 	@Test
 	public void seInvocaYObtieneRespuesta() throws Exception {
 		
-		LlmOoba sut=new LlmOoba("http://localhost:5000/api");
+		LlmEngine sut=new LlmEngineOoba("http://localhost:5000/api");
 		String response=sut.generate("2+2");
 		
 		log.debug("respuesta=["+response+"]");
