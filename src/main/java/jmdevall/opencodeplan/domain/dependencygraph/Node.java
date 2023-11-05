@@ -19,7 +19,7 @@ public class Node {
 	public Node parent;
 	public List<Node> children;
 	
-	private IndexPosrange rrange;
+	private IndexPosRange rrange;
 	private String content;
 	
 	public Node newCopyWithoutChildren() {
@@ -93,12 +93,12 @@ public class Node {
 		this.children = children;
 	}
     
-	public IndexPosrange relativeRange() {
+	public IndexPosRange relativeRange() {
 		if(parent==null) {
 			return this.rrange;
 		}
 		else { 
-			IndexPosrange arangeparent=parent.rrange;
+			IndexPosRange arangeparent=parent.rrange;
 			return rrange.minus(arangeparent);
 		}
 	}
@@ -118,7 +118,7 @@ public class Node {
     	for(Node child:consideredChildren) {
        		child.prompt(sbyo);
     	}
-    	IndexPosrange relativeRange = this.relativeRange();
+    	IndexPosRange relativeRange = this.relativeRange();
 		sbpadre.replace(relativeRange.getBegin(), relativeRange.getEnd(), sbyo.toString());
     	return sbpadre.toString();
 
