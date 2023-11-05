@@ -6,8 +6,7 @@ import jmdevall.opencodeplan.domain.Fragment;
 public class Llm {
 
 	private LlmEngine llmEngine;
-	
-	
+
 
 	public Fragment invoke(String prompt) {
 		String result = llmEngine.generate(prompt);

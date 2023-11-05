@@ -66,33 +66,28 @@ public class AstConstructorJavaParser implements CuProcessor{
         return domainNode;
     }
 	
-	
+	/**
+	 * TODO: por lo que he visto en algunos casos javaparser crea nodos hijos tal que el padre están fuera del padre.
+	 * Esta funcion trataría de arreglarlo. moviendo el hijo como si fuera un hijo del abuelo.
+	 * 
+	 * De todas formas quizas no haga falta. Creo que solo ocurre en los nodos VariableDeclaration y FieldDeclaration y no no hace falta llegar hasta ese nivel
+	 * 
+	 * Al final lo que vale son las relaciones de dependencias entre métodos. Da igual entrar al detalle de a que sentencia dentro del método es la que está relacionada. 
+	 *  
+	 * @param node
+	 */
 	public void fix(Node node) {
 		Node parent=node.parent;
 		
-		if(node.getContent().equals("int") 
-				&& node.getRrange().getBegin()==181) {
-			System.out.println("encontrado");
-		}
 		if(parent!=null) {
 			Node grandparent=parent.parent;
-			if(grandparent!=null) {
-				
-			
-				if(!parent.getId().containsByPosition(node.getId())) {
+			if(grandparent!=null &&	!parent.getId().containsByPosition(node.getId())) {
 					
-					List<Node> brothers=parent.getChildren();
-					List<Node> exbrothers=brothers.stream()
-							.filter(n->!n.getId().equals(node.getId()))
-							.collect(Collectors.toList());
-					parent.setChildren(exbrothers);
-					
-					/*
-					ArrayList<Node> tios=new ArrayList<Node>(grandparent.getChildren());
-					tios.add(node);
-					grandparent.setChildren(tios);
-					*/
-				}
+				List<Node> brothers=parent.getChildren();
+				List<Node> exbrothers=brothers.stream()
+						.filter(n->!n.getId().equals(node.getId()))
+						.collect(Collectors.toList());
+				parent.setChildren(exbrothers);
 			}
 		}
 		for(Node n:node.children) {
@@ -100,11 +95,10 @@ public class AstConstructorJavaParser implements CuProcessor{
 		}
 	}
 
-
-
 	private IndexPosRange absoluterange(LineColRange range, String cucontent) {
 
-		return new IndexPosRange(range.getBegin().absolute(cucontent),
+		return new IndexPosRange(
+				range.getBegin().absolute(cucontent),
 				range.getEnd().absolute(cucontent)+1);
 	}
 
