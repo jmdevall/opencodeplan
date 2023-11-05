@@ -72,27 +72,20 @@
 		</dependency>
 
 
-<!--		<dependency>-->
-<!--			<groupId>com.github.serenadeai</groupId>-->
-<!--			<artifactId>java-tree-sitter</artifactId>-->
-<!--			<version>1.1.2</version>-->
-<!--		</dependency>-->
-
 	<dependency>
 	    <groupId>com.google.code.gson</groupId>
 	    <artifactId>gson</artifactId>
 	    <version>${gson.version}</version>
 	</dependency>
 
-	</dependencies>
+	<dependency>
+	    <groupId>io.github.java-diff-utils</groupId>
+	    <artifactId>java-diff-utils</artifactId>
+	    <version>4.12</version>
+	</dependency>
 
-<!--	<repositories>-->
-<!--		<repository>-->
-<!--			<id>my-repo1</id>-->
-<!--			<name>your custom repo</name>-->
-<!--			<url>https://jitpack.io</url>-->
-<!--		</repository>-->
-<!--	</repositories>-->
+
+	</dependencies>
 
 
 	<build>
