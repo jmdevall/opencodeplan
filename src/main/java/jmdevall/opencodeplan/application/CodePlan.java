@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import jmdevall.opencodeplan.application.port.out.ConstructDependencyGraph;
+import jmdevall.opencodeplan.application.port.out.llm.Llm;
+import jmdevall.opencodeplan.application.port.out.oracle.Oracle;
+import jmdevall.opencodeplan.application.port.out.repository.Repository;
 import jmdevall.opencodeplan.domain.BI;
 import jmdevall.opencodeplan.domain.BlockRelationPair;
 import jmdevall.opencodeplan.domain.DeltaSeeds;
@@ -14,10 +18,6 @@ import jmdevall.opencodeplan.domain.dependencygraph.Node;
 import jmdevall.opencodeplan.domain.plangraph.PlanGraph;
 import jmdevall.opencodeplan.domain.promptmaker.Context;
 import jmdevall.opencodeplan.domain.promptmaker.PromptMaker;
-import jmdevall.opencodeplan.port.out.ConstructDependencyGraph;
-import jmdevall.opencodeplan.port.out.llm.Llm;
-import jmdevall.opencodeplan.port.out.oracle.Oracle;
-import jmdevall.opencodeplan.port.out.repository.Repository;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor

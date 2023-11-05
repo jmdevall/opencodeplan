@@ -7,11 +7,11 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import jmdevall.opencodeplan.application.port.out.repository.Repository;
 import jmdevall.opencodeplan.domain.Fragment;
 import jmdevall.opencodeplan.domain.dependencygraph.DependencyGraph;
 import jmdevall.opencodeplan.domain.dependencygraph.Node;
 import jmdevall.opencodeplan.domain.dependencygraph.DependencyRelation;
-import jmdevall.opencodeplan.port.out.repository.Repository;
 import lombok.Getter;
 
 /**

@@ -13,11 +13,11 @@ import jmdevall.opencodeplan.adapter.out.javaparser.relfinders.ChildParentRelFin
 import jmdevall.opencodeplan.adapter.out.javaparser.relfinders.InstantiateRelFinder;
 import jmdevall.opencodeplan.adapter.out.javaparser.relfinders.OverridesRelFinder;
 import jmdevall.opencodeplan.adapter.out.javaparser.relfinders.UsesRelFinder;
+import jmdevall.opencodeplan.application.port.out.ConstructDependencyGraph;
+import jmdevall.opencodeplan.application.port.out.repository.Repository;
 import jmdevall.opencodeplan.domain.dependencygraph.DependencyGraph;
 import jmdevall.opencodeplan.domain.dependencygraph.Node;
 import jmdevall.opencodeplan.domain.dependencygraph.DependencyRelation;
-import jmdevall.opencodeplan.port.out.ConstructDependencyGraph;
-import jmdevall.opencodeplan.port.out.repository.Repository;
 
 public class ConstructDependencyGraphJavaparser implements ConstructDependencyGraph{
 

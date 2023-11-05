@@ -1,4 +1,4 @@
-package jmdevall.opencodeplan.port.out.repository;
+package jmdevall.opencodeplan.application.port.out.repository;
 
 import java.io.File;
 

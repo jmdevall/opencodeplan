@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import jmdevall.opencodeplan.adapter.out.javaparser.ConstructDependencyGraphJavaparser;
 import jmdevall.opencodeplan.adapter.out.javaparser.util.TestUtil;
+import jmdevall.opencodeplan.application.port.out.repository.Repository;
 import jmdevall.opencodeplan.domain.BI;
 import jmdevall.opencodeplan.domain.Fragment;
 import jmdevall.opencodeplan.domain.dependencygraph.DependencyGraph;
@@ -16,7 +17,6 @@ import jmdevall.opencodeplan.domain.dependencygraph.Node;
 import jmdevall.opencodeplan.domain.dependencygraph.NodeId;
 import jmdevall.opencodeplan.domain.dependencygraph.LineColRange;
 import jmdevall.opencodeplan.domain.instruction.Inatural;
-import jmdevall.opencodeplan.port.out.repository.Repository;
 
 public class ContextTest {
 	private TestUtil testUtil=new TestUtil();

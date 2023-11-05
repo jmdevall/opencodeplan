@@ -1,4 +1,4 @@
-package jmdevall.opencodeplan.port.out.llm;
+package jmdevall.opencodeplan.application.port.out.llm;
 
 import jmdevall.opencodeplan.domain.Fragment;
 

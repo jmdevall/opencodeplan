@@ -1,8 +1,8 @@
 package jmdevall.opencodeplan.adapter.out.oracle;
 
+import jmdevall.opencodeplan.application.port.out.oracle.Oracle;
+import jmdevall.opencodeplan.application.port.out.repository.Repository;
 import jmdevall.opencodeplan.domain.DeltaSeeds;
-import jmdevall.opencodeplan.port.out.oracle.Oracle;
-import jmdevall.opencodeplan.port.out.repository.Repository;
 
 public class OracleDefault implements Oracle {
 

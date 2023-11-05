@@ -2,10 +2,10 @@ package jmdevall.opencodeplan.adapter.out;
 
 import java.io.File;
 
+import jmdevall.opencodeplan.application.port.out.repository.Repository;
 import jmdevall.opencodeplan.domain.BI;
 import jmdevall.opencodeplan.domain.Fragment;
 import jmdevall.opencodeplan.domain.dependencygraph.Node;
-import jmdevall.opencodeplan.port.out.repository.Repository;
 
 public class RepositoryFile implements Repository{
 
