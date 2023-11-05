@@ -9,11 +9,11 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.FieldAccessExpr;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
-import jmdevall.opencodeplan.domain.dependencygraph.Rel;
+import jmdevall.opencodeplan.domain.dependencygraph.DependencyRelation;
 
 
 //TODO: no se en java  a que se refiere exactamente. Lo dejo por el momento
-public class ImportsRelFinder extends VoidVisitorAdapter<List<Rel>>{
+public class ImportsRelFinder extends VoidVisitorAdapter<List<DependencyRelation>>{
 	
 	private String file;
 	
@@ -29,7 +29,7 @@ public class ImportsRelFinder extends VoidVisitorAdapter<List<Rel>>{
 	
 	
 	@Override
-	public void visit(ImportDeclaration n, List<Rel> arg) {
+	public void visit(ImportDeclaration n, List<DependencyRelation> arg) {
 		importDeclarations.add(n);
 		
 		super.visit(n, arg);
@@ -38,7 +38,7 @@ public class ImportsRelFinder extends VoidVisitorAdapter<List<Rel>>{
 	
 
 	@Override
-	public void visit(FieldAccessExpr n, List<Rel> arg) {
+	public void visit(FieldAccessExpr n, List<DependencyRelation> arg) {
 		System.out.println("fieldAccessExpre "+file+" "+n);
 		// Get the name of the field access expression
 	    String fieldName = n.getName().asString();
@@ -55,7 +55,7 @@ public class ImportsRelFinder extends VoidVisitorAdapter<List<Rel>>{
 
 
 	@Override
-	public void visit(MethodDeclaration n, List<Rel> arg) {
+	public void visit(MethodDeclaration n, List<DependencyRelation> arg) {
 		currentMethod=n;
 		
 		super.visit(n, arg);
@@ -64,7 +64,7 @@ public class ImportsRelFinder extends VoidVisitorAdapter<List<Rel>>{
 
 
 	@Override
-	public void visit(ClassOrInterfaceDeclaration n, List<Rel> arg) {
+	public void visit(ClassOrInterfaceDeclaration n, List<DependencyRelation> arg) {
 		//n.getex
 		// TODO Auto-generated method stub
 		super.visit(n, arg);

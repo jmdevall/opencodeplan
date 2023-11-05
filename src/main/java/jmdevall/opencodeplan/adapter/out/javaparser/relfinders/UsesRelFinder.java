@@ -13,8 +13,8 @@ import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedValueDeclaration;
 
 import jmdevall.opencodeplan.adapter.out.javaparser.Util;
-import jmdevall.opencodeplan.domain.dependencygraph.Label;
-import jmdevall.opencodeplan.domain.dependencygraph.Rel;
+import jmdevall.opencodeplan.domain.dependencygraph.DependencyLabel;
+import jmdevall.opencodeplan.domain.dependencygraph.DependencyRelation;
 import lombok.extern.slf4j.Slf4j;
 
 
@@ -23,27 +23,27 @@ import lombok.extern.slf4j.Slf4j;
  */
 
 @Slf4j
-public class UsesRelFinder extends VoidVisitorAdapter<List<Rel>>{
+public class UsesRelFinder extends VoidVisitorAdapter<List<DependencyRelation>>{
 
 	public UsesRelFinder() {
 		super();
 	}
 	
 	@Override
-	public void visit(NameExpr n, List<Rel> rels) {
+	public void visit(NameExpr n, List<DependencyRelation> rels) {
 		super.visit(n, rels);
 		
 		findRelsOfNameExprOrFieldAccessExpr(n, rels);
 	}
 	
 	@Override
-	public void visit(FieldAccessExpr n, List<Rel> rels) {
+	public void visit(FieldAccessExpr n, List<DependencyRelation> rels) {
 		super.visit(n, rels);
 		
 		findRelsOfNameExprOrFieldAccessExpr(n, rels);
 	}
 
-	private void findRelsOfNameExprOrFieldAccessExpr(Node n, List<Rel> rels) {
+	private void findRelsOfNameExprOrFieldAccessExpr(Node n, List<DependencyRelation> rels) {
 		Optional<Node> ofieldDeclaration = tryResolveFieldDeclaration(n);
 		if(!ofieldDeclaration.isPresent()) {
 			return;
@@ -57,14 +57,14 @@ public class UsesRelFinder extends VoidVisitorAdapter<List<Rel>>{
 		Node fieldDeclaration=ofieldDeclaration.get();
 		Statement stmt=ostmt.get();
 		
-		rels.add(Rel.builder()
-				.label(Label.USES)
+		rels.add(DependencyRelation.builder()
+				.label(DependencyLabel.USES)
 				.origin(Util.toNodeId(stmt))
 				.destiny(Util.toNodeId(fieldDeclaration))
 				.build());
 		
-		rels.add(Rel.builder()
-				.label(Label.USED_BY)
+		rels.add(DependencyRelation.builder()
+				.label(DependencyLabel.USED_BY)
 				.origin(Util.toNodeId(fieldDeclaration))
 				.destiny(Util.toNodeId(stmt))
 				.build());

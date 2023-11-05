@@ -13,19 +13,19 @@ import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclar
 import com.github.javaparser.resolution.types.ResolvedType;
 
 import jmdevall.opencodeplan.adapter.out.javaparser.Util;
-import jmdevall.opencodeplan.domain.dependencygraph.Label;
-import jmdevall.opencodeplan.domain.dependencygraph.Rel;
+import jmdevall.opencodeplan.domain.dependencygraph.DependencyLabel;
+import jmdevall.opencodeplan.domain.dependencygraph.DependencyRelation;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class BaseClassRelFinder extends VoidVisitorAdapter<List<Rel>>{
+public class BaseClassRelFinder extends VoidVisitorAdapter<List<DependencyRelation>>{
 
 	public BaseClassRelFinder() {
 		super();
 	}
 
 	@Override
-	public void visit(ClassOrInterfaceDeclaration n, List<Rel> rels) {
+	public void visit(ClassOrInterfaceDeclaration n, List<DependencyRelation> rels) {
 		NodeList<ClassOrInterfaceType> types;
 		
 		types=n.getExtendedTypes();
@@ -37,7 +37,7 @@ public class BaseClassRelFinder extends VoidVisitorAdapter<List<Rel>>{
 	}
 
 	private void addRels(ClassOrInterfaceDeclaration classOrInterfaceDecNode, NodeList<ClassOrInterfaceType> types,
-			List<Rel> rels) {
+			List<DependencyRelation> rels) {
 		for(ClassOrInterfaceType type:types) {
 			log.debug("La clase "+classOrInterfaceDecNode.getName()+" implementa o extiende "+type.getName());
 			//Util.getTypeDeclaration(type);
@@ -53,14 +53,14 @@ public class BaseClassRelFinder extends VoidVisitorAdapter<List<Rel>>{
 			Node basenode = basenodeop.get();
 			log.debug("interface="+Util.toNodeId(basenode));
 			
-			rels.add(Rel.builder()
-					.label(Label.BASE_CLASS_OF)
+			rels.add(DependencyRelation.builder()
+					.label(DependencyLabel.BASE_CLASS_OF)
 					.origin(Util.toNodeId(basenode))
 					.destiny(Util.toNodeId(classOrInterfaceDecNode))
 					.build());
 			
-			rels.add(Rel.builder()
-					.label(Label.DERIVED_CLASS_OF)
+			rels.add(DependencyRelation.builder()
+					.label(DependencyLabel.DERIVED_CLASS_OF)
 					.origin(Util.toNodeId(classOrInterfaceDecNode))
 					.destiny(Util.toNodeId(basenode))
 					.build());

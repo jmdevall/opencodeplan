@@ -13,7 +13,7 @@ import jmdevall.opencodeplan.adapter.out.javaparser.CuRelFinderVisitProcessor;
 import jmdevall.opencodeplan.adapter.out.javaparser.CuSourceFolder;
 import jmdevall.opencodeplan.adapter.out.javaparser.CuSourceProcessor;
 import jmdevall.opencodeplan.adapter.out.javaparser.util.TestUtil;
-import jmdevall.opencodeplan.domain.dependencygraph.Rel;
+import jmdevall.opencodeplan.domain.dependencygraph.DependencyRelation;
 
 
 public class OverridesRelFinderTest {
@@ -34,14 +34,14 @@ public class OverridesRelFinderTest {
 		
 		
 		
-		List<Rel> rels = vp.getRels();
+		List<DependencyRelation> rels = vp.getRels();
 		LogRelUtil.logRels(rels);
 		
 		assertEquals(4,rels.size());
 		
 		String expected="Rel(origin=NodeId(file=/testbench/testutil/overrides/C.java, range=[6,2]->[8,2]), destiny=NodeId(file=/testbench/testutil/overrides/B.java, range=[6,2]->[8,2]), label=OVERRIDES)";
 
-		List<String> collect = rels.stream().map( Rel::toString ).collect(Collectors.toList());
+		List<String> collect = rels.stream().map( DependencyRelation::toString ).collect(Collectors.toList());
 		assertTrue(collect.contains(expected));
 		
 

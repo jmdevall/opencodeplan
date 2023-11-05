@@ -1,7 +1,7 @@
 package jmdevall.opencodeplan.domain.dependencygraph;
 
 
-public enum Label{
+public enum DependencyLabel{
     
     PARENT_OF,
     CHILD_OF,

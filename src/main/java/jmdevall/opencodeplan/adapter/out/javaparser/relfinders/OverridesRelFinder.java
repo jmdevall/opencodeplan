@@ -14,8 +14,8 @@ import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
 
 import jmdevall.opencodeplan.adapter.out.javaparser.Util;
-import jmdevall.opencodeplan.domain.dependencygraph.Label;
-import jmdevall.opencodeplan.domain.dependencygraph.Rel;
+import jmdevall.opencodeplan.domain.dependencygraph.DependencyLabel;
+import jmdevall.opencodeplan.domain.dependencygraph.DependencyRelation;
 import lombok.extern.slf4j.Slf4j;
 
 
@@ -24,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 
 @Slf4j
-public class OverridesRelFinder extends VoidVisitorAdapter<List<Rel>>{
+public class OverridesRelFinder extends VoidVisitorAdapter<List<DependencyRelation>>{
 
 	public OverridesRelFinder() {
 		super();
@@ -73,20 +73,20 @@ public class OverridesRelFinder extends VoidVisitorAdapter<List<Rel>>{
 	}
 	
 	@Override
-	public void visit(MethodDeclaration n, List<Rel> rels) {
+	public void visit(MethodDeclaration n, List<DependencyRelation> rels) {
 		
 		super.visit(n, rels);
 		Optional<Node> methodDeclaration=tryResolveMethodDeclaration(n);
 		if(methodDeclaration.isPresent()) {
 			
-			Rel childToParent=Rel.builder()
-					.label(Label.OVERRIDES)
+			DependencyRelation childToParent=DependencyRelation.builder()
+					.label(DependencyLabel.OVERRIDES)
 					.origin(Util.toNodeId(n))
 					.destiny(Util.toNodeId(methodDeclaration.get()))
 					.build();
 			
-			Rel parentToChild=Rel.builder()
-					.label(Label.OVERRIDEN_BY)
+			DependencyRelation parentToChild=DependencyRelation.builder()
+					.label(DependencyLabel.OVERRIDEN_BY)
 					.origin(Util.toNodeId(methodDeclaration.get()))
 					.destiny(Util.toNodeId(n))
 					.build();

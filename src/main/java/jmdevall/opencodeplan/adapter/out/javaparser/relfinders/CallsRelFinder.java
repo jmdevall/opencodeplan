@@ -11,8 +11,8 @@ import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 
 import jmdevall.opencodeplan.adapter.out.javaparser.Util;
-import jmdevall.opencodeplan.domain.dependencygraph.Label;
-import jmdevall.opencodeplan.domain.dependencygraph.Rel;
+import jmdevall.opencodeplan.domain.dependencygraph.DependencyLabel;
+import jmdevall.opencodeplan.domain.dependencygraph.DependencyRelation;
 import lombok.extern.slf4j.Slf4j;
 
 
@@ -21,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 
 @Slf4j
-public class CallsRelFinder extends VoidVisitorAdapter<List<Rel>>{
+public class CallsRelFinder extends VoidVisitorAdapter<List<DependencyRelation>>{
 
 	public CallsRelFinder() {
 		super();
@@ -38,20 +38,20 @@ public class CallsRelFinder extends VoidVisitorAdapter<List<Rel>>{
 	}
 	
 	@Override
-	public void visit(MethodCallExpr n, List<Rel> rels) {
+	public void visit(MethodCallExpr n, List<DependencyRelation> rels) {
 		super.visit(n, rels);
 		
 		Optional<Node> methodDeclaration=tryResolveMethodDeclaration(n);
 		if(methodDeclaration.isPresent()) {
 			
-			Rel childToParent=Rel.builder()
-					.label(Label.CALLS)
+			DependencyRelation childToParent=DependencyRelation.builder()
+					.label(DependencyLabel.CALLS)
 					.origin(Util.toNodeId(n))
 					.destiny(Util.toNodeId(methodDeclaration.get()))
 					.build();
 			
-			Rel parentToChild=Rel.builder()
-					.label(Label.CALLED_BY)
+			DependencyRelation parentToChild=DependencyRelation.builder()
+					.label(DependencyLabel.CALLED_BY)
 					.origin(Util.toNodeId(methodDeclaration.get()))
 					.destiny(Util.toNodeId(n))
 					.build();

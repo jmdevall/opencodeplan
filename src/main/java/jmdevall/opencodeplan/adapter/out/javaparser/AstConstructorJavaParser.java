@@ -11,7 +11,7 @@ import com.github.javaparser.ast.CompilationUnit;
 import jmdevall.opencodeplan.domain.dependencygraph.Node;
 import jmdevall.opencodeplan.domain.dependencygraph.NodeId;
 import jmdevall.opencodeplan.domain.dependencygraph.LineColRange;
-import jmdevall.opencodeplan.domain.dependencygraph.Rrange;
+import jmdevall.opencodeplan.domain.dependencygraph.IndexPosrange;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -41,7 +41,7 @@ public class AstConstructorJavaParser implements CuProcessor{
 		String cucontent=this.cuSource.getSource(nodeId.getFile());
 		
 		LineColRange range = nodeId.getRange();
-		Rrange rrange=absoluterange(range, cucontent);
+		IndexPosrange rrange=absoluterange(range, cucontent);
 		
 
 		String nodecontent = cucontent.substring(rrange.getBegin(), rrange.getEnd());
@@ -102,9 +102,9 @@ public class AstConstructorJavaParser implements CuProcessor{
 
 
 
-	private Rrange absoluterange(LineColRange range, String cucontent) {
+	private IndexPosrange absoluterange(LineColRange range, String cucontent) {
 
-		return new Rrange(range.getBegin().absolute(cucontent),
+		return new IndexPosrange(range.getBegin().absolute(cucontent),
 				range.getEnd().absolute(cucontent)+1);
 	}
 

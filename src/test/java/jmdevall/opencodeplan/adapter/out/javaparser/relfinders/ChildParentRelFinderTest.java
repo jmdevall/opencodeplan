@@ -11,7 +11,7 @@ import jmdevall.opencodeplan.adapter.out.javaparser.CuRelFinderVisitProcessor;
 import jmdevall.opencodeplan.adapter.out.javaparser.CuSourceFolder;
 import jmdevall.opencodeplan.adapter.out.javaparser.CuSourceProcessor;
 import jmdevall.opencodeplan.adapter.out.javaparser.util.TestUtil;
-import jmdevall.opencodeplan.domain.dependencygraph.Rel;
+import jmdevall.opencodeplan.domain.dependencygraph.DependencyRelation;
 
 public class ChildParentRelFinderTest {
 
@@ -31,7 +31,7 @@ public class ChildParentRelFinderTest {
 
 		
 		
-		List<Rel> rels = vp.getRels();
+		List<DependencyRelation> rels = vp.getRels();
 		LogRelUtil.logRels(rels);
 		
 		assertEquals(4,rels.size());

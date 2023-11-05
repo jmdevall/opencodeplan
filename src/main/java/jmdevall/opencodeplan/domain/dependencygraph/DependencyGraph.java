@@ -32,9 +32,9 @@ field it uses.
 public class DependencyGraph {
 
 	private HashMap<String,Node> forest;
-	private List<Rel> rels;
+	private List<DependencyRelation> rels;
 	
-    public DependencyGraph(HashMap<String, Node> forest, List<Rel> rels) {
+    public DependencyGraph(HashMap<String, Node> forest, List<DependencyRelation> rels) {
 		super();
 		this.forest = forest;
 		this.rels = rels;
@@ -61,7 +61,7 @@ public class DependencyGraph {
 		.findAny();
     }
 
-	public DependencyGraph updateDependencyGraph(List<Label> labels, Fragment fragment, Fragment newFragment, Node b) {
+	public DependencyGraph updateDependencyGraph(List<DependencyLabel> labels, Fragment fragment, Fragment newFragment, Node b) {
         // TODO:
         //return new DependencyGraph(this.r);
     	return null;

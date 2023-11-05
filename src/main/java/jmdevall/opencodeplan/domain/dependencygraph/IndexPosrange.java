@@ -7,13 +7,13 @@ import lombok.ToString;
 @AllArgsConstructor
 @Getter
 @ToString
-public class Rrange {
+public class IndexPosrange {
 	
 	private int begin;
 	private int end;
 	
-	public Rrange minus(Rrange r2) {
-		return new Rrange(this.begin-r2.begin, this.end-r2.begin);
+	public IndexPosrange minus(IndexPosrange r2) {
+		return new IndexPosrange(this.begin-r2.begin, this.end-r2.begin);
 	}
 
 	@Override

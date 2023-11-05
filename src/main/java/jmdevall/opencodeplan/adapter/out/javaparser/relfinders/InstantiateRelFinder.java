@@ -25,12 +25,12 @@ import com.github.javaparser.resolution.types.ResolvedReferenceType;
 import com.github.javaparser.resolution.types.ResolvedType;
 
 import jmdevall.opencodeplan.adapter.out.javaparser.Util;
-import jmdevall.opencodeplan.domain.dependencygraph.Label;
-import jmdevall.opencodeplan.domain.dependencygraph.Rel;
+import jmdevall.opencodeplan.domain.dependencygraph.DependencyLabel;
+import jmdevall.opencodeplan.domain.dependencygraph.DependencyRelation;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class InstantiateRelFinder extends VoidVisitorAdapter<List<Rel>>{
+public class InstantiateRelFinder extends VoidVisitorAdapter<List<DependencyRelation>>{
 
 	public InstantiateRelFinder() {
 		super();
@@ -47,20 +47,20 @@ public class InstantiateRelFinder extends VoidVisitorAdapter<List<Rel>>{
 	}
 	
 	@Override
-	public void visit(ObjectCreationExpr n, List<Rel> rels) {
+	public void visit(ObjectCreationExpr n, List<DependencyRelation> rels) {
 		super.visit(n, rels);
 		Optional<Node> constructionDeclaration=tryResolveConstructionDeclaration(n);
 		
 		if(constructionDeclaration.isPresent()) {
 			
-			Rel childToParent=Rel.builder()
-					.label(Label.CONSTRUCTS)
+			DependencyRelation childToParent=DependencyRelation.builder()
+					.label(DependencyLabel.CONSTRUCTS)
 					.origin(Util.toNodeId(n))
 					.destiny(Util.toNodeId(constructionDeclaration.get()))
 					.build();
 			
-			Rel parentToChild=Rel.builder()
-					.label(Label.CONSTRUCTED_BY)
+			DependencyRelation parentToChild=DependencyRelation.builder()
+					.label(DependencyLabel.CONSTRUCTED_BY)
 					.origin(Util.toNodeId(constructionDeclaration.get()))
 					.destiny(Util.toNodeId(n))
 					.build();

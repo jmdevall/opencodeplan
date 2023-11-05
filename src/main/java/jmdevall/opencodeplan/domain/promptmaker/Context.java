@@ -10,7 +10,7 @@ import java.util.stream.Stream;
 import jmdevall.opencodeplan.domain.Fragment;
 import jmdevall.opencodeplan.domain.dependencygraph.DependencyGraph;
 import jmdevall.opencodeplan.domain.dependencygraph.Node;
-import jmdevall.opencodeplan.domain.dependencygraph.Rel;
+import jmdevall.opencodeplan.domain.dependencygraph.DependencyRelation;
 import jmdevall.opencodeplan.port.out.repository.Repository;
 import lombok.Getter;
 
@@ -56,11 +56,11 @@ public class Context {
 		Node method=node.getRootParent().toStream()
 				.filter(n->n.isMethodContaining(node)).findFirst().get();
 		
-		List<Rel> rels=d.getRels();
+		List<DependencyRelation> rels=d.getRels();
 		
 		List<Node> affectedBlocks=new ArrayList<Node>();
 		
-		for(Rel rel:rels) {
+		for(DependencyRelation rel:rels) {
 			if(method.getId().getRange().contains(rel.getOrigin().getRange())) {
 				Node nodeRelacionado=d.findByNodeId(rel.getDestiny()).get();
 				affectedBlocks.add(nodeRelacionado);

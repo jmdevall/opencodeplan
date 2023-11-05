@@ -15,21 +15,21 @@ import jmdevall.opencodeplan.adapter.out.javaparser.relfinders.OverridesRelFinde
 import jmdevall.opencodeplan.adapter.out.javaparser.relfinders.UsesRelFinder;
 import jmdevall.opencodeplan.domain.dependencygraph.DependencyGraph;
 import jmdevall.opencodeplan.domain.dependencygraph.Node;
-import jmdevall.opencodeplan.domain.dependencygraph.Rel;
+import jmdevall.opencodeplan.domain.dependencygraph.DependencyRelation;
 import jmdevall.opencodeplan.port.out.ConstructDependencyGraph;
 import jmdevall.opencodeplan.port.out.repository.Repository;
 
 public class ConstructDependencyGraphJavaparser implements ConstructDependencyGraph{
 
-	private List<VoidVisitorAdapter<List<Rel>>> relfinders;
+	private List<VoidVisitorAdapter<List<DependencyRelation>>> relfinders;
 	
-	private ConstructDependencyGraphJavaparser(List<VoidVisitorAdapter<List<Rel>>> relfinders) {
+	private ConstructDependencyGraphJavaparser(List<VoidVisitorAdapter<List<DependencyRelation>>> relfinders) {
 		super();
 		this.relfinders = relfinders;
 	}
 	
 	public static ConstructDependencyGraphJavaparser newDefault() {
-		List<VoidVisitorAdapter<List<Rel>>> relfinders=new ArrayList<VoidVisitorAdapter<List<Rel>>>();
+		List<VoidVisitorAdapter<List<DependencyRelation>>> relfinders=new ArrayList<VoidVisitorAdapter<List<DependencyRelation>>>();
 		
 		relfinders.add(new ChildParentRelFinder());
 		relfinders.add(new BaseClassRelFinder());
@@ -52,15 +52,15 @@ public class ConstructDependencyGraphJavaparser implements ConstructDependencyGr
 		CuSourceProcessor.process(cuSource, astcreator);
 		HashMap<String, Node> forest=astcreator.getForest();
 
-		ArrayList<Rel> rels=new ArrayList<Rel>();
-		for(VoidVisitorAdapter<List<Rel>> relfinder:relfinders) {
+		ArrayList<DependencyRelation> rels=new ArrayList<DependencyRelation>();
+		for(VoidVisitorAdapter<List<DependencyRelation>> relfinder:relfinders) {
 			rels.addAll(findRels(relfinder,cuSource));
 		}
 		
 		return new DependencyGraph(forest, rels);
 	}
 	
-	private List<Rel> findRels(VoidVisitorAdapter<List<Rel>> relfinder,CuSourceFolder cuSource) {
+	private List<DependencyRelation> findRels(VoidVisitorAdapter<List<DependencyRelation>> relfinder,CuSourceFolder cuSource) {
 		CuRelFinderVisitProcessor vp=new CuRelFinderVisitProcessor(relfinder);
 		CuSourceProcessor.process(cuSource, vp);
 		

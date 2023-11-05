@@ -8,10 +8,10 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
 import jmdevall.opencodeplan.adapter.out.javaparser.Util;
-import jmdevall.opencodeplan.domain.dependencygraph.Label;
-import jmdevall.opencodeplan.domain.dependencygraph.Rel;
+import jmdevall.opencodeplan.domain.dependencygraph.DependencyLabel;
+import jmdevall.opencodeplan.domain.dependencygraph.DependencyRelation;
 
-public class ChildParentRelFinder extends VoidVisitorAdapter<List<Rel>>{
+public class ChildParentRelFinder extends VoidVisitorAdapter<List<DependencyRelation>>{
 	
 	
 	public ChildParentRelFinder() {
@@ -20,21 +20,21 @@ public class ChildParentRelFinder extends VoidVisitorAdapter<List<Rel>>{
 
 
 	@Override
-	public void visit(MethodDeclaration n, List<Rel> rels) {
+	public void visit(MethodDeclaration n, List<DependencyRelation> rels) {
 		super.visit(n, rels);
 		
 		Optional<com.github.javaparser.ast.Node> parent=n.getParentNode();
 		if(parent.isPresent()) {
-			Rel childToParent=Rel.builder()
+			DependencyRelation childToParent=DependencyRelation.builder()
 			.origin(Util.toNodeId(n))
 			.destiny(Util.toNodeId(n.getParentNode().get()))
-			.label(Label.CHILD_OF)
+			.label(DependencyLabel.CHILD_OF)
 			.build();
 			
-			Rel parentToChild=Rel.builder()
+			DependencyRelation parentToChild=DependencyRelation.builder()
 			.origin(Util.toNodeId(n.getParentNode().get()))
 			.destiny(Util.toNodeId(n))
-			.label(Label.PARENT_OF)
+			.label(DependencyLabel.PARENT_OF)
 			.build();
 
 			rels.addAll(Arrays.asList(childToParent,parentToChild));
