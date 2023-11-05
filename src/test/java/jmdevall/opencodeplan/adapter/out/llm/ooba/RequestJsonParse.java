@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Test;
 
 import com.google.gson.Gson;
 
+import jmdevall.opencodeplan.adapter.out.llm.ooba.jsonmodel.Request;
+
 public class RequestJsonParse {
 	
 	@Test

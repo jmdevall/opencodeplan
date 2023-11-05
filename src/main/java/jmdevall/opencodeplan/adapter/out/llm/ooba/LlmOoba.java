@@ -7,6 +7,9 @@ import java.net.http.HttpResponse;
 
 import com.google.gson.Gson;
 
+import jmdevall.opencodeplan.adapter.out.llm.ooba.jsonmodel.Request;
+import jmdevall.opencodeplan.adapter.out.llm.ooba.jsonmodel.Response;
+
 
 public class LlmOoba {
 	

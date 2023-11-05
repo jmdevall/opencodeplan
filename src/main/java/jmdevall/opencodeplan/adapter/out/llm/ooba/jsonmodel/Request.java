@@ -1,4 +1,4 @@
-package jmdevall.opencodeplan.adapter.out.llm.ooba;
+package jmdevall.opencodeplan.adapter.out.llm.ooba.jsonmodel;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
