@@ -18,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class FragmentTest {
 	
-	String javaCompileUnit=
+  public static	String javaCompileUnit=
   "package test;\n"                               //1
 + "\n"                                            //2
 + "public class Foo{\n"                           //3
@@ -45,21 +45,27 @@ public class FragmentTest {
 + "}\n";
 
 	@Test
-	public void eliminaBloquesDeMetodosNoAfectados() {
-		CuSource testingCuSource=new CuSourceSingleFile("/test/Foo.java", javaCompileUnit);
-				
-		AstConstructorJavaParser acjp=new AstConstructorJavaParser(testingCuSource);
-		CuSourceProcessor.process(testingCuSource, acjp, new JavaParser());
-		Node compilationUnit=acjp.getForest().get("/test/Foo.java");
+	public void removeMethodBlockNotAffected() {
+		Node compilationUnit = getTestingCu();
 		
 		Node sentencia=Node.builder()
 				.id( NodeId.builder()
 						.file("/test/Foo.java")
 						.range(LineColRange.newRange(5, 1, 5, 6)).build()).build();
-		Fragment f=Fragment.newFragment(compilationUnit, sentencia);
+		Fragment f=Fragment.newFromPrunedCuNode(compilationUnit, sentencia);
 		String prompt = f.getNode().prompt();
 		log.debug("resultado fragmento="+prompt);
 		assertEquals(expected,prompt);
 	}
-			
+
+	private Node getTestingCu() {
+		CuSource testingCuSource=new CuSourceSingleFile("/test/Foo.java", javaCompileUnit);
+				
+		AstConstructorJavaParser acjp=new AstConstructorJavaParser(testingCuSource);
+		CuSourceProcessor.process(testingCuSource, acjp, new JavaParser());
+		Node compilationUnit=acjp.getForest().get("/test/Foo.java");
+		return compilationUnit;
+	}
+		
+	
 }

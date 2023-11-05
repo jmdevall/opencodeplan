@@ -31,14 +31,19 @@ public class Fragment {
 	 * replaced with empty blocks because it is not of interest.
 	 * 
 	 * @param cu
-	 * @param block
+	 * @param principalMethodBlock
 	 * @return
 	 */
-	public static Fragment newFragment(Node cu, Node block) {
+	public static Fragment newFromPrunedCuNode(Node cu, Node affectedSubNode) {
 		return Fragment.builder()
-				.node(Fragment.extractCodeFragment(cu,Arrays.asList(block),null))
+				.node(Fragment.extractCodeFragment(cu,Arrays.asList(affectedSubNode),null))
 				.build();
 	}
+	
+	public static Fragment newFromCuNode(Node cu) {
+		return Fragment.builder().node(cu).build();
+	}
+	
 
 	public static Node extractCodeFragment(Node root, List<Node> affectedBlocks, Node parent) {
 	    
