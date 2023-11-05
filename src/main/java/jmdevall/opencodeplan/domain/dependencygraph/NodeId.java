@@ -15,7 +15,7 @@ public class NodeId {
 	
 	@NonNull
 	private String file;
-	private Range range;
+	private LineColRange range;
 	
 	@Override
 	public String toString() {

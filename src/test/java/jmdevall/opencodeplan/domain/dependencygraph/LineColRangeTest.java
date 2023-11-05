@@ -5,13 +5,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-public class RangeTest {
+public class LineColRangeTest {
 	
 	@Test
 	public void inrange() {
-	Range r=Range.newRange(0, 10, 3, 5);
+	LineColRange r=LineColRange.newRange(0, 10, 3, 5);
 	
-	Range r2=Range.newRange(1, 0, 2, 3);
+	LineColRange r2=LineColRange.newRange(1, 0, 2, 3);
 	
 	assertTrue(r.contains(r2));
 	

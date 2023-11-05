@@ -1,10 +1,8 @@
 package jmdevall.opencodeplan.domain.dependencygraph;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import lombok.Builder;
@@ -23,8 +21,6 @@ public class Node {
 	
 	private Rrange rrange;
 	private String content;
-	
-
 	
 	public Node newCopyWithoutChildren() {
 		return Node.builder()
@@ -144,46 +140,8 @@ public class Node {
 	public boolean isMethodContaining(Node other){
 		return this.isMethodDeclaration() && this.id.containsByPosition(other.getId());
 	}
-	
 
-
-	public static Node extractCodeFragment(Node root, List<Node> affectedBlocks, Node parent) {
-	    
-	    Stream<Node> consideredChildren=root.getChildren().stream();
-	    
-	    //otros métodos diferentes al afectado: se sustituye el BlockStmt por un nodo vacio
-	    if(root.isMethodDeclaration() && !root.getId().containsByPosition(affectedBlocks.stream().map(n->n.getId()).collect(Collectors.toList()))) {
-	    	consideredChildren=consideredChildren
-					.map(c->{
-							return (c.getType().equals("BlockStmt"))?
-								skipedNode(c):c;
-					});
-	    }
-	    
-	    Node newNode=root.newCopyWithoutChildren();
-	    
-	    List<Node> prunedChildren=consideredChildren
-	    		.map(c->extractCodeFragment(c,affectedBlocks,newNode))
-	    		.collect(Collectors.toList());
-	
-	    newNode.setChildren(prunedChildren);
-	    
-	    return newNode;
-	}
-
-	private boolean isMethodDeclaration() {
+	public boolean isMethodDeclaration() {
 		return this.type.equals("MethodDeclaration");
-	}
-	
-
-	private static Node skipedNode(Node c) {
-		return builder()
-		.id(c.getId())
-		.type("SkipedBlockFragment")
-		.parent(c.parent)
-		.children(Collections.emptyList())
-		.rrange(c.getRrange())
-		.content("")
-		.build();
 	}
 }

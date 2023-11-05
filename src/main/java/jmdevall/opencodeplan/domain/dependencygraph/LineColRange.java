@@ -7,18 +7,18 @@ import lombok.Getter;
 @Builder
 @Getter
 @EqualsAndHashCode
-public class Range {
-	private Position begin;
-	private Position end;
+public class LineColRange {
+	private LineColPos begin;
+	private LineColPos end;
 	
-	public static Range newRange(int beglin, int begcol, int endlin, int endcol) {
-		return Range.builder()
-				.begin(Position.builder()
+	public static LineColRange newRange(int beglin, int begcol, int endlin, int endcol) {
+		return LineColRange.builder()
+				.begin(LineColPos.builder()
 						.line(beglin)
 						.column(begcol)
 						.build()
 					)
-				.end(Position.builder()
+				.end(LineColPos.builder()
 						.line(endlin)
 						.column(endcol)
 						.build())
@@ -32,15 +32,15 @@ public class Range {
 			,this.getEnd().getLine(),this.getEnd().getColumn());
 	}
 
-	public boolean contains(Range r) {
+	public boolean contains(LineColRange r) {
 		
-        return Position.comparator().compare(this.begin, r.begin) <= 0 
-        		&& Position.comparator().compare(this.end, r.end) >= 0;
+        return LineColPos.comparator().compare(this.begin, r.begin) <= 0 
+        		&& LineColPos.comparator().compare(this.end, r.end) >= 0;
 	}
 
-	public Range minus(Range absoluteNode) {
+	public LineColRange minus(LineColRange absoluteNode) {
 		int beglin = absoluteNode.begin.getLine()- this.begin.getLine();
-		return Range.newRange(
+		return LineColRange.newRange(
 				beglin, beglin==0?absoluteNode.begin.getColumn()-this.begin.getColumn():absoluteNode.begin.getColumn()
 			  , absoluteNode.end.getLine()  - this.begin.getLine(), absoluteNode.end.getColumn() -this.begin.getColumn());
 	}

@@ -14,7 +14,7 @@ import jmdevall.opencodeplan.domain.Fragment;
 import jmdevall.opencodeplan.domain.dependencygraph.DependencyGraph;
 import jmdevall.opencodeplan.domain.dependencygraph.Node;
 import jmdevall.opencodeplan.domain.dependencygraph.NodeId;
-import jmdevall.opencodeplan.domain.dependencygraph.Range;
+import jmdevall.opencodeplan.domain.dependencygraph.LineColRange;
 import jmdevall.opencodeplan.domain.instruction.Inatural;
 import jmdevall.opencodeplan.port.out.repository.Repository;
 
@@ -61,7 +61,7 @@ public class ContextTest {
 		Node searchNode=Node.builder()
 		.id(NodeId.builder()
 		 .file("/testbench/testutil/uses/ExampleClass.java")
-		 .range(Range.newRange(11,23,11,23))
+		 .range(LineColRange.newRange(11,23,11,23))
 		 .build())
 		.build();
 		
@@ -82,7 +82,7 @@ public class ContextTest {
 		Node searchNode=Node.builder()
 		.id(NodeId.builder()
 		 .file("/nemofinder/DictionarySpanish.java")
-		 .range(Range.newRange(17,5,17,5))
+		 .range(LineColRange.newRange(17,5,17,5))
 		 .build())
 		.build();
 		

@@ -4,12 +4,12 @@ import java.util.Collections;
 import java.util.List;
 
 public class DeltaSeeds {
-    boolean isEmpty() {
+    public boolean isEmpty() {
         // TODO:
         return true;
     }
 
-    List<BI> getBIs() {
+    public List<BI> getBIs() {
         // TODO:
         return Collections.emptyList();
     }

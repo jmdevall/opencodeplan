@@ -11,19 +11,19 @@ import lombok.ToString;
 @Getter
 @ToString
 @EqualsAndHashCode
-public class Position {
+public class LineColPos {
 	private int line;
 	private int column;
 	
-	public static Position newPosition(int line, int column) {
-		return Position.builder()
+	public static LineColPos newPosition(int line, int column) {
+		return LineColPos.builder()
 				.line(line)
 				.column(column)
 				.build();
 	}
 
-    public static Comparator<Position> comparator() {
-        return (Position p1, Position p2) -> {
+    public static Comparator<LineColPos> comparator() {
+        return (LineColPos p1, LineColPos p2) -> {
             if (p1.line == p2.line) {
                 return Integer.compare(p1.column, p2.column);
             } else {
@@ -32,15 +32,15 @@ public class Position {
         };
     }
     
-	public int absolute(String texto) {
+	public int absolute(String text) {
 	    int indice = 0;
 	    int lineaActual = 1;
 	    int columnaActual = 1;
 	   
 
-	    while (indice < texto.length() 
+	    while (indice < text.length() 
 	    		&& (lineaActual < line || (lineaActual == line && columnaActual < column))) {
-	        char charAt = texto.charAt(indice);
+	        char charAt = text.charAt(indice);
 
 			if (charAt == '\n' ) {
 	            lineaActual++;

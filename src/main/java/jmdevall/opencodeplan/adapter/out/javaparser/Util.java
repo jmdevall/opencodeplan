@@ -12,13 +12,13 @@ import com.github.javaparser.resolution.SymbolResolver;
 import com.github.javaparser.resolution.declarations.ResolvedReferenceTypeDeclaration;
 
 import jmdevall.opencodeplan.domain.dependencygraph.NodeId;
-import jmdevall.opencodeplan.domain.dependencygraph.Position;
-import jmdevall.opencodeplan.domain.dependencygraph.Range;
+import jmdevall.opencodeplan.domain.dependencygraph.LineColPos;
+import jmdevall.opencodeplan.domain.dependencygraph.LineColRange;
 
 public class Util {
 
-	public static Position toDomainPosition( com.github.javaparser.Position position) {
-		return Position.builder()
+	public static LineColPos toDomainPosition( com.github.javaparser.Position position) {
+		return LineColPos.builder()
 		.line(position.line)
 		.column(position.column)
 		.build();
@@ -29,7 +29,7 @@ public class Util {
 		CompilationUnit compilationUnit = getCompilationUnit(node);
 		String filename = getFileNameOfCompilationUnit(compilationUnit);
 
-		Range absoluteNode=Range.builder()
+		LineColRange absoluteNode=LineColRange.builder()
 				.begin(toDomainPosition(node.getBegin().get()))
 				.end(toDomainPosition(node.getEnd().get()))
 				.build();

@@ -73,7 +73,7 @@ public class Context {
 			.map( file ->d.getForest().get(file));
 				
 		List<Node> fragmentos=affectedCus
-				.map(cu->Node.extractCodeFragment(cu, affectedBlocks, null))
+				.map(cu->Fragment.extractCodeFragment(cu, affectedBlocks, null))
 				.collect(Collectors.toList());
 			
 		

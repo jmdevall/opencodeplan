@@ -11,7 +11,7 @@ import jmdevall.opencodeplan.adapter.out.javaparser.CuSource;
 import jmdevall.opencodeplan.adapter.out.javaparser.CuSourceProcessor;
 import jmdevall.opencodeplan.domain.dependencygraph.Node;
 import jmdevall.opencodeplan.domain.dependencygraph.NodeId;
-import jmdevall.opencodeplan.domain.dependencygraph.Range;
+import jmdevall.opencodeplan.domain.dependencygraph.LineColRange;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -54,7 +54,7 @@ public class FragmentTest {
 		Node sentencia=Node.builder()
 				.id( NodeId.builder()
 						.file("/test/Foo.java")
-						.range(Range.newRange(5, 1, 5, 6)).build()).build();
+						.range(LineColRange.newRange(5, 1, 5, 6)).build()).build();
 		Fragment f=Fragment.newFragment(compilationUnit, sentencia);
 		String prompt = f.getNode().prompt();
 		log.debug("resultado fragmento="+prompt);
