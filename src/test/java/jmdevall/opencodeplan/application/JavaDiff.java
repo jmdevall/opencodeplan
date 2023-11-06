@@ -83,13 +83,90 @@ public class JavaDiff {
 
 		//simple output the computed patch to console
 		for (AbstractDelta<String> delta : patch.getDeltas()) {
-			delta.
-			System.out.println("-----");
-			System.out.println("changeposition "+delta.getSource().getPosition()+" "+delta.getSource().);
+			System.out.println(delta.getSource().getChangePosition());
+			//DiffUtils.
+			//delta.
+			//System.out.println("-----");
+			//System.out.println("changeposition "+delta.getSource().getPosition()+" "+delta.getSource().);
 		    System.out.println(delta);
+		    
 		}
 		
 
+	}
+	
+	
+	  public static	String javaCompileUnit=
+			  "package test;\n"                               //1
+			+ "\n"                                            //2
+			+ "public class Foo{\n"                           //3
+			+ "   public void hello(String who){\n"           //4
+			+ "       System.out.println(\"hello \"+who);\n"  //5
+			+ "   }\n"                                        //6
+			+ "\n"                                            //7
+			+ "   public void addnumbers(int a, int b){\n"    //8
+			+ "      return a+b;\n"                           //9
+			+ "   }\n"                                        //10
+			+ "   int a;"                                     //11
+			+ "}\n";
+				
+				String expected=
+			 "package test;\n"                               //1
+			+ "\n"                                            //2
+			+ "public class Foo{\n"                           //3
+			+ "   public void hello(String who){\n"           //4
+			+ "       System.out.println(\"hello \"+who);\n"  //5
+			+ "   }\n"
+			+ "\n"
+			+ "   public void addnumbers(int a, int b)\n"
+			+ "   int a;"                                     //11
+			+ "}\n";
+	
+	@Test
+	public void nose3() {
+		Patch<String> patch=DiffUtils.diffInline(javaCompileUnit, expected);
+		for (AbstractDelta<String> delta : patch.getDeltas()) {
+		    System.out.println(delta);
+
+		}
+	}
+	
+	@Test
+
+	public void nose4() {
+		Patch<String> patch=DiffUtils.diff(
+		Arrays.asList(javaCompileUnit.split("\n")),
+        Arrays.asList(expected.split("\n")));
+		for (AbstractDelta<String> delta : patch.getDeltas()) {
+		    System.out.println(delta);
+
+		}
+		
+	}
+	
+	@Test
+	public void nose5() {
+		//create a configured DiffRowGenerator
+		DiffRowGenerator generator = DiffRowGenerator.create()
+				//.ignoreWhiteSpaces(true)
+		                .showInlineDiffs(true)
+		                .mergeOriginalRevised(true)
+		                .inlineDiffByWord(true)
+		                .oldTag(f -> "~")      //introduce markdown style for strikethrough
+		                .newTag(f -> "**")     //introduce markdown style for bold
+		                .build();
+
+		//compute the differences for two test texts.
+		List<DiffRow> rows = generator.generateDiffRows(
+						Arrays.asList(javaCompileUnit.split("\n")),
+		                Arrays.asList(expected.split("\n")));
+		        
+		System.out.println("|original|new|");
+		System.out.println("|--------|---|");
+		for (DiffRow row : rows) {
+			System.out.println("|" + row.getOldLine() + "|" + row.getNewLine() + "|");
+			
+		}
 	}
 	
 }
