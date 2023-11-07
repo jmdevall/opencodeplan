@@ -22,6 +22,9 @@ public class Node {
 	private IndexPosRange rrange;
 	private String content;
 	
+	//skiped nodes keep the original node
+	public Node original;
+	
 	public Node newCopyWithoutChildren() {
 		return Node.builder()
 		.id(this.getId())
@@ -29,6 +32,7 @@ public class Node {
 		.parent(this.getParent())
 		.rrange(this.getRrange())
 		.content(this.getContent())
+		.original(this.original)
 		.build();
 	}
 	

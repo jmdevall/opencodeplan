@@ -81,6 +81,7 @@ public class Fragment {
 		.children(Collections.emptyList())
 		.rrange(c.getRrange())
 		.content("")
+		.original(c)
 		.build();
 	}
 	
