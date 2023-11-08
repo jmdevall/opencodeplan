@@ -2,6 +2,7 @@ package jmdevall.opencodeplan.domain;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -111,54 +112,6 @@ public class FragmentTest {
 		
 	}
 	
-	@Test
-	public void prueba2() {
-		Node cu=getTestingCu();
-		
-		String prompt=cu.prompt();
-		
-		Patch<String> patch=DiffUtils.diffInline(
-				javaCompileUnit,revised);
-		
-		for(AbstractDelta<String> delta:patch.getDeltas()) {
-			int line=delta.getSource().getPosition()+1;
-			
-			int dl=0;
-			for(String lineString:delta.getSource().getLines()) {
-				System.out.println("dl "+(line+dl)+" >"+lineString);
-				dl++;
-			}
-			//System.out.println("linea="+line);
-			//System.out.println(delta);
-			
-		}
-		
-	}
-	
-	
-	public String getFile() {
-		try {
-			File file=new File("src/test/java/jmdevall/opencodeplan/domain/foo/Foo.java");
-			
 
-			BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
-			return reader.lines().collect(Collectors.joining(System.lineSeparator()));
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-		}
-
-		
-	}
-	
-	@Test
-	public void prueba3() {
-		String content=getFile();
-		log.debug("foo"+content);
-		assertNotNull(getFile());
-		
-	}
-		
 	
 }
