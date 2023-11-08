@@ -11,6 +11,7 @@ import jmdevall.opencodeplan.application.port.out.repository.Repository;
 import jmdevall.opencodeplan.domain.Fragment;
 import jmdevall.opencodeplan.domain.dependencygraph.DependencyGraph;
 import jmdevall.opencodeplan.domain.dependencygraph.Node;
+import jmdevall.opencodeplan.domain.dependencygraph.NodeId;
 import jmdevall.opencodeplan.domain.dependencygraph.DependencyRelation;
 import lombok.Getter;
 
@@ -58,17 +59,17 @@ public class Context {
 		
 		List<DependencyRelation> rels=d.getRels();
 		
-		List<Node> affectedBlocks=new ArrayList<Node>();
+		List<NodeId> affectedBlocks=new ArrayList<NodeId>();
 		
 		for(DependencyRelation rel:rels) {
 			if(method.getId().getRange().contains(rel.getOrigin().getRange())) {
 				Node nodeRelacionado=d.findByNodeId(rel.getDestiny()).get();
-				affectedBlocks.add(nodeRelacionado);
+				affectedBlocks.add(nodeRelacionado.getId());
 			}
 		}
 
 		Stream<Node> affectedCus=affectedBlocks.stream()
-			.map(n->n.getId().getFile())
+			.map(id->id.getFile())
 			.distinct()
 			.map( file ->d.getForest().get(file));
 				

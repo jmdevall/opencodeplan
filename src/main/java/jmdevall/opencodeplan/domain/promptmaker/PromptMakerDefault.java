@@ -49,7 +49,7 @@ public class PromptMakerDefault implements PromptMaker {
 		}
 		
 		sb.append(p5);
-		sb.append(javaFragmentPrompt(fragment.getNode().prompt()));
+		sb.append(javaFragmentPrompt(fragment.getPrunedcu().prompt()));
 		
 		sb.append(finalInstruction);
 		

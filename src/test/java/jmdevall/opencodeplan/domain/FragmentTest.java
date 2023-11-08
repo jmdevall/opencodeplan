@@ -67,10 +67,10 @@ public class FragmentTest {
 	public void removeMethodBlockNotAffected() {
 		Node compilationUnit = getTestingCu();
 		
-		Node sentencia=Node.builder()
-				.id( NodeId.builder()
+		NodeId sentencia= NodeId.builder()
 						.file("/test/Foo.java")
-						.range(LineColRange.newRange(5, 1, 5, 6)).build()).build();
+						.range(LineColRange.newRange(5, 1, 5, 6))
+						.build();
 		Fragment f=Fragment.newFromPrunedCuNode(compilationUnit, sentencia);
 		String prompt = f.getNode().prompt();
 		log.debug("resultado fragmento="+prompt);

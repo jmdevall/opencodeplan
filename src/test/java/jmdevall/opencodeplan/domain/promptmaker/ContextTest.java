@@ -79,14 +79,13 @@ public class ContextTest {
 		FakeRepository repository = new FakeRepository(srcRoot);
 		DependencyGraph d= jp.construct(repository);
 		
-		Node searchNode=Node.builder()
-		.id(NodeId.builder()
+		NodeId searchNode=NodeId.builder()
 		 .file("/nemofinder/DictionarySpanish.java")
 		 .range(LineColRange.newRange(17,5,17,5))
-		 .build())
-		.build();
+		 .build();
+
 		
-		Optional<Node> si=d.findFinalNodeContaining(searchNode.getId());
+		Optional<Node> si=d.findFinalNodeContaining(searchNode);
 		
 		Context c=Context.gatherContext(si.get(), repository, d);
 		

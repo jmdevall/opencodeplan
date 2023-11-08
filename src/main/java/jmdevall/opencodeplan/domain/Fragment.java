@@ -6,7 +6,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import com.github.difflib.DiffUtils;
+import com.github.difflib.patch.AbstractDelta;
+import com.github.difflib.patch.Patch;
+
 import jmdevall.opencodeplan.domain.dependencygraph.Node;
+import jmdevall.opencodeplan.domain.dependencygraph.NodeId;
+import jmdevall.opencodeplan.domain.promptmaker.DiffUtil;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -24,7 +30,8 @@ public class Fragment {
 	keep declarations of the enclosing class and its members. As we discuss later, this sketched
 	representation also helps us merge the LLM’s output into a source code file more easily.
 	*/
-	private Node node;
+	private Node prunedcu;
+	private Node originalcu;
 	
 	/**
 	 * Fragment is like a copy of the Compilation Unit node but some of the child nodes that represent the method blocks has been
@@ -34,25 +41,28 @@ public class Fragment {
 	 * @param principalMethodBlock
 	 * @return
 	 */
-	public static Fragment newFromPrunedCuNode(Node cu, Node affectedSubNode) {
+	public static Fragment newFromPrunedCuNode(Node originalcu, NodeId affectedSubNode) {
 		return Fragment.builder()
-				.node(Fragment.extractCodeFragment(cu,Arrays.asList(affectedSubNode),null))
+				.originalcu(originalcu)
+				.prunedcu(Fragment.extractCodeFragment(originalcu,Arrays.asList(affectedSubNode),null))
 				.build();
 	}
 	
 	public static Fragment newFromCuNode(Node cu) {
-		return Fragment.builder().node(cu).build();
+		return Fragment.builder()
+				.originalcu(cu)
+				.prunedcu(cu)
+				.build();
 	}
 	
 
-	public static Node extractCodeFragment(Node root, List<Node> affectedBlocks, Node parent) {
+	public static Node extractCodeFragment(Node root, List<NodeId> affectedBlocks, Node parent) {
 	    
 	    Stream<Node> consideredChildren=root.getChildren().stream();
 	    
 	    //other methods different to the affected: replace blockStmt with other empty "SkipBlock"
 	    if(root.isMethodDeclaration() && !root.getId().containsByPosition(
 	    		affectedBlocks.stream()
-	    		.map(n->n.getId())
 	    		.collect(Collectors.toList()))
 	    ) {
 	    	consideredChildren=consideredChildren
@@ -83,6 +93,21 @@ public class Fragment {
 		.content("")
 		.original(c)
 		.build();
+	}
+	
+
+	public void merge(String llmContentRevised){
+		List<String> prunedlines = DiffUtil.tolines(prunedcu.prompt());
+		Patch<String> prunedpatch=DiffUtils.diff(
+				prunedlines,
+				DiffUtil.tolines(originalcu.prompt())
+		);
+		
+		Patch<String> llmpatch=DiffUtils.diff(
+				prunedlines,
+				DiffUtil.tolines(llmContentRevised)
+		);
+		
 	}
 	
 }

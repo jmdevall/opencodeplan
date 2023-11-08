@@ -25,6 +25,10 @@ public class LineColRange {
 				.build();
 	}
 	
+	public static LineColRange newRangeOne(int begendlin,int begendcol) {
+		return newRange(begendlin,begendcol,begendlin,begendcol);
+	}
+	
 	@Override
 	public String toString() {
 		return String.format("[%d,%d]->[%d,%d]",

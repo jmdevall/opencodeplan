@@ -111,7 +111,6 @@ public class Node {
 		return this.prompt(new StringBuffer(this.content));
 	}
 	
-    
     public String prompt(StringBuffer sbpadre) {
     	StringBuffer sbyo = new StringBuffer(content);
     	
