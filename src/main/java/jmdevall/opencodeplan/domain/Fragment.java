@@ -1,5 +1,6 @@
 package jmdevall.opencodeplan.domain;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -8,7 +9,9 @@ import java.util.stream.Stream;
 
 import com.github.difflib.DiffUtils;
 import com.github.difflib.patch.AbstractDelta;
+import com.github.difflib.patch.Chunk;
 import com.github.difflib.patch.Patch;
+import com.github.difflib.patch.PatchFailedException;
 
 import jmdevall.opencodeplan.domain.dependencygraph.Node;
 import jmdevall.opencodeplan.domain.dependencygraph.NodeId;
@@ -95,19 +98,39 @@ public class Fragment {
 		.build();
 	}
 	
+	private String revised;
 
 	public void merge(String llmContentRevised){
-		List<String> prunedlines = DiffUtil.tolines(prunedcu.prompt());
-		Patch<String> prunedpatch=DiffUtils.diff(
-				prunedlines,
-				DiffUtil.tolines(originalcu.prompt())
-		);
+		List<String> original= DiffUtil.tolines(originalcu.prompt());
+		List<String> pruned = DiffUtil.tolines(prunedcu.prompt());
+		List<String> revised= DiffUtil.tolines(llmContentRevised);
 		
-		Patch<String> llmpatch=DiffUtils.diff(
-				prunedlines,
-				DiffUtil.tolines(llmContentRevised)
-		);
 		
+		//patchPrunedToOriginal should only have deltas of source=1 line and target= multiples lines because It's only method body deletions
+		Patch<String> patchPrunedToOriginal=DiffUtils.diff(pruned, original);
+		
+		Patch<String> patchPrunedToRevised=DiffUtils.diff(pruned, revised);
+		
+		ArrayList<String> prunedCopy=new ArrayList<String>(pruned);
+		for(AbstractDelta<String> delta:patchPrunedToOriginal.getDeltas()) {
+
+			Chunk<String> source=delta.getSource();
+			int position=source.getPosition();
+			
+			//in this line it actually goes more than one line but do not alter the positions for the next patch 
+			String multilineHack=delta.getTarget().getLines().stream().collect(Collectors.joining(System.lineSeparator()));
+			prunedCopy.remove(position);
+			prunedCopy.add(position, multilineHack);
+		}
+		
+		try {
+			List<String> finalpatch = DiffUtils.patch(prunedCopy,patchPrunedToRevised);
+			this.revised=finalpatch.stream().collect(Collectors.joining(System.lineSeparator()));
+		} catch (PatchFailedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 	
 }
