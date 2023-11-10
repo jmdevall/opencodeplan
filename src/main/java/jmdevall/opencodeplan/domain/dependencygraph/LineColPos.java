@@ -33,6 +33,10 @@ public class LineColPos {
     }
     
 	public int absolute(String text) {
+		if(text==null) {
+			throw new IllegalArgumentException();
+		}
+		
 	    int indice = 0;
 	    int lineaActual = 1;
 	    int columnaActual = 1;

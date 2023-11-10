@@ -21,22 +21,24 @@ public class UtilTest {
 	
 	@Test
 	public void canReadJavasFromTestbench() {
-		String content = testUtil.readFileFromTestbench("/testbench/CanRead.java");
-		
-		assertEquals("public class CanRead{}",content);
+		String content = testUtil.readFileFromTestSource("/testbench/testutil/CanRead.java");
+		String expected="package testbench.testutil;\n"
+				+ "\n"
+				+ "public class CanRead{}";
+		assertEquals(expected,content);
 	}
 
 	@Test
 	public void canAccessTestbenchRootFolder() {
-		File testbenchRoot=testUtil.getRootTestbenchFolder();
+		File testbenchRoot=testUtil.getSrcRootTestFolder();
 		assertNotNull(testbenchRoot);
 	}
 
 	@Test
 	public void getPublicClassOfCompilationUnit() {
-		JavaParser javaparser=JavaParserFactory.newDefaultJavaParser(testUtil.getRootTestbenchFolder());
+		JavaParser javaparser=JavaParserFactory.newDefaultJavaParser(testUtil.getSrcRootTestFolder());
 		
-		ParseResult<CompilationUnit> cu=javaparser.parse(testUtil.readFileFromTestbench("/testbench/testbench/testutil/Multiclass.java"));
+		ParseResult<CompilationUnit> cu=javaparser.parse(testUtil.readFileFromTestSource("/testbench/testutil/Multiclass.java"));
 		assertTrue(cu.isSuccessful());
 		
 		assertEquals("Multiclass", Util.getPublicTypeOfCompilationUnit(cu.getResult().get()));
@@ -44,9 +46,10 @@ public class UtilTest {
 	
 	@Test
 	public void getFileNameOfCompilationUnitWithPackage() {
-		JavaParser javaparser=JavaParserFactory.newDefaultJavaParser(testUtil.getRootTestbenchFolder());
+		JavaParser javaparser=JavaParserFactory.newDefaultJavaParser(testUtil.getSrcRootTestFolder());
 		
-		ParseResult<CompilationUnit> cu=javaparser.parse(testUtil.readFileFromTestbench("/testbench/testbench/testutil/Multiclass.java"));
+		String readFileFromTestSource = testUtil.readFileFromTestSource("/testbench/testutil/Multiclass.java");
+		ParseResult<CompilationUnit> cu=javaparser.parse(readFileFromTestSource);
 		String filename=Util.getFileNameOfCompilationUnit(cu.getResult().get());
 		
 		assertEquals("/testbench/testutil/Multiclass.java",filename);
@@ -54,9 +57,9 @@ public class UtilTest {
 
 	@Test
 	public void getFileNameOfCompilationUnitWithoutPackage() {
-		JavaParser javaparser=JavaParserFactory.newDefaultJavaParser(testUtil.getRootTestbenchFolder());
+		JavaParser javaparser=JavaParserFactory.newDefaultJavaParser(testUtil.getSrcRootTestFolder());
 		
-		ParseResult<CompilationUnit> cu=javaparser.parse(testUtil.readFileFromTestbench("/testbench/CanRead.java"));
+		ParseResult<CompilationUnit> cu=javaparser.parse(testUtil.readFileFromTestSource("/CanRead.java"));
 		String filename=Util.getFileNameOfCompilationUnit(cu.getResult().get());
 		
 		assertEquals("/CanRead.java",filename);

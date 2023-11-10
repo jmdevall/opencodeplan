@@ -15,7 +15,7 @@ import jmdevall.opencodeplan.domain.dependencygraph.DependencyRelation;
 
 public class BaseClassRelFinderTest {
 
-	private TestUtil testUtil=new TestUtil();
+	public TestUtil testUtil=new TestUtil();
 
 	@Test
 	public void findImplementations() {
@@ -24,8 +24,7 @@ public class BaseClassRelFinderTest {
 		CuRelFinderVisitProcessor vp=new CuRelFinderVisitProcessor(sut);
 		String startfolder=",testbench,testutil,implementation".replaceAll(",", File.separator);
 		
-		CuSourceFolder cuSource=CuSourceFolder.newFromRootFolderAndFilter(testUtil.getRootTestbenchFolder(),
-				(int level, String path, File file)->path.startsWith(startfolder));
+		CuSourceFolder cuSource = testUtil.testingCuSourceFolder(startfolder);
 
 		CuSourceProcessor.process(cuSource, vp);
 		
@@ -35,15 +34,14 @@ public class BaseClassRelFinderTest {
 		assertEquals(2,rels.size());
 		assertEquals("Rel(origin=NodeId(file=/testbench/testutil/implementation/ExampleInterface.java, range=[3,1]->[5,1]), destiny=NodeId(file=/testbench/testutil/implementation/ExampleImpl.java, range=[3,1]->[8,1]), label=BASE_CLASS_OF)",rels.get(0).toString());
 	}
-	
+
 	@Test
 	public void findExtensions() {
 		BaseClassRelFinder sut=new BaseClassRelFinder();
 		
 		CuRelFinderVisitProcessor vp=new CuRelFinderVisitProcessor(sut);
 		String startfolder=",testbench,testutil,extension".replaceAll(",", File.separator);		
-		CuSourceFolder cuSource=CuSourceFolder.newFromRootFolderAndFilter(testUtil.getRootTestbenchFolder(),
-				(int level, String path, File file)->path.startsWith(startfolder));
+		CuSourceFolder cuSource = testUtil.testingCuSourceFolder(startfolder);
 
 		CuSourceProcessor.process(cuSource, vp);
 		

@@ -55,7 +55,7 @@ public class ContextTest {
 	public void canGatherSpatialContext() {
 		ConstructDependencyGraphJavaparser jp=ConstructDependencyGraphJavaparser.newDefault();
 		
-		FakeRepository repository = new FakeRepository(testUtil.getRootTestbenchFolder());
+		FakeRepository repository = new FakeRepository(testUtil.getSrcRootTestFolder());
 		DependencyGraph d= jp.construct(repository);
 		
 		Node searchNode=Node.builder()
