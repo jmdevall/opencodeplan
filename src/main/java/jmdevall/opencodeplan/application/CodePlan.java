@@ -14,6 +14,7 @@ import jmdevall.opencodeplan.domain.Fragment;
 import jmdevall.opencodeplan.domain.dependencygraph.DependencyGraph;
 import jmdevall.opencodeplan.domain.dependencygraph.DependencyLabel;
 import jmdevall.opencodeplan.domain.dependencygraph.Node;
+import jmdevall.opencodeplan.domain.plangraph.CMI;
 import jmdevall.opencodeplan.domain.plangraph.PlanGraph;
 import jmdevall.opencodeplan.domain.promptmaker.Context;
 import jmdevall.opencodeplan.domain.promptmaker.PromptMaker;
@@ -22,14 +23,14 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class CodePlan {
 
-    List<BlockRelationPair> getAffectedBlocks(List<DependencyLabel> labels, Node b, DependencyGraph d, DependencyGraph dp) {
+    List<BlockRelationPair> getAffectedBlocks(List<CMI> labels, Node b, DependencyGraph d, DependencyGraph dp) {
     	//TODO:
     	return new ArrayList<BlockRelationPair>();
     }
 
-    List<DependencyLabel> classifyChanges(Fragment fragment, Fragment newFragment) {
+    List<CMI> classifyChanges(Fragment fragment, Fragment newFragment) {
         // TODO:
-        return Collections.<DependencyLabel>emptyList();
+        return Collections.<CMI>emptyList();
     }
    
     /*
@@ -82,7 +83,7 @@ public class CodePlan {
 
             r = r.merge(newFragment, bi.getB());
             
-            List<DependencyLabel> labels = classifyChanges(fragment, newFragment);
+            List<CMI> labels = classifyChanges(fragment, newFragment);
             DependencyGraph dp = d.updateDependencyGraph(labels, fragment, newFragment, bi.getB());
 
             // Fifth step: adaptively plan and propogate the effect of the edit on dependant

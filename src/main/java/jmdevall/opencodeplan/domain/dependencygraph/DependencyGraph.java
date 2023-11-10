@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import jmdevall.opencodeplan.domain.Fragment;
+import jmdevall.opencodeplan.domain.plangraph.CMI;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -61,7 +62,7 @@ public class DependencyGraph {
 		.findAny();
     }
 
-	public DependencyGraph updateDependencyGraph(List<DependencyLabel> labels, Fragment fragment, Fragment newFragment, Node b) {
+	public DependencyGraph updateDependencyGraph(List<CMI> labels, Fragment fragment, Fragment newFragment, Node b) {
         // TODO:
         //return new DependencyGraph(this.r);
     	return null;
