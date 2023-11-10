@@ -9,30 +9,24 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 
 import com.github.difflib.DiffUtils;
-import com.github.difflib.UnifiedDiffUtils;
 import com.github.difflib.patch.AbstractDelta;
-import com.github.difflib.patch.DeltaType;
+import com.github.difflib.patch.Chunk;
 import com.github.difflib.patch.Patch;
 import com.github.difflib.patch.PatchFailedException;
-import com.github.difflib.text.DiffRow;
-import com.github.difflib.text.DiffRowGenerator;
 import com.github.javaparser.JavaParser;
 
 import jmdevall.opencodeplan.adapter.out.javaparser.AstConstructorJavaParser;
 import jmdevall.opencodeplan.adapter.out.javaparser.CuSourceProcessor;
 import jmdevall.opencodeplan.adapter.out.javaparser.cusource.CuSource;
 import jmdevall.opencodeplan.adapter.out.javaparser.cusource.CuSourceSingleFile;
-import jmdevall.opencodeplan.domain.Fragment;
-import jmdevall.opencodeplan.domain.dependencygraph.LineColRange;
 import jmdevall.opencodeplan.domain.dependencygraph.Node;
-import jmdevall.opencodeplan.domain.dependencygraph.NodeId;
 import jmdevall.opencodeplan.domain.promptmaker.DiffUtil;
 import lombok.extern.slf4j.Slf4j;
 
@@ -47,90 +41,6 @@ public class AtomicChange {
 		Node compilationUnit=acjp.getForest().get(filepath);
 		return compilationUnit;
 	}
-	
-	@Test
-	public void prueba2() {
-		String original=getTestSourceFile("/jmdevall/opencodeplan/application/javadiff/mmb/original/Example.java");
-		String revised=getTestSourceFile("/jmdevall/opencodeplan/application/javadiff/mmb/revised/Example.javaf");
-
-		
-		Patch<String> patch=DiffUtils.diff(
-				DiffUtil.tolines(original)
-				,DiffUtil.tolines(revised));
-		
-		
-		Node cuoriginal=getTestingCu("/jmdevall/opencodeplan/application/javadiff/mmb/original/Example.java");
-
-		NodeId interested=NodeId.builder()
-		.file("/jmdevall/opencodeplan/application/javadiff/mmb/original/Example.java")
-		.range(LineColRange.newRangeOne(10 ,9))
-		.build();
-		
-		Node prunedcu=Fragment.extractCodeFragment(cuoriginal, Arrays.asList(interested), cuoriginal);
-
-		
-		for(AbstractDelta<String> delta:patch.getDeltas()) {
-			int line=delta.getSource().getPosition()+1;
-			System.out.println("linea "+line+" delta= "+delta);
-			
-			int dl=0;
-			for(String lineString:delta.getSource().getLines()) {
-				System.out.println("source "+(line+dl)+" >"+lineString);
-				dl++;
-			}
-			
-			dl=0;
-			for(String lineString:delta.getTarget().getLines()) {
-				System.out.println("target "+(line+dl)+" >"+lineString);
-				dl++;
-			}
-			
-			if(delta.getType()==DeltaType.CHANGE) {
-				int linea=delta.getSource().getPosition()+1;
-				cuoriginal.getId().containsByPosition(interested);
-			}
-			
-			//System.out.println("linea="+line);
-			//System.out.println(delta);
-			
-		}
-		
-		
-		
-		//System.out.println(prunedcu.prompt());
-		//System.out.println("----");
-
-	}
-	
-	@Test
-	public void conelmetodoRowGenerator() {
-		DiffRowGenerator generator = DiffRowGenerator.create()
-				.showInlineDiffs(true)
-				.inlineDiffByWord(true)
-				.oldTag(f -> "~")
-				.newTag(f -> "**").build();
-		
-		Node cuoriginal=getTestingCu("/jmdevall/opencodeplan/application/javadiff/mmb/original/Example.java");
-		String revised=getTestSourceFile("/jmdevall/opencodeplan/application/javadiff/mmb/revised/Example.java");
-	
-		List<DiffRow> rows = generator.generateDiffRows(
-				DiffUtil.tolines(cuoriginal.prompt()),
-				DiffUtil.tolines(revised));
-
-		System.out.println("|original|new|");
-		System.out.println("|--------|---|");
-		for (DiffRow row : rows) {
-			System.out.println("|" + row.getOldLine() + "|" + row.getNewLine() + "|");
-		}
-	}
-	
-
-	/*
-	otra(){
-		List<String> unifiedDiff = UnifiedDiffUtils.   generateUnifiedDiff ("original-file.txt", "new-file.txt", text1, diff, 0);
-
-	}
-	*/
 
 	public static String getTestSourceFile(String filepath) {
 
@@ -155,26 +65,49 @@ public class AtomicChange {
 		
 	}
 	
+	/**
+	 * I have 3 versions of the file: original -> pruned -> revised
+	 * 
+	 * Finally I found the solution to do the patch as it would be done over the original version:
+
+	 * I replaced the pruned version with a "fake version". I apply manually all the deltas and replace the line with the target.
+	 * 
+	 * It is possible because the source is only one line and the target usually are more than one line, 
+	 * but if I join all the lines of the target in one line, then it respect all line positions of the next patch.
+	 *  
+	 * @throws PatchFailedException
+	 */
+	
 	@Test
 	public void aversiasi() throws PatchFailedException {
-		List<String> original=DiffUtil.tolines(getTestSourceFile("/jmdevall/opencodeplan/application/javadiff/mmb/original/Example.java"));
-		List<String> pruned=DiffUtil.tolines(getTestSourceFile("/jmdevall/opencodeplan/application/javadiff/mmb/original/Pruned.javaf"));
-		List<String> revised=DiffUtil.tolines(getTestSourceFile("/jmdevall/opencodeplan/application/javadiff/mmb/revised/Example.javaf"));
+		String subpath="/jmdevall/opencodeplan/application/javadiff/mmb/original";
+		List<String> original=DiffUtil.tolines(getTestSourceFile(subpath+"/Example.java"));
+		List<String> pruned=DiffUtil.tolines(getTestSourceFile(subpath+"/Pruned.javaf"));
+		List<String> revised=DiffUtil.tolines(getTestSourceFile(subpath+"/Revised.javaf"));
 
-		Patch<String> patch=DiffUtils.diff(pruned, original);
+		//patchPrunedToOriginal should only have deltas of source=1 line and target= multiples lines because It's only method body deletions
+		Patch<String> patchPrunedToOriginal=DiffUtils.diff(pruned, original);
 		
-		Patch<String> patchrevised=DiffUtils.diff(pruned, revised);
+		Patch<String> patchPrunedToRevised=DiffUtils.diff(pruned, revised);
 		
-		for(AbstractDelta<String> delta:patchrevised.getDeltas()) {
-			patch.addDelta(delta);
+		ArrayList<String> prunedCopy=new ArrayList<String>(pruned);
+		for(AbstractDelta<String> delta:patchPrunedToOriginal.getDeltas()) {
+
+			Chunk<String> source=delta.getSource();
+			int position=source.getPosition();
 			
+			//in this line it actually goes more than one line but do not alter the positions for the next patch 
+			String multilineHack=delta.getTarget().getLines().stream().collect(Collectors.joining(System.lineSeparator()));
+			prunedCopy.remove(position);
+			prunedCopy.add(position, multilineHack);
 		}
 		
+		List<String> pruebafinal=DiffUtils.patch(prunedCopy,patchPrunedToRevised);
 		
-		System.out.println(DiffUtils.patch(pruned, patch)
+		System.out.println("...and the final result is..............");
+		
+		System.out.println(pruebafinal
 				.stream().collect(Collectors.joining(System.lineSeparator())));
-		
-		
 	}
 		
 }

@@ -62,20 +62,6 @@ public class FragmentTest {
 + "   int a;\n"                                     //11
 + "}\n";
 
-	//TODO: hay que buscar otro enfoque distinto. Esto no va a compilar y no se puede hacer así
-	@Test
-	public void removeMethodBlockNotAffected() {
-		Node compilationUnit = getTestingCu();
-		
-		NodeId sentencia= NodeId.builder()
-						.file("/test/Foo.java")
-						.range(LineColRange.newRange(5, 1, 5, 6))
-						.build();
-		Fragment f=Fragment.newFromPrunedCuNode(compilationUnit, sentencia);
-		String prompt = f.getNode().prompt();
-		log.debug("resultado fragmento="+prompt);
-		assertEquals(revised,prompt);
-	}
 
 	private Node getTestingCu() {
 		CuSource testingCuSource=new CuSourceSingleFile("/test/Foo.java", javaCompileUnit);

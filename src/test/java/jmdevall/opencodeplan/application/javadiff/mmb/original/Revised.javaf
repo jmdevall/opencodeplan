@@ -1,9 +1,9 @@
 package jmdevall.opencodeplan.application.javadiff.mmb.original;
 
 public class Example {
-
-	public String foo(int a, int b)
 	
+	public String foo(int a, int b) 
+
 	public void helloworld(String who) {
 		int foo=3;
 		foo=foo+5;
