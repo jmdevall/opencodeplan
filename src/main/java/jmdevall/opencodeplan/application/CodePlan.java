@@ -33,6 +33,11 @@ public class CodePlan {
         return Collections.<CMI>emptyList();
     }
    
+    private void merge(Repository r,Fragment fragment, String llmrevised, Node b){
+    	fragment.merge(llmrevised);
+    	r.save(b.getId().getFile(), fragment.getRevised());
+    }
+    
     /*
      * Inputs: R is the , Delta_seeds is a set of seed edit
      * specifications, Theta is an oracle and L is an LLM.
@@ -78,10 +83,10 @@ public class CodePlan {
             Context context = Context.gatherContext(bi.getB(), r, d);
             // Third step: use the LLM to get edited code fragment
             String prompt = promptMaker.makePrompt(fragment, bi.getI(), context);
-            Fragment newFragment = llm.invoke(prompt);
+            String llmrevised = llm.invoke(prompt);
             // Fourth step: merge the updated code fragment into R
 
-            r = r.merge(newFragment, bi.getB());
+            merge(r,fragment, llmrevised, bi.getB());
             
             List<CMI> labels = classifyChanges(fragment, newFragment);
             DependencyGraph dp = d.updateDependencyGraph(labels, fragment, newFragment, bi.getB());

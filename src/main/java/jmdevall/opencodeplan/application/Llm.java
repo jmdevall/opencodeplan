@@ -7,14 +7,20 @@ public class Llm {
 
 	private LlmEngine llmEngine;
 
+	public Llm(LlmEngine llmEngine) {
+		super();
+		this.llmEngine = llmEngine;
+	}
 
-	public Fragment invoke(String prompt) {
+	/**
+	 * returns newFragment
+	 * @param prompt
+	 * @return
+	 */
+	public String invoke(String prompt) {
 		String result = llmEngine.generate(prompt);
 
-		String code=extractOnlyCodeOfResponse(result);
-
-		//TODO
-		return null;
+		return extractOnlyCodeOfResponse(result);
 	}
 
 	public String extractOnlyCodeOfResponse(String input) {

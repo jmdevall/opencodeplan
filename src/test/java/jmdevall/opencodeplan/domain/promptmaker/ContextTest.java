@@ -43,11 +43,9 @@ public class ContextTest {
 		}
 
 		@Override
-		public Repository merge(Fragment newFragment, Node b) {
+		public void save(String filepath, String newFileContent) {
 			// TODO Auto-generated method stub
-			return null;
 		}
-		
 		
 	}
 	

@@ -23,9 +23,11 @@ public class LlmTest {
 			"package foo;\n"
 			+ "  class Bar\n"
 			+ "etc\n";
+	
+	
 	@Test
-	public void nose() {
-		Llm sut=new Llm();
+	public void extractOnlyCodeOfResponse() {
+		Llm sut=new Llm(null);
 		String actual=sut.extractOnlyCodeOfResponse(posibleOutputOfLlm);
 		assertEquals(expected,actual);
 	}

@@ -100,10 +100,10 @@ public class Fragment {
 	
 	private String revised;
 
-	public void merge(String llmContentRevised){
+	public void merge(String newFragment){
 		List<String> original= DiffUtil.tolines(originalcu.prompt());
 		List<String> pruned = DiffUtil.tolines(prunedcu.prompt());
-		List<String> revised= DiffUtil.tolines(llmContentRevised);
+		List<String> revised= DiffUtil.tolines(newFragment);
 		
 		
 		//patchPrunedToOriginal should only have deltas of source=1 line and target= multiples lines because It's only method body deletions

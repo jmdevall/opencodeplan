@@ -12,6 +12,5 @@ public interface Repository {
         
     Fragment extractCodeFragment(BI bi);
 
-    Repository merge(Fragment newFragment, Node b);
-
+    void save(String filepath, String newFileContent);
 }
