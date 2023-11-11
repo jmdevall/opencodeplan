@@ -3,8 +3,10 @@ package jmdevall.opencodeplan.domain.dependencygraph;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Stream;
 
+import jmdevall.opencodeplan.domain.plangraph.NodeTypeTag;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -36,26 +38,68 @@ public class Node {
 		.build();
 	}
 	
-	public void debugRecursive(int level) {
-    	printlevel(level);
+	
+	public NodeTypeTag getNodeTypeTag(){
+		if(findParentRecursive("BlockStmt")) {
+			return NodeTypeTag.BodyOfMethod;
+		}
+		if(findParentRecursive("MethodDeclaration")) {
+			return NodeTypeTag.SignatureOfMethod;
+		}
+		if(findParentRecursive("ConstructorDeclaration")) {
+			return NodeTypeTag.SignatureOfConstructor;
+		}		
+		if(findParentRecursive("FieldDeclaration")) {
+			return NodeTypeTag.Field;
+		}
+		if(findParentRecursive("ClassOrInterfaceDeclaration")) {
+			return NodeTypeTag.DeclarationOfClass;
+		}		
+		return null;
+	}
+	
+	private boolean findParentRecursive(String type) {
+		if(this.type.equals(type)) {
+			return true;
+		}
+		if(this.parent==null) {
+			return false;
+		}
+		return parent.findParentRecursive(type);
+		
+	}
+	
+	public String debugRecursive() {
+		StringBuffer sb=new StringBuffer("");
+		debugRecursiveSb(sb,0);
+		return sb.toString();
+	}
+	
+	public void debugRecursiveSb(StringBuffer sb, int level) {
+		
+		//String mycontent="\n"+this.getContent();
+		String mycontent="";
+		
     	if(this.getChildren().isEmpty()) {
-        	System.out.println(String.format("[%s]+[%s]: A%s R%s, \n[%s]"
+        	System.out.println(String.format("%s [%s]+[%s]: A%s R%s, [%s]"
+        			,this.getLevel(level)
         			,this.getType(), id.getFile()
         			,this.id.getRange().toString()
         			,this.rrange.toString()
-        			,this.getContent()));
+        			,mycontent));
     	}
     	else {
-        	System.out.println(String.format("[%s]+[%s]: A%s R[%s], \n[%s]"
+        	System.out.println(String.format("%s [%s]+[%s]: A%s R[%s], [%s]"
+        			,this.getLevel(level)
         			,this.getType(), id.getFile()
         			,this.id.getRange().toString()
         			,this.rrange.toString()
-        	        ,this.getContent()));
+        	        ,mycontent));
     	}
     	
     	
     	for(Node child:this.getChildren()) {
-    		child.debugRecursive(level+1);
+    		child.debugRecursiveSb(sb,level+1);
     	}
     }
 	
@@ -68,10 +112,13 @@ public class Node {
 		}
 	}
 	
-    private void printlevel(int level) {
+    private String getLevel(int level) {
+    	StringBuffer sb=new StringBuffer("");
+    	
     	for(int i=0;i<level;i++) {
-    		System.out.print("-");
+    		sb.append("-");
     	}
+    	return sb.toString();
     }
 	
 

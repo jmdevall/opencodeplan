@@ -45,10 +45,28 @@ public class AstConstructorJavaParserTest {
 		
 		ArrayList<String> ficheros=new ArrayList<String>(forest.keySet());
 		Node cu=forest.get(ficheros.get(0));
-		cu.debugRecursive(0);
+		String res=cu.debugRecursive();
+		System.out.println(res);
 		
 		assertEquals(cu.getContent(),cu.prompt());
 	}
+	
+	@Test
+	public void parseaUnoQueTieneDeTodo() {
+		CuSourceFolder cuSource=testUtil.testingCuSourceFolder("/testbench");
+		
+		AstConstructorJavaParser sut=new AstConstructorJavaParser(cuSource);
+		CuSourceProcessor.process(cuSource, sut);
+		
+		HashMap<String, Node> forest=sut.getForest();
+		
+		Node cu=forest.get("/testbench/testutil/allthings/Miclass.java");
+		String res=cu.debugRecursive();
+		System.out.println(res);
+		
+		assertEquals(cu.getContent(),cu.prompt());
+	}
+	
 	
 	@Test
 	public void testComportamientoStringBuffer() {
