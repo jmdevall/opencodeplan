@@ -1,17 +1,14 @@
 package jmdevall.opencodeplan.adapter.out.javaparser;
 
-
-import java.util.Optional;
-
 import jmdevall.opencodeplan.adapter.out.javaparser.cusource.CuSource;
 import jmdevall.opencodeplan.adapter.out.javaparser.cusource.CuSourceSingleFile;
-import jmdevall.opencodeplan.application.port.out.parser.GetFragment;
-import jmdevall.opencodeplan.domain.Fragment;
+import jmdevall.opencodeplan.application.port.out.parser.Parser;
+import jmdevall.opencodeplan.domain.dependencygraph.Node;
 
-public class GetFragmentJavaParser implements GetFragment{
+public class ParserJavaParser implements Parser{
 
 	@Override
-	public Fragment getFragment(String code) {
+	public Node parse(String code) {
 		CuSource cuSource=new CuSourceSingleFile("", code);
 		AstConstructorJavaParser acjp=new AstConstructorJavaParser(cuSource);
 		
@@ -19,8 +16,7 @@ public class GetFragmentJavaParser implements GetFragment{
 		
 		String cuname=acjp.getForest().keySet().stream().findFirst().orElseThrow();
 		
-		
-		return Fragment.newFromCuNode(acjp.getForest().get(cuname));
+		return acjp.getForest().get(cuname);
 	}
 
 }

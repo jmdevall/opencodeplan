@@ -7,7 +7,7 @@ import java.util.List;
 
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
-import jmdevall.opencodeplan.adapter.out.javaparser.cusource.CuSourceFolder;
+import jmdevall.opencodeplan.adapter.out.javaparser.cusource.CuSourceCreatorFolder;
 import jmdevall.opencodeplan.adapter.out.javaparser.relfinders.BaseClassRelFinder;
 import jmdevall.opencodeplan.adapter.out.javaparser.relfinders.CallsRelFinder;
 import jmdevall.opencodeplan.adapter.out.javaparser.relfinders.ChildParentRelFinder;
@@ -46,7 +46,7 @@ public class ConstructDependencyGraphJavaparser implements ConstructDependencyGr
 	public DependencyGraph construct(Repository repository) {
 		File srcRoot=repository.getSrcRoot();
 		
-		CuSourceFolder cuSource=CuSourceFolder.newDefaultJavaCuSourceFolder(srcRoot);
+		CuSourceCreatorFolder cuSource=CuSourceCreatorFolder.newDefaultJavaCuSourceFolder(srcRoot);
 		
 		AstConstructorJavaParser astcreator=new AstConstructorJavaParser(cuSource);
 		
@@ -61,7 +61,7 @@ public class ConstructDependencyGraphJavaparser implements ConstructDependencyGr
 		return new DependencyGraph(forest, rels);
 	}
 	
-	private List<DependencyRelation> findRels(VoidVisitorAdapter<List<DependencyRelation>> relfinder,CuSourceFolder cuSource) {
+	private List<DependencyRelation> findRels(VoidVisitorAdapter<List<DependencyRelation>> relfinder,CuSourceCreatorFolder cuSource) {
 		CuRelFinderVisitProcessor vp=new CuRelFinderVisitProcessor(relfinder);
 		CuSourceProcessor.process(cuSource, vp);
 		

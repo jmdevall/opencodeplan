@@ -5,14 +5,14 @@ import com.github.javaparser.ParseResult;
 import com.github.javaparser.ast.CompilationUnit;
 
 import jmdevall.opencodeplan.adapter.out.javaparser.cusource.CuSource;
-import jmdevall.opencodeplan.adapter.out.javaparser.cusource.CuSourceFolder;
+import jmdevall.opencodeplan.adapter.out.javaparser.cusource.CuSourceCreatorFolder;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class CuSourceProcessor {
 
 
-	public static void process(CuSourceFolder cuSource, CuProcessor processor){
+	public static void process(CuSourceCreatorFolder cuSource, CuProcessor processor){
    	 	JavaParser parser = JavaParserFactory.newDefaultJavaParser(cuSource.getSrcRoot());
    	 	
         process(cuSource, processor, parser);

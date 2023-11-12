@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import jmdevall.opencodeplan.adapter.out.javaparser.CuRelFinderVisitProcessor;
 import jmdevall.opencodeplan.adapter.out.javaparser.CuSourceProcessor;
-import jmdevall.opencodeplan.adapter.out.javaparser.cusource.CuSourceFolder;
+import jmdevall.opencodeplan.adapter.out.javaparser.cusource.CuSourceCreatorFolder;
 import jmdevall.opencodeplan.adapter.out.javaparser.util.TestUtil;
 import jmdevall.opencodeplan.domain.dependencygraph.DependencyRelation;
 
@@ -24,7 +24,7 @@ public class ChildParentRelFinderTest {
 		
 		CuRelFinderVisitProcessor vp=new CuRelFinderVisitProcessor(sut);
 		String startfolder=",testbench,testutil,childparent".replaceAll(",", File.separator);
-		CuSourceFolder cuSource=CuSourceFolder.newFromRootFolderAndFilter(testUtil.getSrcRootTestFolder(),
+		CuSourceCreatorFolder cuSource=CuSourceCreatorFolder.newFromRootFolderAndFilter(testUtil.getSrcRootTestFolder(),
 				(int level, String path, File file)->path.startsWith(startfolder));
 
 		CuSourceProcessor.process(cuSource, vp);

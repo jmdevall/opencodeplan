@@ -6,6 +6,7 @@ import java.util.List;
 
 import jmdevall.opencodeplan.application.port.out.oracle.Oracle;
 import jmdevall.opencodeplan.application.port.out.parser.ConstructDependencyGraph;
+import jmdevall.opencodeplan.application.port.out.parser.Parser;
 import jmdevall.opencodeplan.application.port.out.repository.Repository;
 import jmdevall.opencodeplan.domain.BI;
 import jmdevall.opencodeplan.domain.BlockRelationPair;
@@ -27,15 +28,15 @@ public class CodePlan {
     	//TODO:
     	return new ArrayList<BlockRelationPair>();
     }
-
-    List<CMI> classifyChanges(Fragment fragment, Fragment newFragment) {
-        // TODO:
-        return Collections.<CMI>emptyList();
-    }
+    
+    Parser parser;
    
     private void merge(Repository r,Fragment fragment, String llmrevised, Node b){
-    	fragment.merge(llmrevised);
-    	r.save(b.getId().getFile(), fragment.getRevised());
+    	String curevised=fragment.merge(llmrevised);
+    	Node revisedCuNodeParsed=parser.parse(curevised);
+    	fragment.setRevised(revisedCuNodeParsed);
+    	
+    	r.save(b.getId().getFile(), curevised);
     }
     
     /*
@@ -88,7 +89,8 @@ public class CodePlan {
 
             merge(r,fragment, llmrevised, bi.getB());
             
-            List<CMI> labels = classifyChanges(fragment, newFragment);
+            List<CMI> labels=fragment.classifyChanges();
+            
             DependencyGraph dp = d.updateDependencyGraph(labels, fragment, newFragment, bi.getB());
 
             // Fifth step: adaptively plan and propogate the effect of the edit on dependant

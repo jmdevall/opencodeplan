@@ -9,7 +9,7 @@ import java.util.HashMap;
 
 import org.junit.jupiter.api.Test;
 
-import jmdevall.opencodeplan.adapter.out.javaparser.cusource.CuSourceFolder;
+import jmdevall.opencodeplan.adapter.out.javaparser.cusource.CuSourceCreatorFolder;
 import jmdevall.opencodeplan.adapter.out.javaparser.util.TestUtil;
 import jmdevall.opencodeplan.domain.dependencygraph.Node;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +21,7 @@ public class AstConstructorJavaParserTest {
 	
 	@Test
 	public void canFindCompilationUnits() {
-		CuSourceFolder cuSource=testUtil.testingCuSourceFolder("/testbench");
+		CuSourceCreatorFolder cuSource=testUtil.testingCuSourceFolder("/testbench");
 
 		AstConstructorJavaParser sut=new AstConstructorJavaParser(cuSource);
 		CuSourceProcessor.process(cuSource, sut);
@@ -36,7 +36,7 @@ public class AstConstructorJavaParserTest {
 	
 	@Test
 	public void elResultadoDeHacerParseSobreCuEsElPropioContenidoDelCu() {
-		CuSourceFolder cuSource=testUtil.testingCuSourceFolder("/testbench");
+		CuSourceCreatorFolder cuSource=testUtil.testingCuSourceFolder("/testbench");
 		
 		AstConstructorJavaParser sut=new AstConstructorJavaParser(cuSource);
 		CuSourceProcessor.process(cuSource, sut);
@@ -53,7 +53,7 @@ public class AstConstructorJavaParserTest {
 	
 	@Test
 	public void parseaUnoQueTieneDeTodo() {
-		CuSourceFolder cuSource=testUtil.testingCuSourceFolder("/testbench");
+		CuSourceCreatorFolder cuSource=testUtil.testingCuSourceFolder("/testbench");
 		
 		AstConstructorJavaParser sut=new AstConstructorJavaParser(cuSource);
 		CuSourceProcessor.process(cuSource, sut);

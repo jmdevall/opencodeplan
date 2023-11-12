@@ -1,5 +1,10 @@
 package jmdevall.opencodeplan.domain.plangraph;
 
+import java.util.Arrays;
+import java.util.List;
+
+import jmdevall.opencodeplan.domain.dependencygraph.DependencyLabel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /*
@@ -12,6 +17,8 @@ SignatureOfConstructor,
 Import //?
 */
 
+//CMI="Change May Impact"
+
 @Getter
 public enum CMI {
 	
@@ -19,12 +26,22 @@ public enum CMI {
 	     "Body of Method M"
 		,"MMB"
 		,"Recompute the edges incident on the statements in the method body."
-		,"If an escaping object is modified then Rel(D,M,CalledBy) else Nill")
+		,"If an escaping object is modified then Rel(D,M,CalledBy) else Nill"
+	    ,Arrays.asList(new CMIRelation(WhatD.D,DependencyLabel.CALLED_BY)))
+	    
 	, MMS(ChangeType.MODIFICATION, NodeTypeTag.SignatureOfMethod,
 		"Signature of Method M"
 		,"MMS"
 		,"Recompute the edges incident on the method."
-	    ,"Rel(D, M, CalledBy), Rel(D, M, Overrides), Rel(D, M, OverriddenBy), Rel(D′ , M, Overrides), Rel(D′ , M, OverriddenBy)")
+	    ,"Rel(D, M, CalledBy), Rel(D, M, Overrides), Rel(D, M, OverriddenBy), Rel(D′ , M, Overrides), Rel(D′ , M, OverriddenBy)"
+	    ,Arrays.asList(
+	    		new CMIRelation(WhatD.D,DependencyLabel.CALLED_BY)
+	    		,new CMIRelation(WhatD.D,DependencyLabel.OVERRIDES)
+	    		,new CMIRelation(WhatD.D,DependencyLabel.OVERRIDEN_BY)
+	    		,new CMIRelation(WhatD.DP,DependencyLabel.OVERRIDES)
+	    		,new CMIRelation(WhatD.DP,DependencyLabel.OVERRIDEN_BY)
+		));
+/*	    		
     , MF(ChangeType.MODIFICATION, NodeTypeTag.Field,
     	"Field F in class C"
     	,"MF"
@@ -93,7 +110,7 @@ public enum CMI {
 		,"DCC"
 		,"Remove the edges incident on the class due to object instatiations using the constructor."
 		,"Rel(D, C, InstantiatedBy), Rel(D, C, BaseClassOf), Rel(D, C, DerivedClassOf)");
-	
+	*/
 	private ChangeType changeType;
 	private NodeTypeTag nodeTypeTag;
 	
@@ -101,15 +118,35 @@ public enum CMI {
 	private String label;
 	private String desc;
 	private String analisis;
+	private List<CMIRelation> formalChangeMayImpact;
 	
 	CMI(ChangeType changeType, NodeTypeTag nodeTypeTag,
-		String atomicChange,String label, String desc, String analisis){
+		String atomicChange,String label, String desc, String analisis
+		,List<CMIRelation> formalChangeMayImpact){
 		this.changeType=changeType;
 		this.nodeTypeTag=nodeTypeTag;
 		this.atomicChange=atomicChange;
 		this.label=label;
 		this.desc=desc;
 		this.analisis=analisis;
+		this.formalChangeMayImpact=formalChangeMayImpact;
+	}
+	
+	private static enum WhatD{
+		D, DP
+	}
+	
+	private static class CMIRelation{
+		private WhatD dgc; //¿old dependency graph or new?
+		private DependencyLabel dependencyLabel;
+		
+		public CMIRelation(WhatD dgc, DependencyLabel dependencyLabel) {
+			super();
+			this.dgc = dgc;
+			this.dependencyLabel = dependencyLabel;
+		}
+		
+		
 	}
 
 }

@@ -10,11 +10,14 @@ import java.util.stream.Stream;
 import com.github.difflib.DiffUtils;
 import com.github.difflib.patch.AbstractDelta;
 import com.github.difflib.patch.Chunk;
+import com.github.difflib.patch.DeltaType;
 import com.github.difflib.patch.Patch;
 import com.github.difflib.patch.PatchFailedException;
 
 import jmdevall.opencodeplan.domain.dependencygraph.Node;
 import jmdevall.opencodeplan.domain.dependencygraph.NodeId;
+import jmdevall.opencodeplan.domain.plangraph.CMI;
+import jmdevall.opencodeplan.domain.plangraph.ChangeType;
 import jmdevall.opencodeplan.domain.promptmaker.DiffUtil;
 import lombok.Builder;
 import lombok.Getter;
@@ -35,6 +38,7 @@ public class Fragment {
 	*/
 	private Node prunedcu;
 	private Node originalcu;
+	private Node revised;
 	
 	/**
 	 * Fragment is like a copy of the Compilation Unit node but some of the child nodes that represent the method blocks has been
@@ -98,12 +102,11 @@ public class Fragment {
 		.build();
 	}
 	
-	private String revised;
 
-	public void merge(String newFragment){
+	public String merge(String llmrevised){
 		List<String> original= DiffUtil.tolines(originalcu.prompt());
 		List<String> pruned = DiffUtil.tolines(prunedcu.prompt());
-		List<String> revised= DiffUtil.tolines(newFragment);
+		List<String> revised= DiffUtil.tolines(llmrevised);
 		
 		
 		//patchPrunedToOriginal should only have deltas of source=1 line and target= multiples lines because It's only method body deletions
@@ -125,12 +128,65 @@ public class Fragment {
 		
 		try {
 			List<String> finalpatch = DiffUtils.patch(prunedCopy,patchPrunedToRevised);
-			this.revised=finalpatch.stream().collect(Collectors.joining(System.lineSeparator()));
+			return finalpatch.stream().collect(Collectors.joining(System.lineSeparator()));
 		} catch (PatchFailedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			throw new IllegalStateException();
+		}
+	}
+	
+	
+
+	
+	public void setRevised(Node newFragment){
+		this.revised=newFragment;
+	}
+
+	
+	public List<CMI> classifyChanges() {
+		List<String> original= DiffUtil.tolines(originalcu.prompt());
+		List<String> revisedCode = DiffUtil.tolines(revised.prompt());
+		
+		Patch<String> originalToRevised=DiffUtils.diff(original, revisedCode);
+		
+		for(AbstractDelta<String> delta:originalToRevised.getDeltas()) {
+
+			Chunk<String> source=delta.getSource();
+			Chunk<String> target=delta.getTarget();
+			
+			int sourceLine=source.getPosition()+1;
+			int targetLine=target.getPosition()+1;
+			
+			ChangeType ct=fromDeltaType(delta.getType());
+			
+			//con esto filtraríamos los nodos raiz de algun tipoTag que se han añadido en revised
+			if(ct==ChangeType.ADD) {
+				revised.toStream()
+					.filter(n -> n.getId().getRange().getBegin().getLine()==sourceLine)
+					.filter(n -> n.getNodeTypeTag()!=null)
+					.filter(n -> n.getParent()!=null && n.getNodeTypeTag()!=n.getParent().getNodeTypeTag())
+					.collect(Collectors.toList());
+			}
+					
 		}
 
+		//TODO:
+		return null;
+ 
+	}
+	
+	private ChangeType fromDeltaType(DeltaType deltaType) {
+		if(deltaType==DeltaType.INSERT) {
+			return ChangeType.ADD;
+		}
+		if(deltaType==DeltaType.DELETE) {
+			return ChangeType.DELETION;
+		}
+		if(deltaType==DeltaType.CHANGE) {
+			return ChangeType.MODIFICATION;
+		}
+		throw new IllegalArgumentException();
 	}
 	
 }

@@ -12,7 +12,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.stream.Collectors;
 
-import jmdevall.opencodeplan.adapter.out.javaparser.cusource.CuSourceFolder;
+import jmdevall.opencodeplan.adapter.out.javaparser.cusource.CuSourceCreatorFolder;
 
 public class TestUtil {
 	
@@ -38,8 +38,8 @@ public class TestUtil {
 		return new File("src/test/java");
 	}
 
-	public CuSourceFolder testingCuSourceFolder(String startfolder) {
-		CuSourceFolder cuSource=CuSourceFolder.newFromRootFolderAndFilter(getSrcRootTestFolder(),
+	public CuSourceCreatorFolder testingCuSourceFolder(String startfolder) {
+		CuSourceCreatorFolder cuSource=CuSourceCreatorFolder.newFromRootFolderAndFilter(getSrcRootTestFolder(),
 				(int level, String path, File file)->path.startsWith(startfolder));
 		return cuSource;
 	}

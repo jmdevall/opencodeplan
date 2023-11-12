@@ -16,7 +16,7 @@ public class CuSourceFolterTest {
 	public void canReadSourceCode() {
 		File root=testUtil.getSrcTestFile("/testbench");
 		//CuSourceFolder sut=CuSourceFolder.newDefaultJavaCuSourceFolder(testUtil.getSrcRootTestFolder());
-		CuSourceFolder sut=CuSourceFolder.newDefaultJavaCuSourceFolder(root);
+		CuSourceCreatorFolder sut=CuSourceCreatorFolder.newDefaultJavaCuSourceFolder(root);
 		
 		String sourceCode=sut.getSource(sut.getPaths().get(0));
 		assertNotNull(sourceCode);

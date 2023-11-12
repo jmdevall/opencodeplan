@@ -17,12 +17,12 @@ import lombok.extern.slf4j.Slf4j;
  */
 
 @Slf4j
-public class CuSourceFolder implements CuSource {
+public class CuSourceCreatorFolder implements CuSource {
 
  	private HashMap<String,String> files=new HashMap<String,String>();
 	private File rootDir;
 
- 	private CuSourceFolder(File rootDir,HashMap<String,String> files) {
+ 	private CuSourceCreatorFolder(File rootDir,HashMap<String,String> files) {
  		this.files=files;
  		this.rootDir=rootDir;
  	}
@@ -31,11 +31,11 @@ public class CuSourceFolder implements CuSource {
 		return (level, path, file) -> path.endsWith(".java");
 	}
 	
-	public static CuSourceFolder newDefaultJavaCuSourceFolder(File rootDir){
+	public static CuSourceCreatorFolder newDefaultJavaCuSourceFolder(File rootDir){
         return newFromRootFolderAndFilter(rootDir, defaultJavaExtensionFilter());
 	}
 
-	public static CuSourceFolder newFromRootFolderAndFilter(File rootDir, Filter defaultJavaExtensionFilter) {
+	public static CuSourceCreatorFolder newFromRootFolderAndFilter(File rootDir, Filter defaultJavaExtensionFilter) {
 		HashMap<String,String> readedfiles=new HashMap<String,String>();
 
         new DirExplorer(
@@ -47,7 +47,7 @@ public class CuSourceFolder implements CuSource {
 
          }).explore(rootDir);
         
-        return new CuSourceFolder(rootDir,readedfiles);
+        return new CuSourceCreatorFolder(rootDir,readedfiles);
 	}
 	
 	public File getSrcRoot() {
