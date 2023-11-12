@@ -165,7 +165,7 @@ public class Fragment {
 				revised.toStream()
 					.filter(n -> n.getId().getRange().getBegin().getLine()==sourceLine)
 					.filter(n -> n.getNodeTypeTag()!=null)
-					.filter(n -> n.getParent()!=null && n.getNodeTypeTag()!=n.getParent().getNodeTypeTag())
+					.filter(n -> n.getParent()!=null && n.getNodeTypeTag()!=n.getParent().getNodeTypeTag()) // TODO: NO ESTÁ BIEN. Debería comprobar que la linea está dentro del rango del nodo
 					.collect(Collectors.toList());
 			}
 					
