@@ -3,6 +3,7 @@ package jmdevall.opencodeplan.application;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import jmdevall.opencodeplan.application.port.out.oracle.Oracle;
 import jmdevall.opencodeplan.application.port.out.parser.ConstructDependencyGraph;
@@ -16,7 +17,10 @@ import jmdevall.opencodeplan.domain.dependencygraph.DependencyGraph;
 import jmdevall.opencodeplan.domain.dependencygraph.DependencyLabel;
 import jmdevall.opencodeplan.domain.dependencygraph.Node;
 import jmdevall.opencodeplan.domain.plangraph.CMI;
+import jmdevall.opencodeplan.domain.plangraph.CMIRelation;
+import jmdevall.opencodeplan.domain.plangraph.ClasifiedChange;
 import jmdevall.opencodeplan.domain.plangraph.PlanGraph;
+import jmdevall.opencodeplan.domain.plangraph.WhatD;
 import jmdevall.opencodeplan.domain.promptmaker.Context;
 import jmdevall.opencodeplan.domain.promptmaker.PromptMaker;
 import lombok.AllArgsConstructor;
@@ -24,12 +28,33 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class CodePlan {
 
-    List<BlockRelationPair> getAffectedBlocks(List<CMI> labels, Node b, DependencyGraph d, DependencyGraph dp) {
-    	//TODO:
-    	return new ArrayList<BlockRelationPair>();
+    List<BlockRelationPair> getAffectedBlocks(List<ClasifiedChange> labels, Node b, DependencyGraph d, DependencyGraph dp) {
+    	ArrayList<BlockRelationPair>ret = new ArrayList<BlockRelationPair>();
+    	
+    	for(ClasifiedChange change:labels) {
+    		List<CMIRelation> impacts=change.getCmi().getFormalChangeMayImpact();
+    		for(CMIRelation impact:impacts) {
+    			DependencyGraph affectedDg=impact.getDgc()==WhatD.D?d:dp;
+    			List<Node> afectedNodes=impact.getDgc()==WhatD.D?change.getOriginal():change.getRevised();
+    			
+    			Node afectedNode=afectedNodes.get(0);
+    			
+    			ret.addAll(
+    					//TODO: Rel tiene nodeids, no nodes. Comparar o buscar los nodos en el dependency graph de otro forma
+	    			affectedDg.getRels().stream()          
+	    			.filter(rel-> rel.getLabel()==impact.getDependencyLabel())
+	    			.filter(rel-> rel.getOrigin().equals(b))
+	    			.filter(rel-> rel.getDestiny().equals(afectedNode))
+	    			.map(rel->new BlockRelationPair(rel.getDestiny(),change.getCmi()))
+	    			.collect(Collectors.toList())
+	    		);
+    		}
+    		
+    	}
+    	
     }
     
-    Parser parser;
+   
    
     private void merge(Repository r,Fragment fragment, String llmrevised, Node b){
     	String curevised=fragment.merge(llmrevised);
@@ -44,6 +69,7 @@ public class CodePlan {
      * specifications, Theta is an oracle and L is an LLM.
      */
 
+    Parser parser;
     ConstructDependencyGraph constructDependencyGraph;
     PromptMaker promptMaker;
     Oracle oracle;
@@ -89,9 +115,10 @@ public class CodePlan {
 
             merge(r,fragment, llmrevised, bi.getB());
             
-            List<CMI> labels=fragment.classifyChanges();
-            
-            DependencyGraph dp = d.updateDependencyGraph(labels, fragment, newFragment, bi.getB());
+            List<ClasifiedChange> labels=fragment.classifyChanges();
+  
+//          DependencyGraph dp = d.updateDependencyGraph(labels, fragment, newFragment, bi.getB());
+            DependencyGraph dp = constructDependencyGraph.construct(r); //isn't it more easy???
 
             // Fifth step: adaptively plan and propogate the effect of the edit on dependant
             // code

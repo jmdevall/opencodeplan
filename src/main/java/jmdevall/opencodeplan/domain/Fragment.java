@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -13,11 +14,14 @@ import com.github.difflib.patch.Chunk;
 import com.github.difflib.patch.DeltaType;
 import com.github.difflib.patch.Patch;
 import com.github.difflib.patch.PatchFailedException;
+import com.google.common.collect.Streams;
 
 import jmdevall.opencodeplan.domain.dependencygraph.Node;
 import jmdevall.opencodeplan.domain.dependencygraph.NodeId;
 import jmdevall.opencodeplan.domain.plangraph.CMI;
 import jmdevall.opencodeplan.domain.plangraph.ChangeType;
+import jmdevall.opencodeplan.domain.plangraph.ClasifiedChange;
+import jmdevall.opencodeplan.domain.plangraph.NodeTypeTag;
 import jmdevall.opencodeplan.domain.promptmaker.DiffUtil;
 import lombok.Builder;
 import lombok.Getter;
@@ -144,11 +148,13 @@ public class Fragment {
 	}
 
 	
-	public List<CMI> classifyChanges() {
+	public List<ClasifiedChange> classifyChanges() {
 		List<String> original= DiffUtil.tolines(originalcu.prompt());
 		List<String> revisedCode = DiffUtil.tolines(revised.prompt());
 		
 		Patch<String> originalToRevised=DiffUtils.diff(original, revisedCode);
+		
+		List<ClasifiedChange> clasified=new ArrayList<ClasifiedChange>();
 		
 		for(AbstractDelta<String> delta:originalToRevised.getDeltas()) {
 
@@ -160,20 +166,35 @@ public class Fragment {
 			
 			ChangeType ct=fromDeltaType(delta.getType());
 			
+			List<Node> originalNodes=Collections.emptyList();
+			List<Node> revisedNodes=Collections.emptyList();
 			//con esto filtraríamos los nodos raiz de algun tipoTag que se han añadido en revised
-			if(ct==ChangeType.ADD) {
-				revised.toStream()
-					.filter(n -> n.getId().getRange().getBegin().getLine()==sourceLine)
-					.filter(n -> n.getNodeTypeTag()!=null)
-					.filter(n -> n.getParent()!=null && n.getNodeTypeTag()!=n.getParent().getNodeTypeTag()) // TODO: NO ESTÁ BIEN. Debería comprobar que la linea está dentro del rango del nodo
+			if(ct==ChangeType.ADD || ct==ChangeType.MODIFICATION) {
+				originalNodes=revised.toStream()
+					.filter(n -> n.getId().getRange().containsLine(targetLine))
+					.filter(n -> n.getNodeTypeTag()!=null && n.getParent()!=null)
+					.filter(n -> n.getNodeTypeTag()!=n.getParent().getNodeTypeTag()) 
 					.collect(Collectors.toList());
 			}
-					
+			if(ct==ChangeType.DELETION || ct==ChangeType.MODIFICATION) {
+				revisedNodes=originalcu.toStream()
+				.filter(n -> n.getId().getRange().containsLine(sourceLine))
+				.filter(n -> n.getNodeTypeTag()!=null && n.getParent()!=null)
+				.filter(n -> n.getNodeTypeTag()!=n.getParent().getNodeTypeTag()) 
+				.collect(Collectors.toList());
+			}
+
+			Optional<NodeTypeTag> nodeTypeTag=Streams.concat(originalNodes.stream(),revisedNodes.stream())
+			.map(n->n.getNodeTypeTag())
+			.findFirst();
+
+			if(nodeTypeTag.isEmpty()) {
+				CMI cmi=CMI.find(ct, nodeTypeTag.get());
+				clasified.add(new ClasifiedChange(cmi, originalNodes, revisedNodes));
+			}
 		}
 
-		//TODO:
-		return null;
- 
+		return clasified;
 	}
 	
 	private ChangeType fromDeltaType(DeltaType deltaType) {
