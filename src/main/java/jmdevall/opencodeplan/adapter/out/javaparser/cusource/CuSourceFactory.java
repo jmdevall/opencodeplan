@@ -1,9 +1,7 @@
 package jmdevall.opencodeplan.adapter.out.javaparser.cusource;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+
 
 import jmdevall.opencodeplan.adapter.out.file.FileUtil;
 import jmdevall.opencodeplan.adapter.out.file.direxplorer.DirExplorer;
@@ -17,51 +15,35 @@ import lombok.extern.slf4j.Slf4j;
  */
 
 @Slf4j
-public class CuSourceCreatorFolder implements CuSource {
-
- 	private HashMap<String,String> files=new HashMap<String,String>();
-	private File rootDir;
-
- 	private CuSourceCreatorFolder(File rootDir,HashMap<String,String> files) {
- 		this.files=files;
- 		this.rootDir=rootDir;
- 	}
+public class CuSourceFactory {
  	
 	private static Filter defaultJavaExtensionFilter() {
 		return (level, path, file) -> path.endsWith(".java");
 	}
 	
-	public static CuSourceCreatorFolder newDefaultJavaCuSourceFolder(File rootDir){
+	public static CuSource newDefaultJavaCuSourceFolder(File rootDir){
         return newFromRootFolderAndFilter(rootDir, defaultJavaExtensionFilter());
 	}
 
-	public static CuSourceCreatorFolder newFromRootFolderAndFilter(File rootDir, Filter defaultJavaExtensionFilter) {
-		HashMap<String,String> readedfiles=new HashMap<String,String>();
+	public static CuSource newFromRootFolderAndFilter(File rootDir, Filter defaultJavaExtensionFilter) {
+		CuSource cuSource=new CuSource();
 
         new DirExplorer(
         	defaultJavaExtensionFilter,
             
             (level, subpathFromRoot, file) -> {
                String javaFileContent= FileUtil.readFile(file.getAbsolutePath()) +"\n"; //bug de javaparser https://github.com/javaparser/javaparser/issues/2169
-               readedfiles.put(subpathFromRoot, javaFileContent);
+               cuSource.add(subpathFromRoot, javaFileContent);
 
          }).explore(rootDir);
         
-        return new CuSourceCreatorFolder(rootDir,readedfiles);
+        return cuSource;
 	}
 	
-	public File getSrcRoot() {
-		return this.rootDir;
-	}
-	
-	@Override
-	public String getSource(String path) {
-		return files.get(path);
-	}
-	
-	@Override
-	public List<String> getPaths(){
-		return new ArrayList<String>(this.files.keySet());
+	public static CuSource newFromSingleFile(String path, String content) {
+		CuSource cuSource=new CuSource();
+		cuSource.add(path, content);
+		return cuSource;
 	}
         
 }

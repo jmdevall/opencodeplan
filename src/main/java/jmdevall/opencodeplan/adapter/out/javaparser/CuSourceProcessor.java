@@ -1,22 +1,17 @@
 package jmdevall.opencodeplan.adapter.out.javaparser;
 
+import java.io.File;
+
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ast.CompilationUnit;
 
 import jmdevall.opencodeplan.adapter.out.javaparser.cusource.CuSource;
-import jmdevall.opencodeplan.adapter.out.javaparser.cusource.CuSourceCreatorFolder;
+import jmdevall.opencodeplan.adapter.out.javaparser.cusource.CuSourceFactory;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class CuSourceProcessor {
-
-
-	public static void process(CuSourceCreatorFolder cuSource, CuProcessor processor){
-   	 	JavaParser parser = JavaParserFactory.newDefaultJavaParser(cuSource.getSrcRoot());
-   	 	
-        process(cuSource, processor, parser);
-	}
 
 	public static void process(CuSource cuSource, CuProcessor processor, JavaParser javaparser) {
 		for(String filepath:cuSource.getPaths()) {

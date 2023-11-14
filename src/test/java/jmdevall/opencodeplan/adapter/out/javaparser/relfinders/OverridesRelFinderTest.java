@@ -11,14 +11,15 @@ import org.junit.jupiter.api.Test;
 
 import jmdevall.opencodeplan.adapter.out.javaparser.CuRelFinderVisitProcessor;
 import jmdevall.opencodeplan.adapter.out.javaparser.CuSourceProcessor;
-import jmdevall.opencodeplan.adapter.out.javaparser.cusource.CuSourceCreatorFolder;
-import jmdevall.opencodeplan.adapter.out.javaparser.util.TestUtil;
+import jmdevall.opencodeplan.adapter.out.javaparser.cusource.CuSource;
+import jmdevall.opencodeplan.adapter.out.javaparser.cusource.CuSourceFactory;
+import jmdevall.opencodeplan.adapter.out.javaparser.util.TestingUtil;
 import jmdevall.opencodeplan.domain.dependencygraph.DependencyRelation;
 
 
 public class OverridesRelFinderTest {
 
-	private TestUtil testUtil=new TestUtil();
+	private TestingUtil testUtil=new TestingUtil();
 
 	@Test
 	public void findOverrides() {
@@ -26,10 +27,10 @@ public class OverridesRelFinderTest {
 		
 		CuRelFinderVisitProcessor vp=new CuRelFinderVisitProcessor(sut);
 		String startfolder=",testbench,testutil,overrides".replaceAll(",", File.separator);
-		CuSourceCreatorFolder cuSource=CuSourceCreatorFolder.newFromRootFolderAndFilter(testUtil.getSrcRootTestFolder(),
+		CuSource cuSource=CuSourceFactory.newFromRootFolderAndFilter(testUtil.getSrcRootTestFolder(),
 				(int level, String path, File file)->path.startsWith(startfolder));
 
-		CuSourceProcessor.process(cuSource, vp);
+		CuSourceProcessor.process(cuSource, vp, testUtil.getTestingJavaParser());
 		
 		
 		

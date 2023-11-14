@@ -14,7 +14,6 @@ public class FileUtil {
 			System.err.println(error);
 			return "";
 		}
-
 	}
 
 }

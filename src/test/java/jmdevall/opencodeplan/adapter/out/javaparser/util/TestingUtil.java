@@ -12,9 +12,13 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.stream.Collectors;
 
-import jmdevall.opencodeplan.adapter.out.javaparser.cusource.CuSourceCreatorFolder;
+import com.github.javaparser.JavaParser;
 
-public class TestUtil {
+import jmdevall.opencodeplan.adapter.out.javaparser.JavaParserFactory;
+import jmdevall.opencodeplan.adapter.out.javaparser.cusource.CuSource;
+import jmdevall.opencodeplan.adapter.out.javaparser.cusource.CuSourceFactory;
+
+public class TestingUtil {
 	
 	public String readFileFromTestSource(String filepath) {
 		File file=getSrcTestFile(filepath);
@@ -38,10 +42,14 @@ public class TestUtil {
 		return new File("src/test/java");
 	}
 
-	public CuSourceCreatorFolder testingCuSourceFolder(String startfolder) {
-		CuSourceCreatorFolder cuSource=CuSourceCreatorFolder.newFromRootFolderAndFilter(getSrcRootTestFolder(),
+	public CuSource getTestingCuSourceFolder(String startfolder) {
+		CuSource cuSource=CuSourceFactory.newFromRootFolderAndFilter(getSrcRootTestFolder(),
 				(int level, String path, File file)->path.startsWith(startfolder));
 		return cuSource;
+	}
+	
+	public JavaParser getTestingJavaParser() {
+		return JavaParserFactory.newDefaultJavaParser(getSrcRootTestFolder());
 	}
 	
 

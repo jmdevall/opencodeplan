@@ -8,7 +8,7 @@ import java.util.Optional;
 import org.junit.jupiter.api.Test;
 
 import jmdevall.opencodeplan.adapter.out.javaparser.ConstructDependencyGraphJavaparser;
-import jmdevall.opencodeplan.adapter.out.javaparser.util.TestUtil;
+import jmdevall.opencodeplan.adapter.out.javaparser.util.TestingUtil;
 import jmdevall.opencodeplan.application.port.out.repository.Repository;
 import jmdevall.opencodeplan.domain.BI;
 import jmdevall.opencodeplan.domain.Fragment;
@@ -19,7 +19,7 @@ import jmdevall.opencodeplan.domain.dependencygraph.LineColRange;
 import jmdevall.opencodeplan.domain.instruction.Inatural;
 
 public class ContextTest {
-	private TestUtil testUtil=new TestUtil();
+	private TestingUtil testUtil=new TestingUtil();
 
 	
 	private static class FakeRepository implements Repository{

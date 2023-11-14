@@ -24,7 +24,8 @@ import com.github.javaparser.JavaParser;
 import jmdevall.opencodeplan.adapter.out.javaparser.AstConstructorJavaParser;
 import jmdevall.opencodeplan.adapter.out.javaparser.CuSourceProcessor;
 import jmdevall.opencodeplan.adapter.out.javaparser.cusource.CuSource;
-import jmdevall.opencodeplan.adapter.out.javaparser.cusource.CuSourceSingleFile;
+import jmdevall.opencodeplan.adapter.out.javaparser.cusource.CuSourceFactory;
+import jmdevall.opencodeplan.adapter.out.javaparser.util.TestingUtil;
 import jmdevall.opencodeplan.domain.dependencygraph.Node;
 import jmdevall.opencodeplan.domain.dependencygraph.NodeId;
 import jmdevall.opencodeplan.domain.dependencygraph.LineColRange;
@@ -64,7 +65,7 @@ public class FragmentTest {
 
 
 	private Node getTestingCu() {
-		CuSource testingCuSource=new CuSourceSingleFile("/test/Foo.java", javaCompileUnit);
+		CuSource testingCuSource=CuSourceFactory.newFromSingleFile("/test/Foo.java", javaCompileUnit);
 				
 		AstConstructorJavaParser acjp=new AstConstructorJavaParser(testingCuSource);
 		CuSourceProcessor.process(testingCuSource, acjp, new JavaParser());
@@ -98,6 +99,8 @@ public class FragmentTest {
 		
 	}
 	
+	TestingUtil testingUtil=new TestingUtil();
+
 
 	
 }

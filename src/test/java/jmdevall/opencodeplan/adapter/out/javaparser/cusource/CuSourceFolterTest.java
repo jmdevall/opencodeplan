@@ -6,19 +6,19 @@ import java.io.File;
 
 import org.junit.jupiter.api.Test;
 
-import jmdevall.opencodeplan.adapter.out.javaparser.util.TestUtil;
+import jmdevall.opencodeplan.adapter.out.javaparser.util.TestingUtil;
 
 public class CuSourceFolterTest {
 
-	TestUtil testUtil=new TestUtil();
+	TestingUtil testUtil=new TestingUtil();
 	
 	@Test
 	public void canReadSourceCode() {
 		File root=testUtil.getSrcTestFile("/testbench");
 		//CuSourceFolder sut=CuSourceFolder.newDefaultJavaCuSourceFolder(testUtil.getSrcRootTestFolder());
-		CuSourceCreatorFolder sut=CuSourceCreatorFolder.newDefaultJavaCuSourceFolder(root);
+		CuSource sut=CuSourceFactory.newDefaultJavaCuSourceFolder(root);
 		
-		String sourceCode=sut.getSource(sut.getPaths().get(0));
+		String sourceCode=sut.getSource(sut.getPaths().iterator().next());
 		assertNotNull(sourceCode);
 	}
 }

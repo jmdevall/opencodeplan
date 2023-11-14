@@ -5,9 +5,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
-import jmdevall.opencodeplan.adapter.out.javaparser.cusource.CuSourceCreatorFolder;
+import jmdevall.opencodeplan.adapter.out.javaparser.cusource.CuSource;
+import jmdevall.opencodeplan.adapter.out.javaparser.cusource.CuSourceFactory;
 import jmdevall.opencodeplan.adapter.out.javaparser.relfinders.BaseClassRelFinder;
 import jmdevall.opencodeplan.adapter.out.javaparser.relfinders.CallsRelFinder;
 import jmdevall.opencodeplan.adapter.out.javaparser.relfinders.ChildParentRelFinder;
@@ -46,24 +48,25 @@ public class ConstructDependencyGraphJavaparser implements ConstructDependencyGr
 	public DependencyGraph construct(Repository repository) {
 		File srcRoot=repository.getSrcRoot();
 		
-		CuSourceCreatorFolder cuSource=CuSourceCreatorFolder.newDefaultJavaCuSourceFolder(srcRoot);
+		CuSource cuSource=CuSourceFactory.newDefaultJavaCuSourceFolder(srcRoot);
 		
 		AstConstructorJavaParser astcreator=new AstConstructorJavaParser(cuSource);
-		
-		CuSourceProcessor.process(cuSource, astcreator);
+		JavaParser parser=JavaParserFactory.newDefaultJavaParser(srcRoot);
+		CuSourceProcessor.process(cuSource, astcreator,parser);
 		HashMap<String, Node> forest=astcreator.getForest();
 
 		ArrayList<DependencyRelation> rels=new ArrayList<DependencyRelation>();
 		for(VoidVisitorAdapter<List<DependencyRelation>> relfinder:relfinders) {
-			rels.addAll(findRels(relfinder,cuSource));
+			rels.addAll(findRels(relfinder,cuSource, parser));
 		}
 		
 		return new DependencyGraph(forest, rels);
 	}
 	
-	private List<DependencyRelation> findRels(VoidVisitorAdapter<List<DependencyRelation>> relfinder,CuSourceCreatorFolder cuSource) {
+	private List<DependencyRelation> findRels(
+			VoidVisitorAdapter<List<DependencyRelation>> relfinder, CuSource cuSource, JavaParser parser) {
 		CuRelFinderVisitProcessor vp=new CuRelFinderVisitProcessor(relfinder);
-		CuSourceProcessor.process(cuSource, vp);
+		CuSourceProcessor.process(cuSource, vp, parser );
 		
 		return vp.getRels();
 	}

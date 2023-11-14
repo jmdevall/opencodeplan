@@ -9,22 +9,23 @@ import java.util.HashMap;
 
 import org.junit.jupiter.api.Test;
 
-import jmdevall.opencodeplan.adapter.out.javaparser.cusource.CuSourceCreatorFolder;
-import jmdevall.opencodeplan.adapter.out.javaparser.util.TestUtil;
+import jmdevall.opencodeplan.adapter.out.javaparser.cusource.CuSource;
+import jmdevall.opencodeplan.adapter.out.javaparser.cusource.CuSourceFactory;
+import jmdevall.opencodeplan.adapter.out.javaparser.util.TestingUtil;
 import jmdevall.opencodeplan.domain.dependencygraph.Node;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class AstConstructorJavaParserTest {
 
-	private TestUtil testUtil=new TestUtil();
+	private TestingUtil testUtil=new TestingUtil();
 	
 	@Test
 	public void canFindCompilationUnits() {
-		CuSourceCreatorFolder cuSource=testUtil.testingCuSourceFolder("/testbench");
+		CuSource cuSource=testUtil.getTestingCuSourceFolder("/testbench");
 
 		AstConstructorJavaParser sut=new AstConstructorJavaParser(cuSource);
-		CuSourceProcessor.process(cuSource, sut);
+		CuSourceProcessor.process(cuSource, sut, testUtil.getTestingJavaParser());
 
 		HashMap<String, Node> forest=sut.getForest();
 		String expectedName = ".testbench.testutil.Multiclass".replace(".", File.separator)+".java";
@@ -36,10 +37,10 @@ public class AstConstructorJavaParserTest {
 	
 	@Test
 	public void elResultadoDeHacerParseSobreCuEsElPropioContenidoDelCu() {
-		CuSourceCreatorFolder cuSource=testUtil.testingCuSourceFolder("/testbench");
+		CuSource cuSource=testUtil.getTestingCuSourceFolder("/testbench");
 		
 		AstConstructorJavaParser sut=new AstConstructorJavaParser(cuSource);
-		CuSourceProcessor.process(cuSource, sut);
+		CuSourceProcessor.process(cuSource, sut, testUtil.getTestingJavaParser());
 		
 		HashMap<String, Node> forest=sut.getForest();
 		
@@ -53,10 +54,10 @@ public class AstConstructorJavaParserTest {
 	
 	@Test
 	public void parseaUnoQueTieneDeTodo() {
-		CuSourceCreatorFolder cuSource=testUtil.testingCuSourceFolder("/testbench");
+		CuSource cuSource=testUtil.getTestingCuSourceFolder("/testbench");
 		
 		AstConstructorJavaParser sut=new AstConstructorJavaParser(cuSource);
-		CuSourceProcessor.process(cuSource, sut);
+		CuSourceProcessor.process(cuSource, sut, testUtil.getTestingJavaParser());
 		
 		HashMap<String, Node> forest=sut.getForest();
 		

@@ -1,15 +1,24 @@
 package jmdevall.opencodeplan.adapter.out.javaparser.cusource;
 
-import java.util.List;
+import java.util.Collection;
+import java.util.HashMap;
 
 /**
  * Source of compilation units
  * 
  */
-public interface CuSource {
+public class CuSource {
+ 	private HashMap<String,String> files=new HashMap<String,String>();
+	
+	public String getSource(String path) {
+		return files.get(path);
+	}
 
-	String getSource(String path);
+	public Collection<String> getPaths(){
+		return files.keySet();
+	}
 
-	List<String> getPaths();
-
+	public void add(String path,String content){
+		this.files.put(path,content);
+	}
 }

@@ -25,7 +25,7 @@ import com.github.javaparser.JavaParser;
 import jmdevall.opencodeplan.adapter.out.javaparser.AstConstructorJavaParser;
 import jmdevall.opencodeplan.adapter.out.javaparser.CuSourceProcessor;
 import jmdevall.opencodeplan.adapter.out.javaparser.cusource.CuSource;
-import jmdevall.opencodeplan.adapter.out.javaparser.cusource.CuSourceSingleFile;
+import jmdevall.opencodeplan.adapter.out.javaparser.cusource.CuSourceFactory;
 import jmdevall.opencodeplan.domain.dependencygraph.Node;
 import jmdevall.opencodeplan.domain.promptmaker.DiffUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -34,7 +34,7 @@ import lombok.extern.slf4j.Slf4j;
 public class AtomicChange {
 	
 	public static Node getTestingCu(String filepath) {
-		CuSource testingCuSource=new CuSourceSingleFile(filepath, getTestSourceFile(filepath));
+		CuSource testingCuSource=CuSourceFactory.newFromSingleFile(filepath, getTestSourceFile(filepath));
 				
 		AstConstructorJavaParser acjp=new AstConstructorJavaParser(testingCuSource);
 		CuSourceProcessor.process(testingCuSource, acjp, new JavaParser());

@@ -15,9 +15,9 @@ import com.github.javaparser.ast.CompilationUnit;
 import jmdevall.opencodeplan.adapter.out.javaparser.JavaParserFactory;
 import jmdevall.opencodeplan.adapter.out.javaparser.Util;
 
-public class UtilTest {
+public class TestingUtilTest {
 
-	TestUtil testUtil=new TestUtil();
+	TestingUtil testUtil=new TestingUtil();
 	
 	@Test
 	public void canReadJavasFromTestbench() {
