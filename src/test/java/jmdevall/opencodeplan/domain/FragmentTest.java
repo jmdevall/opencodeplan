@@ -1,18 +1,6 @@
 package jmdevall.opencodeplan.domain;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.fail;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 
@@ -23,12 +11,10 @@ import com.github.javaparser.JavaParser;
 
 import jmdevall.opencodeplan.adapter.out.javaparser.AstConstructorJavaParser;
 import jmdevall.opencodeplan.adapter.out.javaparser.CuSourceProcessor;
-import jmdevall.opencodeplan.adapter.out.javaparser.cusource.CuSource;
-import jmdevall.opencodeplan.adapter.out.javaparser.cusource.CuSourceFactory;
 import jmdevall.opencodeplan.adapter.out.javaparser.util.TestingUtil;
+import jmdevall.opencodeplan.adapter.out.repository.CuSourceFactory;
+import jmdevall.opencodeplan.application.port.out.repository.CuSource;
 import jmdevall.opencodeplan.domain.dependencygraph.Node;
-import jmdevall.opencodeplan.domain.dependencygraph.NodeId;
-import jmdevall.opencodeplan.domain.dependencygraph.LineColRange;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

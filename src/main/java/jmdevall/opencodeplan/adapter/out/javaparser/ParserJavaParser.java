@@ -1,8 +1,8 @@
 package jmdevall.opencodeplan.adapter.out.javaparser;
 
-import jmdevall.opencodeplan.adapter.out.javaparser.cusource.CuSource;
-import jmdevall.opencodeplan.adapter.out.javaparser.cusource.CuSourceFactory;
+import jmdevall.opencodeplan.adapter.out.repository.CuSourceFactory;
 import jmdevall.opencodeplan.application.port.out.parser.Parser;
+import jmdevall.opencodeplan.application.port.out.repository.CuSource;
 import jmdevall.opencodeplan.domain.dependencygraph.Node;
 
 public class ParserJavaParser implements Parser{

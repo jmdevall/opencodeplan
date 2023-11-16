@@ -1,6 +1,7 @@
 package jmdevall.opencodeplan.application;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -105,7 +106,7 @@ public class CodePlan {
 
             BI bi = g.getNextPending().get().getBi();
             // First step: extract fragment of code
-            Fragment fragment = r.extractCodeFragment(bi);
+            Fragment fragment = Fragment.newFromPrunedCuNode( bi.getB().getRootParent(), bi.getB().getId());
             // Second step: gather context of the edit
             Context context = Context.gatherContext(bi.getB(), r, d);
             // Third step: use the LLM to get edited code fragment

@@ -8,15 +8,13 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.stream.Collectors;
 
 import com.github.javaparser.JavaParser;
 
 import jmdevall.opencodeplan.adapter.out.javaparser.JavaParserFactory;
-import jmdevall.opencodeplan.adapter.out.javaparser.cusource.CuSource;
-import jmdevall.opencodeplan.adapter.out.javaparser.cusource.CuSourceFactory;
+import jmdevall.opencodeplan.adapter.out.repository.RepositoryFile;
+import jmdevall.opencodeplan.application.port.out.repository.Repository;
 
 public class TestingUtil {
 	
@@ -42,10 +40,10 @@ public class TestingUtil {
 		return new File("src/test/java");
 	}
 
-	public CuSource getTestingCuSourceFolder(String startfolder) {
-		CuSource cuSource=CuSourceFactory.newFromRootFolderAndFilter(getSrcRootTestFolder(),
+	public Repository getTestingRepository(String startfolder) {
+		return
+				RepositoryFile.newRepositoryFile(getSrcRootTestFolder(),
 				(int level, String path, File file)->path.startsWith(startfolder));
-		return cuSource;
 	}
 	
 	public JavaParser getTestingJavaParser() {

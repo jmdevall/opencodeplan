@@ -7,8 +7,9 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 
-import jmdevall.opencodeplan.adapter.out.javaparser.ConstructDependencyGraphJavaparser;
+import jmdevall.opencodeplan.adapter.out.javaparser.DependencyGraphConstructorJavaparser;
 import jmdevall.opencodeplan.adapter.out.javaparser.util.TestingUtil;
+import jmdevall.opencodeplan.application.port.out.repository.CuSource;
 import jmdevall.opencodeplan.application.port.out.repository.Repository;
 import jmdevall.opencodeplan.domain.BI;
 import jmdevall.opencodeplan.domain.Fragment;
@@ -17,9 +18,10 @@ import jmdevall.opencodeplan.domain.dependencygraph.Node;
 import jmdevall.opencodeplan.domain.dependencygraph.NodeId;
 import jmdevall.opencodeplan.domain.dependencygraph.LineColRange;
 import jmdevall.opencodeplan.domain.instruction.Inatural;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class ContextTest {
-	private TestingUtil testUtil=new TestingUtil();
 
 	
 	private static class FakeRepository implements Repository{
@@ -37,24 +39,27 @@ public class ContextTest {
 		}
 
 		@Override
-		public Fragment extractCodeFragment(BI bi) {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
 		public void save(String filepath, String newFileContent) {
 			// TODO Auto-generated method stub
 		}
+
+		@Override
+		public CuSource getCuSource() {
+			// TODO Auto-generated method stub
+			return null;
+		}
 		
 	}
+	private TestingUtil testUtil=new TestingUtil();
+
 	
 	@Test
 	public void canGatherSpatialContext() {
-		ConstructDependencyGraphJavaparser jp=ConstructDependencyGraphJavaparser.newDefault();
+		Repository r=testUtil.getTestingRepository("/testbench");
+
+		DependencyGraphConstructorJavaparser jp=DependencyGraphConstructorJavaparser.newDefault();
 		
-		FakeRepository repository = new FakeRepository(testUtil.getSrcRootTestFolder());
-		DependencyGraph d= jp.construct(repository);
+		DependencyGraph d= jp.construct(r);
 		
 		Node searchNode=Node.builder()
 		.id(NodeId.builder()
@@ -63,14 +68,15 @@ public class ContextTest {
 		 .build())
 		.build();
 		
-		Context c=Context.gatherContext(searchNode, repository, d);
-		assertEquals(5,c.getSpatialContext().size());
+		Context c=Context.gatherContext(searchNode, r, d);
+		log.debug("spatialContext="+c.getSpatialContext());
+		assertEquals(6,c.getSpatialContext().size());
 		
 	}
 	
 	@Test
 	public void makePrompt() {
-		ConstructDependencyGraphJavaparser jp=ConstructDependencyGraphJavaparser.newDefault();
+		DependencyGraphConstructorJavaparser jp=DependencyGraphConstructorJavaparser.newDefault();
 		
 		String nemofinderRoot="..."; //un proyecto existente TODO: configuracion!
 		File srcRoot = new File(nemofinderRoot+"/src/main/java");

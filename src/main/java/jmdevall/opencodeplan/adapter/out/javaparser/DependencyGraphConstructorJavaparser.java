@@ -1,6 +1,5 @@
 package jmdevall.opencodeplan.adapter.out.javaparser;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -8,8 +7,6 @@ import java.util.List;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
-import jmdevall.opencodeplan.adapter.out.javaparser.cusource.CuSource;
-import jmdevall.opencodeplan.adapter.out.javaparser.cusource.CuSourceFactory;
 import jmdevall.opencodeplan.adapter.out.javaparser.relfinders.BaseClassRelFinder;
 import jmdevall.opencodeplan.adapter.out.javaparser.relfinders.CallsRelFinder;
 import jmdevall.opencodeplan.adapter.out.javaparser.relfinders.ChildParentRelFinder;
@@ -17,21 +14,22 @@ import jmdevall.opencodeplan.adapter.out.javaparser.relfinders.InstantiateRelFin
 import jmdevall.opencodeplan.adapter.out.javaparser.relfinders.OverridesRelFinder;
 import jmdevall.opencodeplan.adapter.out.javaparser.relfinders.UsesRelFinder;
 import jmdevall.opencodeplan.application.port.out.parser.ConstructDependencyGraph;
+import jmdevall.opencodeplan.application.port.out.repository.CuSource;
 import jmdevall.opencodeplan.application.port.out.repository.Repository;
 import jmdevall.opencodeplan.domain.dependencygraph.DependencyGraph;
-import jmdevall.opencodeplan.domain.dependencygraph.Node;
 import jmdevall.opencodeplan.domain.dependencygraph.DependencyRelation;
+import jmdevall.opencodeplan.domain.dependencygraph.Node;
 
-public class ConstructDependencyGraphJavaparser implements ConstructDependencyGraph{
+public class DependencyGraphConstructorJavaparser implements ConstructDependencyGraph{
 
 	private List<VoidVisitorAdapter<List<DependencyRelation>>> relfinders;
 	
-	private ConstructDependencyGraphJavaparser(List<VoidVisitorAdapter<List<DependencyRelation>>> relfinders) {
+	private DependencyGraphConstructorJavaparser(List<VoidVisitorAdapter<List<DependencyRelation>>> relfinders) {
 		super();
 		this.relfinders = relfinders;
 	}
 	
-	public static ConstructDependencyGraphJavaparser newDefault() {
+	public static DependencyGraphConstructorJavaparser newDefault() {
 		List<VoidVisitorAdapter<List<DependencyRelation>>> relfinders=new ArrayList<VoidVisitorAdapter<List<DependencyRelation>>>();
 		
 		relfinders.add(new ChildParentRelFinder());
@@ -41,17 +39,16 @@ public class ConstructDependencyGraphJavaparser implements ConstructDependencyGr
 		relfinders.add(new InstantiateRelFinder());
 		relfinders.add(new CallsRelFinder());
 		
-		return new ConstructDependencyGraphJavaparser(relfinders);
+		return new DependencyGraphConstructorJavaparser(relfinders);
 	}
 
 	@Override
 	public DependencyGraph construct(Repository repository) {
-		File srcRoot=repository.getSrcRoot();
 		
-		CuSource cuSource=CuSourceFactory.newDefaultJavaCuSourceFolder(srcRoot);
+		CuSource cuSource=repository.getCuSource();
 		
 		AstConstructorJavaParser astcreator=new AstConstructorJavaParser(cuSource);
-		JavaParser parser=JavaParserFactory.newDefaultJavaParser(srcRoot);
+		JavaParser parser=JavaParserFactory.newDefaultJavaParser(repository.getSrcRoot());
 		CuSourceProcessor.process(cuSource, astcreator,parser);
 		HashMap<String, Node> forest=astcreator.getForest();
 

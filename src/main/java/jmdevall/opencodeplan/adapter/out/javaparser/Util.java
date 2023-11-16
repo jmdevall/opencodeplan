@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.List;
 import java.util.Optional;
 
+import com.github.javaparser.Position;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.PackageDeclaration;
@@ -29,8 +30,12 @@ public class Util {
 		CompilationUnit compilationUnit = getCompilationUnit(node);
 		String filename = getFileNameOfCompilationUnit(compilationUnit);
 
+		Optional<Position> begin = node.getBegin();
+		if(begin.isEmpty()) {
+			System.out.println("foo");
+		}
 		LineColRange absoluteNode=LineColRange.builder()
-				.begin(toDomainPosition(node.getBegin().get()))
+				.begin(toDomainPosition(begin.get()))
 				.end(toDomainPosition(node.getEnd().get()))
 				.build();
 

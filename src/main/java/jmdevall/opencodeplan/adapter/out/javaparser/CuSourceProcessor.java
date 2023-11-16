@@ -1,13 +1,10 @@
 package jmdevall.opencodeplan.adapter.out.javaparser;
 
-import java.io.File;
-
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseResult;
 import com.github.javaparser.ast.CompilationUnit;
 
-import jmdevall.opencodeplan.adapter.out.javaparser.cusource.CuSource;
-import jmdevall.opencodeplan.adapter.out.javaparser.cusource.CuSourceFactory;
+import jmdevall.opencodeplan.application.port.out.repository.CuSource;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

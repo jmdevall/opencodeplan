@@ -1,4 +1,4 @@
-package jmdevall.opencodeplan.adapter.out.javaparser.cusource;
+package jmdevall.opencodeplan.adapter.out.cusource;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -7,6 +7,9 @@ import java.io.File;
 import org.junit.jupiter.api.Test;
 
 import jmdevall.opencodeplan.adapter.out.javaparser.util.TestingUtil;
+import jmdevall.opencodeplan.adapter.out.repository.CuSourceFactory;
+import jmdevall.opencodeplan.adapter.out.repository.RepositoryFile;
+import jmdevall.opencodeplan.application.port.out.repository.CuSource;
 
 public class CuSourceFolterTest {
 
@@ -16,7 +19,7 @@ public class CuSourceFolterTest {
 	public void canReadSourceCode() {
 		File root=testUtil.getSrcTestFile("/testbench");
 		//CuSourceFolder sut=CuSourceFolder.newDefaultJavaCuSourceFolder(testUtil.getSrcRootTestFolder());
-		CuSource sut=CuSourceFactory.newDefaultJavaCuSourceFolder(root);
+		CuSource sut=RepositoryFile.newRepositoryFile(root).getCuSource();
 		
 		String sourceCode=sut.getSource(sut.getPaths().iterator().next());
 		assertNotNull(sourceCode);

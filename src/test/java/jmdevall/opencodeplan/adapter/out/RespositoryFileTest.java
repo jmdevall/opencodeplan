@@ -8,6 +8,7 @@ import java.nio.file.Paths;
 
 import org.junit.jupiter.api.Test;
 
+import jmdevall.opencodeplan.adapter.out.repository.RepositoryFile;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -19,7 +20,7 @@ public class RespositoryFileTest {
 		String tmpdir = srcRoot.getAbsolutePath();
 		log.debug("temp folder="+tmpdir);
 		
-		RepositoryFile sut=new RepositoryFile(srcRoot);
+		RepositoryFile sut=RepositoryFile.newRepositoryFile(srcRoot);
 		
 		String filepath = "/foo/bar/Foo.java";
 		

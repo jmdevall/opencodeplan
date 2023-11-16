@@ -1,4 +1,4 @@
-package jmdevall.opencodeplan.adapter.out.javaparser.cusource;
+package jmdevall.opencodeplan.application.port.out.repository;
 
 import java.util.Collection;
 import java.util.HashMap;

@@ -11,7 +11,7 @@ import com.github.javaparser.ast.CompilationUnit;
 import jmdevall.opencodeplan.domain.dependencygraph.Node;
 import jmdevall.opencodeplan.domain.dependencygraph.NodeId;
 import jmdevall.opencodeplan.domain.dependencygraph.LineColRange;
-import jmdevall.opencodeplan.adapter.out.javaparser.cusource.CuSource;
+import jmdevall.opencodeplan.application.port.out.repository.CuSource;
 import jmdevall.opencodeplan.domain.dependencygraph.IndexPosRange;
 import lombok.extern.slf4j.Slf4j;
 
@@ -55,7 +55,7 @@ public class AstConstructorJavaParser implements CuProcessor{
     	    .build();
 
 		ArrayList<Node> children=new ArrayList<Node>();
-    	if(!domainNode.getType().equals("FieldDeclaration")) {
+    	if(isInterestedType(domainNode.getType())) {
             for(com.github.javaparser.ast.Node child: node.getChildNodes()) {
             	Node childomain=toDomainNode(child,domainNode);
                 children.add(childomain);
@@ -66,7 +66,16 @@ public class AstConstructorJavaParser implements CuProcessor{
         return domainNode;
     }
 	
+	private String notInterestedTypes[]= {"FieldDeclaration","LambdaExpr"};
 	
+	private boolean isInterestedType(String type) {
+		for(String nitype: notInterestedTypes) {
+			if(nitype.equals(type)) {
+				return false;
+			}
+		}
+		return true;
+	}
 	
 	/**
 	 * TODO: por lo que he visto en algunos casos javaparser crea nodos hijos tal que el padre están fuera del padre.
