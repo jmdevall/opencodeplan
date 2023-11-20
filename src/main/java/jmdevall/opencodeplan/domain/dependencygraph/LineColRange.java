@@ -37,7 +37,8 @@ public class LineColRange {
 	}
 
 	public boolean containsLine(int line) {
-		return this.getBegin().getLine()>=line && this.getEnd().getLine()<=line;
+		boolean ret=this.getBegin().getLine()<=line && this.getEnd().getLine()>=line;
+		return ret;
 	}
 	
 	public boolean contains(LineColRange r) {

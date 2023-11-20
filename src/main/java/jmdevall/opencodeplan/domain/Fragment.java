@@ -173,33 +173,25 @@ public class Fragment {
 			List<Node> revisedNodes=Collections.emptyList();
 			//con esto filtraríamos los nodos raiz de algun tipoTag que se han añadido en revised
 			if(ct==ChangeType.ADD || ct==ChangeType.MODIFICATION) {
-				originalNodes=revised.toStream()
-						.filter(n -> n.getNodeTypeTag()!=null && n.getParent()!=null)
-						.filter(n -> n.getNodeTypeTag()!=n.getParent().getNodeTypeTag())
-						.collect(Collectors.toList());
-				for(Node n:originalNodes) {
-					System.out.println("nodeTypeTag "+n.getNodeTypeTag()
-					+" type del parent="+n.getParent().getType()
-					+" nodeTypeTag del parent="+n.getParent().getNodeTypeTag()
-					+" n.getId().getRange()="+n.getId().getRange()
-					+" n -> n.getId().getRange().containsLine(targetLine"+n.getId().getRange().containsLine(targetLine));
-					
-				}
-				
-				originalNodes=revised.toStream()
+				revisedNodes=revised.toStream()
+					.filter(n -> n.getId().getRange().containsLine(targetLine))
 					.filter(n -> n.getNodeTypeTag()!=null && n.getParent()!=null)
 					.filter(n -> n.getNodeTypeTag()!=n.getParent().getNodeTypeTag())
-					.filter(n -> n.getId().getRange().containsLine(targetLine))
 					.collect(Collectors.toList());
 			}
 			if(ct==ChangeType.DELETION || ct==ChangeType.MODIFICATION) {
-				revisedNodes=originalcu.toStream()
+				originalNodes=originalcu.toStream()
 				.filter(n -> n.getId().getRange().containsLine(sourceLine))
 				.filter(n -> n.getNodeTypeTag()!=null && n.getParent()!=null)
 				.filter(n -> n.getNodeTypeTag()!=n.getParent().getNodeTypeTag()) 
 				.collect(Collectors.toList());
 			}
 
+			
+			//al pillar los nodos también entran los nodos superiores, en este caso no nos interesa saber que cuando el cambio es en un método
+			originalNodes=filterMostRelevant(originalNodes);
+			revisedNodes=filterMostRelevant(revisedNodes);
+			
 			Optional<NodeTypeTag> nodeTypeTag=Streams.concat(originalNodes.stream(),revisedNodes.stream())
 			.map(n->n.getNodeTypeTag())
 			.findFirst();
@@ -211,6 +203,18 @@ public class Fragment {
 		}
 
 		return clasified;
+	}
+	
+	private List<Node> filterMostRelevant(List<Node> nodes){
+		
+		for(NodeTypeTag nodeTypeTag:NodeTypeTag.values()) {
+			List<Node> only=nodes.stream().filter(n->n.getNodeTypeTag()==nodeTypeTag).collect(Collectors.toList());
+			if(!only.isEmpty()) {
+				return only;
+			}
+		}
+		return Collections.emptyList();
+		
 	}
 	
 	private ChangeType fromDeltaType(DeltaType deltaType) {
