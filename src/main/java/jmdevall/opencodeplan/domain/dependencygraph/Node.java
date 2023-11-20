@@ -40,24 +40,29 @@ public class Node {
 	
 	
 	public NodeTypeTag getNodeTypeTag(){
-		if(findParentRecursive("BlockStmt")) {
+		if(this.type.equals("BlockStmt")) {
 			return NodeTypeTag.BodyOfMethod;
 		}
-		if(findParentRecursive("MethodDeclaration")) {
+		if(this.type.equals("MethodDeclaration")) {
 			return NodeTypeTag.SignatureOfMethod;
 		}
-		if(findParentRecursive("ConstructorDeclaration")) {
+		if(this.type.equals("ConstructorDeclaration")) {
 			return NodeTypeTag.SignatureOfConstructor;
 		}		
-		if(findParentRecursive("FieldDeclaration")) {
+		if(this.type.equals("FieldDeclaration")) {
 			return NodeTypeTag.Field;
 		}
-		if(findParentRecursive("ClassOrInterfaceDeclaration")) {
+		if(this.type.equals("ClassOrInterfaceDeclaration")) {
 			return NodeTypeTag.DeclarationOfClass;
-		}		
-		return null;
+		}
+		if(this.parent==null) {
+			return null;	
+		}
+		return this.parent.getNodeTypeTag();
+		
 	}
 	
+	/*
 	private boolean findParentRecursive(String type) {
 		if(this.type.equals(type)) {
 			return true;
@@ -67,7 +72,7 @@ public class Node {
 		}
 		return parent.findParentRecursive(type);
 		
-	}
+	}*/
 	
 	public String debugRecursive() {
 		StringBuffer sb=new StringBuffer("");

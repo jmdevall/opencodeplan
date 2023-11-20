@@ -147,7 +147,10 @@ public class Fragment {
 		this.revised=newFragment;
 	}
 
-	
+	/**
+	 * Compare original compilation unit with revised and gives a list of Clasified changes
+	 * @return
+	 */
 	public List<ClasifiedChange> classifyChanges() {
 		List<String> original= DiffUtil.tolines(originalcu.prompt());
 		List<String> revisedCode = DiffUtil.tolines(revised.prompt());
@@ -171,9 +174,22 @@ public class Fragment {
 			//con esto filtraríamos los nodos raiz de algun tipoTag que se han añadido en revised
 			if(ct==ChangeType.ADD || ct==ChangeType.MODIFICATION) {
 				originalNodes=revised.toStream()
-					.filter(n -> n.getId().getRange().containsLine(targetLine))
+						.filter(n -> n.getNodeTypeTag()!=null && n.getParent()!=null)
+						.filter(n -> n.getNodeTypeTag()!=n.getParent().getNodeTypeTag())
+						.collect(Collectors.toList());
+				for(Node n:originalNodes) {
+					System.out.println("nodeTypeTag "+n.getNodeTypeTag()
+					+" type del parent="+n.getParent().getType()
+					+" nodeTypeTag del parent="+n.getParent().getNodeTypeTag()
+					+" n.getId().getRange()="+n.getId().getRange()
+					+" n -> n.getId().getRange().containsLine(targetLine"+n.getId().getRange().containsLine(targetLine));
+					
+				}
+				
+				originalNodes=revised.toStream()
 					.filter(n -> n.getNodeTypeTag()!=null && n.getParent()!=null)
-					.filter(n -> n.getNodeTypeTag()!=n.getParent().getNodeTypeTag()) 
+					.filter(n -> n.getNodeTypeTag()!=n.getParent().getNodeTypeTag())
+					.filter(n -> n.getId().getRange().containsLine(targetLine))
 					.collect(Collectors.toList());
 			}
 			if(ct==ChangeType.DELETION || ct==ChangeType.MODIFICATION) {
@@ -188,7 +204,7 @@ public class Fragment {
 			.map(n->n.getNodeTypeTag())
 			.findFirst();
 
-			if(nodeTypeTag.isEmpty()) {
+			if(nodeTypeTag.isPresent()) {
 				CMI cmi=CMI.find(ct, nodeTypeTag.get());
 				clasified.add(new ClasifiedChange(cmi, originalNodes, revisedNodes));
 			}

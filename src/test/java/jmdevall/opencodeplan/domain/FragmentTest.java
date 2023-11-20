@@ -1,6 +1,9 @@
 package jmdevall.opencodeplan.domain;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.util.Arrays;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
@@ -15,12 +18,13 @@ import jmdevall.opencodeplan.adapter.out.javaparser.util.TestingUtil;
 import jmdevall.opencodeplan.adapter.out.repository.CuSourceFactory;
 import jmdevall.opencodeplan.application.port.out.repository.CuSource;
 import jmdevall.opencodeplan.domain.dependencygraph.Node;
+import jmdevall.opencodeplan.domain.plangraph.ClasifiedChange;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class FragmentTest {
 	
-  public static	String javaCompileUnit=
+  public static	String originalCu=
   "package test;\n"                               //1
 + "\n"                                            //2
 + "public class Foo{\n"                           //3
@@ -50,18 +54,18 @@ public class FragmentTest {
 + "}\n";
 
 
-	private Node getTestingCu() {
-		CuSource testingCuSource=CuSourceFactory.newFromSingleFile("/test/Foo.java", javaCompileUnit);
+	private Node getTestingCu(String javaFilePath, String javaCompilationUnitContent) {
+		CuSource testingCuSource=CuSourceFactory.newFromSingleFile(javaFilePath, javaCompilationUnitContent);
 				
 		AstConstructorJavaParser acjp=new AstConstructorJavaParser(testingCuSource);
 		CuSourceProcessor.process(testingCuSource, acjp, new JavaParser());
-		Node compilationUnit=acjp.getForest().get("/test/Foo.java");
+		Node compilationUnit=acjp.getForest().get(javaFilePath);
 		return compilationUnit;
 	}
 	
 	@Test
 	public void prueba() {
-		Node cu=getTestingCu();
+		Node cu=getTestingCu("/test/Foo.java",originalCu);
 		
 		String prompt=cu.prompt();
 		
@@ -79,14 +83,39 @@ public class FragmentTest {
 			}
 			System.out.println("linea="+line);
 			System.out.println(delta);
-			
 		}
-		
-		
 	}
 	
 	TestingUtil testingUtil=new TestingUtil();
 
 
+	@Test
+	public void merge() {
+		Node original=getTestingCu("/test/Foo.java",originalCu);
+		
+		Fragment sut=Fragment.newFromCuNode(original);
+		
+		String merged=sut.merge(revised);
+		
+		assertEquals(revised,merged);
+	}
+	
+	@Test
+	public void getClasifiedChanges() {
+		Node original=getTestingCu("/test/Foo.java",originalCu);
+		Fragment sut=Fragment.newFromCuNode(original);
+		
+		Node revised=getTestingCu("/test/Foo.java",this.revised);
+		sut.setRevised(revised);
+		
+		List<ClasifiedChange> changes = sut.classifyChanges();
+		
+		System.out.println("changes="+changes);
+		
+		
+
+	}
+	
+	
 	
 }
