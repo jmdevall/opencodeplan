@@ -1,9 +1,8 @@
 package jmdevall.opencodeplan.application;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import jmdevall.opencodeplan.application.port.out.oracle.Oracle;
@@ -15,9 +14,7 @@ import jmdevall.opencodeplan.domain.BlockRelationPair;
 import jmdevall.opencodeplan.domain.DeltaSeeds;
 import jmdevall.opencodeplan.domain.Fragment;
 import jmdevall.opencodeplan.domain.dependencygraph.DependencyGraph;
-import jmdevall.opencodeplan.domain.dependencygraph.DependencyLabel;
 import jmdevall.opencodeplan.domain.dependencygraph.Node;
-import jmdevall.opencodeplan.domain.plangraph.CMI;
 import jmdevall.opencodeplan.domain.plangraph.CMIRelation;
 import jmdevall.opencodeplan.domain.plangraph.ClasifiedChange;
 import jmdevall.opencodeplan.domain.plangraph.PlanGraph;
@@ -46,13 +43,20 @@ public class CodePlan {
 	    			.filter(rel-> rel.getLabel()==impact.getDependencyLabel())
 	    			.filter(rel-> rel.getOrigin().equals(b))
 	    			.filter(rel-> rel.getDestiny().equals(afectedNode))
-	    			.map(rel->new BlockRelationPair(rel.getDestiny(),change.getCmi()))
+	    			.map((rel)->{
+	    				Optional<Node> node=affectedDg.findByNodeId(rel.getDestiny());
+	    				if(node.isPresent()) {
+	    					return new BlockRelationPair(node.get(),change.getCmi());
+	    				}
+	    				else throw new IllegalStateException();
+	    				
+	    			})
 	    			.collect(Collectors.toList())
 	    		);
     		}
     		
     	}
-    	
+    	return ret;
     }
     
    
