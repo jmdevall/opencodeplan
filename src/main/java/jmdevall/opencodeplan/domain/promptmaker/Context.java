@@ -12,6 +12,8 @@ import jmdevall.opencodeplan.domain.Fragment;
 import jmdevall.opencodeplan.domain.dependencygraph.DependencyGraph;
 import jmdevall.opencodeplan.domain.dependencygraph.Node;
 import jmdevall.opencodeplan.domain.dependencygraph.NodeId;
+import jmdevall.opencodeplan.domain.plangraph.PlanGraph;
+import jmdevall.opencodeplan.domain.plangraph.TemporalContext;
 import jmdevall.opencodeplan.domain.dependencygraph.DependencyRelation;
 import lombok.Getter;
 
@@ -27,17 +29,19 @@ from the root nodes of the plan graph to 𝐵.
 public class Context {
 
 	private List<String> spatialContext;
-
+	private TemporalContext temporalContext;
 	
-	public Context(List<String> spatialContext) {
+	public Context(List<String> spatialContext,TemporalContext temporalContext) {
 		super();
 		this.spatialContext = spatialContext;
+		this.temporalContext = temporalContext;
+		
 	}
 
 
 	//SpatialContext
 	
-	public static Context gatherContext(Node b, Repository r, DependencyGraph d) {
+	public static Context gatherContext(Node b, Repository r, DependencyGraph d, PlanGraph p) {
 		/*
 		Spatial context in CodePlan refers to the arrangement and relationships of
 		code blocks within a codebase, helping understand how classes, functions, variables, and modules
@@ -91,8 +95,13 @@ public class Context {
 		calls A", which helps the LLM understand the cause-effect relation between the latest temporal
 		change (change to A) and the current obligation (to make a change to B).*/
 		
-		// TODO:
-        return new Context(spatialContext);
+		
+		TemporalContext temporalContext = p.getTemporalContext(b);
+		
+		
+		
+		
+        return new Context(spatialContext,temporalContext);
         
         
     }

@@ -1,7 +1,11 @@
 package jmdevall.opencodeplan.domain.promptmaker;
 
+import jmdevall.opencodeplan.domain.BI;
 import jmdevall.opencodeplan.domain.Fragment;
 import jmdevall.opencodeplan.domain.instruction.I;
+import jmdevall.opencodeplan.domain.plangraph.CMI;
+import jmdevall.opencodeplan.domain.plangraph.Pair;
+import jmdevall.opencodeplan.domain.plangraph.TemporalContext;
 
 public class PromptMakerDefault implements PromptMaker {
 
@@ -37,11 +41,28 @@ public class PromptMakerDefault implements PromptMaker {
 		sb.append(String.format(p1, i.getSpecificInstruction()));
 		sb.append("\n\n");
 		
-		sb.append(p2);  //TODO:
+		sb.append(p2);
+		
+		//TemporalContext
+		TemporalContext tc=context.getTemporalContext();
+		if(tc.getContexts().isEmpty()) {
+			sb.append("No Earlier code changes before\n\n");
+		}
+		else {
+			for(Pair<BI, CMI> t:tc.getContexts()) {
+				t.getFirst().getI()
+				
+			}
+		}
+		
+		
+		/**
 		sb.append("No Earlier code changes before\n\n");
 		
 		sb.append(p3);  //TODO:
 		sb.append("No Earlier code changes before\n\n");
+		
+		**/
 		
 		sb.append(p4);
 		for(String javacode:context.getSpatialContext()) {
