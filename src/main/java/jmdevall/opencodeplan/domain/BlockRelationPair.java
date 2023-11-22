@@ -2,6 +2,7 @@ package jmdevall.opencodeplan.domain;
 
 import jmdevall.opencodeplan.domain.dependencygraph.Node;
 import jmdevall.opencodeplan.domain.plangraph.CMI;
+import jmdevall.opencodeplan.domain.plangraph.CMIRelation;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -9,5 +10,5 @@ import lombok.Getter;
 @AllArgsConstructor
 public class BlockRelationPair {
     public Node b;
-    public CMI cmi;
+    public CMIRelation impact;
 }

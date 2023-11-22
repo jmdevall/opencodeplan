@@ -17,6 +17,7 @@ import jmdevall.opencodeplan.domain.dependencygraph.DependencyGraph;
 import jmdevall.opencodeplan.domain.dependencygraph.Node;
 import jmdevall.opencodeplan.domain.plangraph.CMIRelation;
 import jmdevall.opencodeplan.domain.plangraph.ClasifiedChange;
+import jmdevall.opencodeplan.domain.plangraph.Obligation;
 import jmdevall.opencodeplan.domain.plangraph.PlanGraph;
 import jmdevall.opencodeplan.domain.plangraph.WhatD;
 import jmdevall.opencodeplan.domain.promptmaker.Context;
@@ -46,7 +47,7 @@ public class CodePlan {
 	    			.map((rel)->{
 	    				Optional<Node> node=affectedDg.findByNodeId(rel.getDestiny());
 	    				if(node.isPresent()) {
-	    					return new BlockRelationPair(node.get(),change.getCmi());
+	    					return new BlockRelationPair(node.get(),impact);
 	    				}
 	    				else throw new IllegalStateException();
 	    				
@@ -108,17 +109,20 @@ public class CodePlan {
     void adaptivePlanAndExecute(Repository r, DependencyGraph d, PlanGraph g, Llm llm) {
         while (g.hasNodesWithPendingStatus()) {
 
-            BI bi = g.getNextPending().get().getBi();
+            Obligation obligation = g.getNextPending().get();
+			BI bi = obligation.getBi();
             // First step: extract fragment of code
             Fragment fragment = Fragment.newFromPrunedCuNode( bi.getB().getRootParent(), bi.getB().getId());
             // Second step: gather context of the edit
-            Context context = Context.gatherContext(bi.getB(), r, d);
+            Context context = Context.gatherContext(bi.getB(), r, d ,g);
             // Third step: use the LLM to get edited code fragment
             String prompt = promptMaker.makePrompt(fragment, bi.getI(), context);
             String llmrevised = llm.invoke(prompt);
             // Fourth step: merge the updated code fragment into R
 
             merge(r,fragment, llmrevised, bi.getB());
+            obligation.setFragment(fragment); // este paso no lo pone el paper, pero es la única forma que veo para poder obtener luego los cambios.
+            
             
             List<ClasifiedChange> labels=fragment.classifyChanges();
   
@@ -132,7 +136,7 @@ public class CodePlan {
             
             blockRelationPairs.forEach(br -> {
                 Node n = bi.getB();
-                g.addPendingChild(n, br.b, br.cmi);
+                g.addPendingChild(n, br.b, br.impact);
             });
 
             d = dp;

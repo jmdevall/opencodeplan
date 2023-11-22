@@ -5,10 +5,12 @@ import java.util.List;
 import java.util.Optional;
 
 import jmdevall.opencodeplan.domain.BI;
+import jmdevall.opencodeplan.domain.Fragment;
 import jmdevall.opencodeplan.domain.dependencygraph.Node;
 import jmdevall.opencodeplan.domain.instruction.I;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
 @Builder
 @Getter
@@ -16,8 +18,10 @@ public class Obligation {
 	Node b;
 	I i;
 	
+	@Setter
+	Fragment fragment;
 	Status status;
-	CMI cmi;
+	CMIRelation cmi;
 	
 	@Builder.Default
 	List<Obligation> childrens=new ArrayList<Obligation>();
@@ -88,7 +92,7 @@ public class Obligation {
 		return false;
 	}
 
-	public void searchRecursiveToAddPendingChild(Node parent, Node child, CMI elcmi) {
+	public void searchRecursiveToAddPendingChild(Node parent, Node child, CMIRelation elcmi) {
 		if(this.b==parent) {
 			Obligation o=
 					Obligation.builder()
@@ -105,4 +109,6 @@ public class Obligation {
 		}
 		
 	}
+	
+	
 }

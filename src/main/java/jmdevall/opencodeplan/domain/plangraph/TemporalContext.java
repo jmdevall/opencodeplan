@@ -3,16 +3,14 @@ package jmdevall.opencodeplan.domain.plangraph;
 import java.util.ArrayList;
 import java.util.List;
 
-import jmdevall.opencodeplan.domain.BI;
-
 public class TemporalContext {
-    private List<Pair<BI, CMI>> contexts = new ArrayList<>();
+    private List<TemporalChange> changes = new ArrayList<>();
 
-    public void addContext(BI bi, CMI cmi) {
-        contexts.add(new Pair<>(bi, cmi));
+    public void addChange(TemporalChange temporalChange) {
+        changes.add(temporalChange);
     }
 
-    public List<Pair<BI, CMI>> getContexts() {
-        return contexts;
+    public List<TemporalChange> getChanges() {
+        return changes;
     }
 }

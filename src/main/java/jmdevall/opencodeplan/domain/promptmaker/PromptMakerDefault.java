@@ -5,6 +5,7 @@ import jmdevall.opencodeplan.domain.Fragment;
 import jmdevall.opencodeplan.domain.instruction.I;
 import jmdevall.opencodeplan.domain.plangraph.CMI;
 import jmdevall.opencodeplan.domain.plangraph.Pair;
+import jmdevall.opencodeplan.domain.plangraph.TemporalChange;
 import jmdevall.opencodeplan.domain.plangraph.TemporalContext;
 
 public class PromptMakerDefault implements PromptMaker {
@@ -43,14 +44,29 @@ public class PromptMakerDefault implements PromptMaker {
 		
 		sb.append(p2);
 		
+		
 		//TemporalContext
 		TemporalContext tc=context.getTemporalContext();
-		if(tc.getContexts().isEmpty()) {
+		if(tc.getChanges().isEmpty()) {
 			sb.append("No Earlier code changes before\n\n");
 		}
 		else {
-			for(Pair<BI, CMI> t:tc.getContexts()) {
-				t.getFirst().getI()
+			int numEdit=1;
+			for(TemporalChange change:tc.getChanges()) {
+				sb.append("Edit ");
+				sb.append(numEdit);
+				sb.append("\n");
+
+				sb.append("Before:\n");
+				sb.append(javaFragmentPrompt(change.getFragment().getOriginalcu().prompt()));
+				sb.append("\n");
+				
+				sb.append("After:\n");
+				sb.append(javaFragmentPrompt(change.getFragment().getRevised().prompt()));
+				sb.append("\n");
+				
+				sb.append(p3);
+				sb.append("«code_to_be_edited» is related to «code_changed_earlier» by «cause»="+change.getCause().getDependencyLabel());
 				
 			}
 		}

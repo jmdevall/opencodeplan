@@ -1,5 +1,13 @@
 package jmdevall.opencodeplan.domain.plangraph;
 
-public class TemporalChange {
+import jmdevall.opencodeplan.domain.Fragment;
+import lombok.Builder;
+import lombok.Getter;
 
+@Getter
+@Builder
+public class TemporalChange {
+	private Fragment fragment;
+	private CMIRelation cause;
+	
 }

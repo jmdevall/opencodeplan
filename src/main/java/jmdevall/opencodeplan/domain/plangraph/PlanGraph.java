@@ -1,6 +1,7 @@
 package jmdevall.opencodeplan.domain.plangraph;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import jmdevall.opencodeplan.domain.BI;
@@ -49,7 +50,7 @@ public class PlanGraph {
 		}
 	}
 
-	public void addPendingChild(Node parent, Node child, CMI cmi) {
+	public void addPendingChild(Node parent, Node child, CMIRelation cmi) {
 		for (Obligation o : obligationRoots) {
 			o.searchRecursiveToAddPendingChild(parent, child, cmi);
 		}
@@ -57,27 +58,38 @@ public class PlanGraph {
 
 	public TemporalContext getTemporalContext(Node targetNode) {
 		TemporalContext temporalContext = new TemporalContext();
+		   List<Obligation> visitedNodes = new ArrayList<>();
 
 		// Recorrer todos los nodos raíz
 		for (Obligation root : obligationRoots) {
 			// Llamar a la función recursiva para obtener el contexto temporal
-			getTemporalContextRecursive(root, targetNode, temporalContext);
+			getTemporalContextRecursive(root, targetNode, temporalContext,visitedNodes);
 		}
 
 		return temporalContext;
 	}
 
-	private void getTemporalContextRecursive(Obligation currentNode, Node targetNode, TemporalContext temporalContext) {
+	private void getTemporalContextRecursive(Obligation currentNode, Node targetNode, TemporalContext temporalContext, List<Obligation> visitedNodes) {
 		// Si el nodo actual es el nodo objetivo, agregar el contexto temporal
 		if (currentNode.getB().equals(targetNode)) {
-			temporalContext.addContext(currentNode.getBi(), currentNode.getCmi());
+			for(Obligation o:visitedNodes) {
+				TemporalChange change=TemporalChange.builder()
+						.fragment(o.getFragment())
+						.cause(o.getCmi())
+						.build();
+						
+				temporalContext.addChange(change);	
+			}
+		}else {
+			visitedNodes.add(currentNode);
+
+			// Recorrer todos los hijos del nodo actual
+			for (Obligation child : currentNode.getChildrens()) {
+				// Llamar a la función recursiva para los hijos del nodo actual
+				getTemporalContextRecursive(child, targetNode, temporalContext, new ArrayList<Obligation>(visitedNodes));
+			}
 		}
 
-		// Recorrer todos los hijos del nodo actual
-		for (Obligation child : currentNode.getChildrens()) {
-			// Llamar a la función recursiva para los hijos del nodo actual
-			getTemporalContextRecursive(child, targetNode, temporalContext);
-		}
 	}
 
 }
