@@ -13,14 +13,14 @@ import jmdevall.opencodeplan.adapter.out.javaparser.relfinders.ChildParentRelFin
 import jmdevall.opencodeplan.adapter.out.javaparser.relfinders.InstantiateRelFinder;
 import jmdevall.opencodeplan.adapter.out.javaparser.relfinders.OverridesRelFinder;
 import jmdevall.opencodeplan.adapter.out.javaparser.relfinders.UsesRelFinder;
-import jmdevall.opencodeplan.application.port.out.parser.ConstructDependencyGraph;
+import jmdevall.opencodeplan.application.port.out.parser.DependencyGraphConstructor;
 import jmdevall.opencodeplan.application.port.out.repository.CuSource;
 import jmdevall.opencodeplan.application.port.out.repository.Repository;
 import jmdevall.opencodeplan.domain.dependencygraph.DependencyGraph;
 import jmdevall.opencodeplan.domain.dependencygraph.DependencyRelation;
 import jmdevall.opencodeplan.domain.dependencygraph.Node;
 
-public class DependencyGraphConstructorJavaparser implements ConstructDependencyGraph{
+public class DependencyGraphConstructorJavaparser implements DependencyGraphConstructor{
 
 	private List<VoidVisitorAdapter<List<DependencyRelation>>> relfinders;
 	
@@ -43,7 +43,7 @@ public class DependencyGraphConstructorJavaparser implements ConstructDependency
 	}
 
 	@Override
-	public DependencyGraph construct(Repository repository) {
+	public DependencyGraph constructDependencyGraph(Repository repository) {
 		
 		CuSource cuSource=repository.getCuSource();
 		

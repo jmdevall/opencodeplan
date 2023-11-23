@@ -6,7 +6,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import jmdevall.opencodeplan.application.port.out.oracle.Oracle;
-import jmdevall.opencodeplan.application.port.out.parser.ConstructDependencyGraph;
+import jmdevall.opencodeplan.application.port.out.parser.DependencyGraphConstructor;
 import jmdevall.opencodeplan.application.port.out.parser.Parser;
 import jmdevall.opencodeplan.application.port.out.repository.Repository;
 import jmdevall.opencodeplan.domain.BI;
@@ -27,6 +27,13 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class CodePlan {
 
+    private Parser parser;
+    private DependencyGraphConstructor dependencyGraphConstructor;
+    private PromptMaker promptMaker;
+    private Oracle oracle;
+    private Llm llm;
+    
+    
     List<BlockRelationPair> getAffectedBlocks(List<ClasifiedChange> labels, Node b, DependencyGraph d, DependencyGraph dp) {
     	ArrayList<BlockRelationPair>ret = new ArrayList<BlockRelationPair>();
     	
@@ -75,11 +82,6 @@ public class CodePlan {
      * specifications, Theta is an oracle and L is an LLM.
      */
 
-    Parser parser;
-    ConstructDependencyGraph constructDependencyGraph;
-    PromptMaker promptMaker;
-    Oracle oracle;
-    
 	/**
 	 * 
 	 * @param r source code of a repository
@@ -90,9 +92,9 @@ public class CodePlan {
 	 * 
 	 */
 	    
-	void codePlan(Repository r, DeltaSeeds deltaSeeds, Llm llm, PromptMaker pm){
+	void codePlan(Repository r, DeltaSeeds deltaSeeds){
 	    PlanGraph g = new PlanGraph();
-	    DependencyGraph d = constructDependencyGraph.construct(r);
+	    DependencyGraph d = dependencyGraphConstructor.constructDependencyGraph(r);
 	     while (!deltaSeeds.isEmpty()){
 	        initializePlanGraph(g, deltaSeeds);
 	        adaptivePlanAndExecute(r, d, g,llm);
@@ -127,7 +129,7 @@ public class CodePlan {
             List<ClasifiedChange> labels=fragment.classifyChanges();
   
 //          DependencyGraph dp = d.updateDependencyGraph(labels, fragment, newFragment, bi.getB());
-            DependencyGraph dp = constructDependencyGraph.construct(r); //isn't it more easy???
+            DependencyGraph dp = dependencyGraphConstructor.constructDependencyGraph(r); //isn't it more easy???
 
             // Fifth step: adaptively plan and propogate the effect of the edit on dependant
             // code
@@ -142,4 +144,5 @@ public class CodePlan {
             d = dp;
         }
     }
+
 }

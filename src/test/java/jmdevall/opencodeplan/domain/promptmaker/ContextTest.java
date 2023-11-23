@@ -18,6 +18,7 @@ import jmdevall.opencodeplan.domain.dependencygraph.Node;
 import jmdevall.opencodeplan.domain.dependencygraph.NodeId;
 import jmdevall.opencodeplan.domain.dependencygraph.LineColRange;
 import jmdevall.opencodeplan.domain.instruction.Inatural;
+import jmdevall.opencodeplan.domain.plangraph.PlanGraph;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -59,7 +60,7 @@ public class ContextTest {
 
 		DependencyGraphConstructorJavaparser jp=DependencyGraphConstructorJavaparser.newDefault();
 		
-		DependencyGraph d= jp.construct(r);
+		DependencyGraph d= jp.constructDependencyGraph(r);
 		
 		Node searchNode=Node.builder()
 		.id(NodeId.builder()
@@ -68,7 +69,7 @@ public class ContextTest {
 		 .build())
 		.build();
 		
-		Context c=Context.gatherContext(searchNode, r, d);
+		Context c=Context.gatherContext(searchNode, r, d, new PlanGraph());
 		log.debug("spatialContext="+c.getSpatialContext());
 		assertEquals(6,c.getSpatialContext().size());
 		
@@ -81,7 +82,7 @@ public class ContextTest {
 		String nemofinderRoot="..."; //un proyecto existente TODO: configuracion!
 		File srcRoot = new File(nemofinderRoot+"/src/main/java");
 		FakeRepository repository = new FakeRepository(srcRoot);
-		DependencyGraph d= jp.construct(repository);
+		DependencyGraph d= jp.constructDependencyGraph(repository);
 		
 		NodeId searchNode=NodeId.builder()
 		 .file("/nemofinder/DictionarySpanish.java")
@@ -91,7 +92,7 @@ public class ContextTest {
 		
 		Optional<Node> si=d.findFinalNodeContaining(searchNode);
 		
-		Context c=Context.gatherContext(si.get(), repository, d);
+		Context c=Context.gatherContext(si.get(), repository, d, new PlanGraph());
 		
 		Fragment f=Fragment.newFromPrunedCuNode(si.get().getRootParent(), searchNode);
 		PromptMakerDefault pm=new PromptMakerDefault();

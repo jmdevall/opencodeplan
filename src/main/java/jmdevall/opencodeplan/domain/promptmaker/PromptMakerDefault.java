@@ -1,10 +1,7 @@
 package jmdevall.opencodeplan.domain.promptmaker;
 
-import jmdevall.opencodeplan.domain.BI;
 import jmdevall.opencodeplan.domain.Fragment;
 import jmdevall.opencodeplan.domain.instruction.I;
-import jmdevall.opencodeplan.domain.plangraph.CMI;
-import jmdevall.opencodeplan.domain.plangraph.Pair;
 import jmdevall.opencodeplan.domain.plangraph.TemporalChange;
 import jmdevall.opencodeplan.domain.plangraph.TemporalContext;
 
