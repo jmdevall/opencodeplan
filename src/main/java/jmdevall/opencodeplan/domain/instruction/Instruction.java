@@ -1,6 +1,6 @@
 package jmdevall.opencodeplan.domain.instruction;
 
-public interface I {
+public interface Instruction {
 
 	String getSpecificInstruction();
 

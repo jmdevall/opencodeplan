@@ -6,6 +6,7 @@ import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.time.Duration;
 
 import com.google.gson.Gson;
 
@@ -35,9 +36,10 @@ public class LlmEngineOoba implements LlmEngine {
 	private String getJsonRequest(String prompt) {
 		Request r=Request.builder()
 				.prompt(prompt)
-				.auto_max_new_tokens(false)
+				.auto_max_new_tokens(true)
 				.max_new_tokens(2000)
 				.max_tokens_seconds(0)
+				.truncation_length(16000)
 				.build();
 		return gson.toJson(r);
 	}
@@ -53,6 +55,7 @@ public class LlmEngineOoba implements LlmEngine {
 			        .uri(targetURI)
 			        .POST(HttpRequest.BodyPublishers.ofString(bodyRequest))
 			        .header("Content-Type", "application/json")
+			        .timeout(Duration.ofMinutes(20)) //usando un modelo que se ejecuta en CPU los resultados son extremadamente lentos
 			        .build();
 			
 			HttpClient httpClient = HttpClient.newHttpClient();

@@ -1,5 +1,19 @@
 Proof of concept-implementation of this paper in java: https://huggingface.co/papers/2309.12499
 
+**NEWS**: Finally!!!! First test launched of the algorithm that is doing something. The llm is already invoked to recover the parts to be embedded in the repository... You can look at the class jmdevall.opencodeplan.application.CodePlanTest.java
+
+
+I am doing the tests locally by starting the oobatextgen, using as a model a quantized Phind model of 33B parameters that TheBloke has available (https://huggingface.co/TheBloke), thank you! It is certain that there will be better models today but I do not know what the state of the art is like right now.
+
+Specifically I am using this model: https://huggingface.co/TheBloke/Phind-CodeLlama-34B-v2-GGUF
+
+I currently only have an 8Gb domestic graphics card so I can only run quantized models with 7B parameters on the GPU. I think it is insufficient, so it would be advisable to go for more advanced 33B models, which would require at least a 24Gb card...
+I'm using a GGUF model on CPU on a ryzen 5600: very bad speed. I start it this way:
+
+python server.py --model phind-codellama-34b-v2.Q5_K_M.gguf --threads 12 --n_ctx 16384 --api --verbose
+
+Once started ooba raises the api on port 5000
+
 ATTENTION: this project is still incomplete. It is not functional. However, certain parts can be seen and there are loose components. For now the perfect definition is that this project is chaos.
 
 

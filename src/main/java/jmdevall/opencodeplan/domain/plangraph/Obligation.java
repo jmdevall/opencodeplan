@@ -7,7 +7,7 @@ import java.util.Optional;
 import jmdevall.opencodeplan.domain.BI;
 import jmdevall.opencodeplan.domain.Fragment;
 import jmdevall.opencodeplan.domain.dependencygraph.Node;
-import jmdevall.opencodeplan.domain.instruction.I;
+import jmdevall.opencodeplan.domain.instruction.Instruction;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,7 +16,7 @@ import lombok.Setter;
 @Getter
 public class Obligation {
 	Node b;
-	I i;
+	Instruction i;
 	
 	@Setter
 	Fragment fragment;

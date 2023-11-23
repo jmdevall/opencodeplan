@@ -14,4 +14,5 @@ public class Request {
 	private int max_new_tokens;
 	private boolean auto_max_new_tokens;
 	private int max_tokens_seconds;
+	private int truncation_length;
 }

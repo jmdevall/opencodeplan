@@ -55,7 +55,6 @@ public class DependencyGraph {
     	}
     	Node cu=forest.get(nodeid.getFile());
     	
-    	
 		return cu.toStream()
 		.filter(n->n.getId().getRange().contains(nodeid.getRange()))
 		.filter(n->n.children.isEmpty())

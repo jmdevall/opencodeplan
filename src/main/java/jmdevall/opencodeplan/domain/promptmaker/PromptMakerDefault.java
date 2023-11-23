@@ -1,7 +1,7 @@
 package jmdevall.opencodeplan.domain.promptmaker;
 
 import jmdevall.opencodeplan.domain.Fragment;
-import jmdevall.opencodeplan.domain.instruction.I;
+import jmdevall.opencodeplan.domain.instruction.Instruction;
 import jmdevall.opencodeplan.domain.plangraph.TemporalChange;
 import jmdevall.opencodeplan.domain.plangraph.TemporalContext;
 
@@ -16,7 +16,7 @@ public class PromptMakerDefault implements PromptMaker {
 	+"### Response:\n";
 	
 	private static final String  p1=
-	 "TaskInstruction: Your task is to ...\n%s";
+	 "Task Instruction: Your task is to ...\n%s";
 
 	private static final String p2 = "Earlier Code Changes (Temporal Context): These are edits that have been made in the code-base previously\n";
 
@@ -33,7 +33,7 @@ public class PromptMakerDefault implements PromptMaker {
 	+"needed, output \"No changes.\"";
 		
 	@Override
-	public String makePrompt(Fragment fragment, I i, Context context){
+	public String makePrompt(Fragment fragment, Instruction i, Context context){
 		
 		StringBuilder sb=new StringBuilder();
 		sb.append(String.format(p1, i.getSpecificInstruction()));

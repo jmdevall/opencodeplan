@@ -1,6 +1,6 @@
 package jmdevall.opencodeplan.domain.instruction;
 
-public class IDiff implements I{
+public class InstructionDiff implements Instruction{
 	
     private static String EXAMPLE_DIFF=""
     +"+ class Complex {\n"

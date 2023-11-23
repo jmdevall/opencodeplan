@@ -17,7 +17,7 @@ import jmdevall.opencodeplan.domain.dependencygraph.DependencyGraph;
 import jmdevall.opencodeplan.domain.dependencygraph.Node;
 import jmdevall.opencodeplan.domain.dependencygraph.NodeId;
 import jmdevall.opencodeplan.domain.dependencygraph.LineColRange;
-import jmdevall.opencodeplan.domain.instruction.Inatural;
+import jmdevall.opencodeplan.domain.instruction.InstructuionNatural;
 import jmdevall.opencodeplan.domain.plangraph.PlanGraph;
 import lombok.extern.slf4j.Slf4j;
 
@@ -96,7 +96,7 @@ public class ContextTest {
 		
 		Fragment f=Fragment.newFromPrunedCuNode(si.get().getRootParent(), searchNode);
 		PromptMakerDefault pm=new PromptMakerDefault();
-		Inatural i=new Inatural("Haz que el método devuelva un Collection");
+		InstructuionNatural i=new InstructuionNatural("Haz que el método devuelva un Collection");
 		String prompt=pm.makePrompt(f, i, c);
 		
 		System.out.println("prompt="+prompt);

@@ -1,7 +1,7 @@
 package jmdevall.opencodeplan.domain;
 
 import jmdevall.opencodeplan.domain.dependencygraph.Node;
-import jmdevall.opencodeplan.domain.instruction.I;
+import jmdevall.opencodeplan.domain.instruction.Instruction;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -9,5 +9,5 @@ import lombok.Getter;
 @Builder
 public class BI {
     private Node b;
-    private I i;
+    private Instruction i;
 }

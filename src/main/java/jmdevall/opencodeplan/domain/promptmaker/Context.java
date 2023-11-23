@@ -79,12 +79,12 @@ public class Context {
 		*/
 		List<String> spatialContext=new ArrayList<String>();
 		
-		Optional<Node> found=d.findFinalNodeContaining(b.getId());
-		Node node=found.get();
+		//Optional<Node> found=d.findFinalNodeContaining(b.getId());
+		//Node node=found.get();
 		
 		//find the method
-		Node method=node.getRootParent().toStream()
-				.filter(n->n.isMethodContaining(node)).findFirst().get();
+		Node method=b.getRootParent().toStream()
+				.filter(n->n.isMethodContaining(b)).findFirst().get();
 		
 		List<DependencyRelation> rels=d.getRels();
 		

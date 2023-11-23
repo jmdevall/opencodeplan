@@ -11,10 +11,10 @@ import jmdevall.opencodeplan.application.port.out.parser.Parser;
 import jmdevall.opencodeplan.application.port.out.repository.Repository;
 import jmdevall.opencodeplan.domain.BI;
 import jmdevall.opencodeplan.domain.BlockRelationPair;
-import jmdevall.opencodeplan.domain.DeltaSeeds;
 import jmdevall.opencodeplan.domain.Fragment;
 import jmdevall.opencodeplan.domain.dependencygraph.DependencyGraph;
 import jmdevall.opencodeplan.domain.dependencygraph.Node;
+import jmdevall.opencodeplan.domain.instruction.DeltaSeeds;
 import jmdevall.opencodeplan.domain.plangraph.CMIRelation;
 import jmdevall.opencodeplan.domain.plangraph.ClasifiedChange;
 import jmdevall.opencodeplan.domain.plangraph.Obligation;
@@ -96,14 +96,15 @@ public class CodePlan {
 	    PlanGraph g = new PlanGraph();
 	    DependencyGraph d = dependencyGraphConstructor.constructDependencyGraph(r);
 	     while (!deltaSeeds.isEmpty()){
-	        initializePlanGraph(g, deltaSeeds);
+	        initializePlanGraph(g, deltaSeeds, d);
 	        adaptivePlanAndExecute(r, d, g,llm);
 	        deltaSeeds = oracle.oracle(r);
 	     }
 	}
 
-    void initializePlanGraph(PlanGraph g, DeltaSeeds deltaSeeds) {
-        deltaSeeds.getBIs().forEach(bi -> {
+    void initializePlanGraph(PlanGraph g, DeltaSeeds deltaSeeds, DependencyGraph d) {
+        List<BI> bis = deltaSeeds.getBis(d);
+		bis.forEach(bi -> {
             g.addPendingRoot(bi);
         });
     }

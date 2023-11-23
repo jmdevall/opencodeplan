@@ -1,10 +1,10 @@
 package jmdevall.opencodeplan.domain.instruction;
 
-public class Inatural implements I {
+public class InstructuionNatural implements Instruction {
 
     private String specificInstruction;
 
-	public Inatural(String specificInstruction) {
+	public InstructuionNatural(String specificInstruction) {
 		super();
 		this.specificInstruction = specificInstruction;
 	}

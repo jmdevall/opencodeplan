@@ -1,6 +1,28 @@
 Prueba de concepto-implementation de este paper en java: https://huggingface.co/papers/2309.12499
 
-ATENCIÓN: este proyecto aún está incompleto. No es funcional. Sin embargo, se pueden ver ciertas partes y hay componentes sueltos. Por ahora la definición perfecta es que este proyecto es un caos.
+
+**NOVEDADES**: !Por fín!!!!  Primer test lanzado del algoritmo que va haciendo algo. Ya se invoca el llm para recuperar las partes a incrustar en el repositorio... Podeis mirar la clase jmdevall.opencodeplan.application.CodePlanTest.java
+
+
+Las pruebas las estoy haciendo en local arrancando el oobatextgen, usando como modelo un modelo quantizado de phind de 33B de parámetros que tiene disponible TheBloke (https://huggingface.co/TheBloke) ¡gracias! Es seguro que hoy existirán modelos mejores pero desconozco como anda ahora mismo estado del arte.
+
+Concretamente estoy usando este modelo: https://huggingface.co/TheBloke/Phind-CodeLlama-34B-v2-GGUF
+
+Actualmente solo dispongo de una tarjeta gráfica doméstica de 8 Gb por lo que solo puedo ejecutar modelos quantizados de 7B de parámetros en la GPU. Creo que es insuficiente, por lo que lo aconsejable sería ir a modelos mas avanzados de 33B, lo cual requeriría al menos una tarjeta de 24Gb...
+Estoy usando un modelo GGUF sobre CPU en un ryzen 5600: muy mala velocidad. Lo arranco de esta forma:
+
+python server.py --model phind-codellama-34b-v2.Q5_K_M.gguf --threads 12 --n_ctx 16384 --api --verbose
+
+Una vez arrancado ooba levanta el api en el puerto 5000
+
+
+ATENCIÓN: este proyecto aún está incompleto. No es funcional. Sin embargo, se pueden ver ciertas partes y hay componentes sueltos.
+
+Como prueba de repositorio estoy usando otro proyecto mio https://github.com/jmdevall/nemofinder el cual tengo clonado en local.
+
+En el test es necesario iniciar el proceso iterativo indicando un bloque y una instrucción. Por lo que dice el paper una instrucción puede ser de tipo Diff o una instrucción en lenguaje natural.
+El bloque es complicado especificarlo ya que aún no se ha hecho parseo del código. He tendido que crearme una clase para describir el bloque (buscarlo una vez parseado el código).
+
 
 
 He intentado seguir una arquitectura límpia, con el fin de poder cambiar las partes que no son propiamente del algoritmo. Dichas partes externas son:
@@ -17,7 +39,7 @@ El objetivo es separar las partes que son del algoritmo de las que no, de modo q
 FAQ:
 ¿Cual es tu pretensión con este proyecto?
 
-Personalmente he estado probando otros otros proyectos que usan la IA y hacen de asistentes o son capaces de generar código. Como por ejemplo:
+El desarrollo está siendo lento puesto que solo dedico alguna parte de mi tiempo libre. Personalmente he estado probando otros otros proyectos que usan la IA y hacen de asistentes o son capaces de generar código. Como por ejemplo:
 
 https://github.com/paul-gauthier/aider, https://github.com/genia-dev/GeniA etc
 
