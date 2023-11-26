@@ -1,24 +1,11 @@
 package jmdevall.opencodeplan.application.port.out.repository;
 
 import java.util.Collection;
-import java.util.HashMap;
 
-/**
- * Source of compilation units
- * 
- */
-public class CuSource {
- 	private HashMap<String,String> files=new HashMap<String,String>();
-	
-	public String getSource(String path) {
-		return files.get(path);
-	}
+public interface CuSource {
 
-	public Collection<String> getPaths(){
-		return files.keySet();
-	}
+	String getSource(String path);
 
-	public void add(String path,String content){
-		this.files.put(path,content);
-	}
+	Collection<String> getPaths();
+
 }

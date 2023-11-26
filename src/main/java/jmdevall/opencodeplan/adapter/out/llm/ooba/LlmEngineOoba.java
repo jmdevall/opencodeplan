@@ -55,14 +55,16 @@ public class LlmEngineOoba implements LlmEngine {
 			        .uri(targetURI)
 			        .POST(HttpRequest.BodyPublishers.ofString(bodyRequest))
 			        .header("Content-Type", "application/json")
-			        .timeout(Duration.ofMinutes(20)) //usando un modelo que se ejecuta en CPU los resultados son extremadamente lentos
+			        .timeout(Duration.ofMinutes(50)) //usando un modelo que se ejecuta en CPU los resultados son extremadamente lentos
 			        .build();
 			
 			HttpClient httpClient = HttpClient.newHttpClient();
 			
 			HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
 			        
-			return tryParseResponseBody(response.body());
+			String tryParseResponseBody = tryParseResponseBody(response.body());
+			System.out.println("salida del llm:\n");
+			return tryParseResponseBody;
 		} catch (URISyntaxException e) {
 			log.error("Uri Syntax Exception",e);
 			throw new LlmException(e);

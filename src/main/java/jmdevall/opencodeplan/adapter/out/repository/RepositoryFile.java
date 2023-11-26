@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 
 import jmdevall.opencodeplan.application.port.out.repository.CuSource;
+import jmdevall.opencodeplan.application.port.out.repository.CuSourceMulti;
 import jmdevall.opencodeplan.application.port.out.repository.Repository;
 import jmdevall.opencodeplan.adapter.out.file.FileUtil;
 import jmdevall.opencodeplan.adapter.out.file.direxplorer.DirExplorer;
@@ -55,7 +56,7 @@ public class RepositoryFile implements Repository{
 
 	@Override
 	public CuSource getCuSource() {
-		CuSource cuSource=new CuSource();
+		CuSourceMulti cuSource=new CuSourceMulti();
 
         new DirExplorer(
         		filter,

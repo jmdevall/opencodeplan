@@ -9,7 +9,7 @@ public class ParserJavaParser implements Parser{
 
 	@Override
 	public Node parse(String code) {
-		CuSource cuSource=CuSourceFactory.newFromSingleFile("", code);
+		CuSource cuSource=CuSourceFactory.newFromSingleFile("",code);
 		
 		AstConstructorJavaParser acjp=new AstConstructorJavaParser(cuSource);
 		

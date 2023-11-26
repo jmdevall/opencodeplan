@@ -46,7 +46,8 @@ public class CodePlan {
     			Node afectedNode=afectedNodes.get(0);
     			
     			ret.addAll(
-    					//TODO: Rel tiene nodeids, no nodes. Comparar o buscar los nodos en el dependency graph de otro forma
+    				
+    				//TODO: Rel tiene nodeids, no nodes. Comparar o buscar los nodos en el dependency graph de otro forma
 	    			affectedDg.getRels().stream()          
 	    			.filter(rel-> rel.getLabel()==impact.getDependencyLabel())
 	    			.filter(rel-> rel.getOrigin().equals(b))
@@ -115,7 +116,9 @@ public class CodePlan {
             Obligation obligation = g.getNextPending().get();
 			BI bi = obligation.getBi();
             // First step: extract fragment of code
-            Fragment fragment = Fragment.newFromPrunedCuNode( bi.getB().getRootParent(), bi.getB().getId());
+            //Fragment fragment = Fragment.newFromPrunedCuNode( bi.getB().getRootParent(), bi.getB().getId());
+			Fragment fragment = Fragment.newFromCuNode(bi.getB().getRootParent());
+			
             // Second step: gather context of the edit
             Context context = Context.gatherContext(bi.getB(), r, d ,g);
             // Third step: use the LLM to get edited code fragment

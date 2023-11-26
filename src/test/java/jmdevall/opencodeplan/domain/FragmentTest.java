@@ -17,7 +17,9 @@ import jmdevall.opencodeplan.adapter.out.javaparser.CuSourceProcessor;
 import jmdevall.opencodeplan.adapter.out.javaparser.util.TestingUtil;
 import jmdevall.opencodeplan.adapter.out.repository.CuSourceFactory;
 import jmdevall.opencodeplan.application.port.out.repository.CuSource;
+import jmdevall.opencodeplan.domain.dependencygraph.LineColRange;
 import jmdevall.opencodeplan.domain.dependencygraph.Node;
+import jmdevall.opencodeplan.domain.dependencygraph.NodeId;
 import jmdevall.opencodeplan.domain.plangraph.ClasifiedChange;
 import lombok.extern.slf4j.Slf4j;
 
@@ -114,6 +116,21 @@ public class FragmentTest {
 		
 		
 
+	}
+	
+	@Test
+	public void casoQueFalla() {
+		Node original=getTestingCu("/nemofinder/HerigoneSpanish.java",testingUtil.readFileFromTestSource("/caso/original.txt"));
+		NodeId afected=NodeId.builder()
+				.file("/nemofinder/HerigoneSpanish.java")
+				.range(LineColRange.newRangeOne(41, 0))
+				.build();
+		String revised=testingUtil.readFileFromTestSource("/caso/revised.txt");
+		Fragment sut=Fragment.newFromPrunedCuNode(original,afected);
+		sut.merge(revised);
+		
+		
+		
 	}
 	
 	

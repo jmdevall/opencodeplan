@@ -108,8 +108,10 @@ public class Fragment {
 	
 
 	public String merge(String llmrevised){
-		List<String> original= DiffUtil.tolines(originalcu.prompt());
-		List<String> pruned = DiffUtil.tolines(prunedcu.prompt());
+		String originalCuPrompt = originalcu.prompt();
+		List<String> original= DiffUtil.tolines(originalCuPrompt);
+		String prunedCUPrompt = prunedcu.prompt();
+		List<String> pruned = DiffUtil.tolines(prunedCUPrompt);
 		List<String> revised= DiffUtil.tolines(llmrevised);
 		
 		

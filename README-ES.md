@@ -2,19 +2,19 @@ Prueba de concepto-implementation de este paper en java: https://huggingface.co/
 
 
 **NOVEDADES**: !Por fín!!!!  Primer test lanzado del algoritmo que va haciendo algo. Ya se invoca el llm para recuperar las partes a incrustar en el repositorio... Podeis mirar la clase jmdevall.opencodeplan.application.CodePlanTest.java
+Sin embargo tengo que revisar el código encargado del mezclado (que se encarga de mezclar el código revisado en el código podado). No había contemplado que el llm tratase de cambiar algunas líneas de algún método no afectado. El paper no especifica como hace este paso. 
 
+Las pruebas las estoy haciendo en local arrancando el oobatextgen, usando distintos modelos. Desconozco como anda ahora mismo estado del arte.
 
-Las pruebas las estoy haciendo en local arrancando el oobatextgen, usando como modelo un modelo quantizado de phind de 33B de parámetros que tiene disponible TheBloke (https://huggingface.co/TheBloke) ¡gracias! Es seguro que hoy existirán modelos mejores pero desconozco como anda ahora mismo estado del arte.
+https://huggingface.co/TheBloke/Phind-CodeLlama-34B-v2-GGUF -> Muuuy lento
+TheBloke_Mistral-7B-Code-16K-qlora-GPTQ" que si cabe en la GPU -> No lo suficientemente bueno pero al menos cabe en la GPU
 
-Concretamente estoy usando este modelo: https://huggingface.co/TheBloke/Phind-CodeLlama-34B-v2-GGUF
 
 Actualmente solo dispongo de una tarjeta gráfica doméstica de 8 Gb por lo que solo puedo ejecutar modelos quantizados de 7B de parámetros en la GPU. Creo que es insuficiente, por lo que lo aconsejable sería ir a modelos mas avanzados de 33B, lo cual requeriría al menos una tarjeta de 24Gb...
-Estoy usando un modelo GGUF sobre CPU en un ryzen 5600: muy mala velocidad. Lo arranco de esta forma:
 
 python server.py --model phind-codellama-34b-v2.Q5_K_M.gguf --threads 12 --n_ctx 16384 --api --verbose
 
 Una vez arrancado ooba levanta el api en el puerto 5000
-
 
 ATENCIÓN: este proyecto aún está incompleto. No es funcional. Sin embargo, se pueden ver ciertas partes y hay componentes sueltos.
 
@@ -23,13 +23,18 @@ Como prueba de repositorio estoy usando otro proyecto mio https://github.com/jmd
 En el test es necesario iniciar el proceso iterativo indicando un bloque y una instrucción. Por lo que dice el paper una instrucción puede ser de tipo Diff o una instrucción en lenguaje natural.
 El bloque es complicado especificarlo ya que aún no se ha hecho parseo del código. He tendido que crearme una clase para describir el bloque (buscarlo una vez parseado el código).
 
-
-
+Estructura del proyecto:
 He intentado seguir una arquitectura límpia, con el fin de poder cambiar las partes que no son propiamente del algoritmo. Dichas partes externas son:
 
 - el llm
 - el repositorio de código
 - el parseador/analizador de dependencias
+
+En la parte de dominio se encuentran las estructuras de datos que maneja el algoritmo
+
+En la parte de aplicación se encuentran los servicios... en esencia el algoritmo.
+
+Por lo pronto no existe interfaz de usuario ni nada parecido. Todas las pruebas se hacen desde los tests
 
 He seguido la estructura de paquetes sugerida aquí:
 https://tbuss.de/posts/2023/9-how-to-do-the-package-structure-in-a-ports-and-adapter-architecture/

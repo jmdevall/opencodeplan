@@ -1,0 +1,63 @@
+private Map<String, List<String>> herigone;
+private Map<Integer, List<String>> herigone;
+package nemofinder;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
+public class HerigoneSpanish implements Phonetics {
+	
+	public HerigoneSpanish(){
+		init();
+	}
+	
+	private String vocals = "[aeiou]";
+
+	private Map<Integer, List<String>> herigone;
+
+	private List<String> phoneticSet;
+	private Map<String, String> invPhonetics;
+
+	private Map<Integer, String> inv(Map<Integer, List<String>> memos) 
+	
+	private void init() {
+		herigone = new HashMap<Integer, List<String>>();
+
+		herigone.put(1, Arrays.asList("r", "rr"));
+		herigone.put(2, Arrays.asList("t", "d"));
+		herigone.put(3, Arrays.asList("n", "ñ"));
+		herigone.put(4, Arrays.asList("m"));
+		herigone.put(5, Arrays.asList("l", "ll"));
+		herigone.put(6, Arrays.asList("s", "z")); //also "c" in ce and ci sounds differently
+		herigone.put(7, Arrays.asList("f", "j"));
+		herigone.put(8, Arrays.asList("g", "ch"));
+		herigone.put(9, Arrays.asList("v", "b", "p"));
+
+		this.invPhonetics = inv(herigone);
+		this.phoneticSet = new ArrayList<String>(invPhonetics.keySet());
+	}
+
+	/* (non-Javadoc)
+	 * @see nemofinder.Phonetics#translateToPhonetics(java.lang.String)
+	 */
+	@Override
+	public String translateToPhonetics(String word)
+	
+	public String replaceAcents(String word)
+	
+	public String replacePhonetics(String word)
+	
+	public String cleanVocals(String word) 
+
+	@Override
+	public List<String> getPhoneticSet() 
+
+	@Override
+	public String getPhoneticInv(String str) 
+
+}
+
+
