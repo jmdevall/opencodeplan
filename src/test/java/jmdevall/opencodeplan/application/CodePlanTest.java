@@ -1,6 +1,7 @@
 package jmdevall.opencodeplan.application;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -8,6 +9,8 @@ import org.junit.jupiter.api.Test;
 
 import jmdevall.opencodeplan.adapter.out.javaparser.DependencyGraphConstructorJavaparser;
 import jmdevall.opencodeplan.adapter.out.javaparser.ParserJavaParser;
+import jmdevall.opencodeplan.adapter.out.llm.cache.LlmEngineCacheAdapter;
+import jmdevall.opencodeplan.adapter.out.llm.debug.LlmEngineDebugAdapter;
 import jmdevall.opencodeplan.adapter.out.llm.ooba.LlmEngineOoba;
 import jmdevall.opencodeplan.adapter.out.oracle.OracleDefault;
 import jmdevall.opencodeplan.adapter.out.repository.RepositoryFile;
@@ -58,9 +61,50 @@ public class CodePlanTest {
 		sut.codePlan(r,deltaSeed);
 	}
 	
+
+	@Test
+	public void otroTestCodePlan() {
+		
+		//initialize default dependencies....
+		Parser parser=new ParserJavaParser();
+		PromptMakerDefault promptMaker=new PromptMakerDefault();
+		DependencyGraphConstructor dgConstructor=DependencyGraphConstructorJavaparser.newDefault();
+		Oracle oracle=new OracleDefault();
+		Llm llm=newTestingLlm();
+		
+		CodePlan sut =new CodePlan(parser, dgConstructor, promptMaker, oracle,llm);
+
+		
+		Repository r=RepositoryFile.newRepositoryFile(new File("/home/vicuna/js/nemofinder/src/main/java"));
+		DeltaSeeds deltaSeed=new DeltaSeeds();
+		
+		Seed initialCommand=Seed.builder()
+				.instruction(new InstructuionNatural("Haz que el método retorne un Collection<String> en lugar de un List"))
+				.block(NodeSearchDescriptor.builder()
+						.file("/nemofinder/DictionarySpanish.java")
+						.nodeTypeTag(NodeTypeTag.BodyOfMethod)
+						.position(LineColPos.newPosition(14, 0))
+						.build()
+				 )
+				.build();
+		
+		deltaSeed.addSeed(initialCommand);
+		
+		sut.codePlan(r,deltaSeed);
+	}
+	
+	
 	private Llm newTestingLlm() {
-		LlmEngine engine=new LlmEngineOoba("http://localhost:5000/api");
-		Llm llm=new Llm(engine);
-		return llm;
+		try {
+			File cacheFolder=new File("/home/vicuna/temp/cachellm");
+			LlmEngine ooba=new LlmEngineOoba("http://localhost:5000/api");
+			LlmEngine engine=new LlmEngineDebugAdapter(
+				new LlmEngineCacheAdapter(ooba,cacheFolder)
+			);
+			Llm llm=new Llm(engine);
+			return llm;
+		} catch (IOException e) {
+			throw new IllegalStateException();
+		}
 	}
 }
