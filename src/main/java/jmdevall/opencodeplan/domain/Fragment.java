@@ -188,7 +188,12 @@ public class Fragment {
 				.filter(n -> n.getNodeTypeTag()!=n.getParent().getNodeTypeTag()) 
 				.collect(Collectors.toList());
 			}
+			
 
+			List<String> contentsoriginal=originalNodes.stream().map(n->n.getContent()).collect(Collectors.toList());
+			List<String> contentsrevised=revisedNodes.stream().map(n->n.getContent()).collect(Collectors.toList());
+			originalNodes.removeIf(n->contentsrevised.contains(n.getContent()));
+			revisedNodes.removeIf(n->contentsoriginal.contains(n.getContent()));
 			
 			//al pillar los nodos también entran los nodos superiores, en este caso no nos interesa saber que cuando el cambio es en un método
 			originalNodes=filterMostRelevant(originalNodes);
@@ -210,7 +215,8 @@ public class Fragment {
 	private List<Node> filterMostRelevant(List<Node> nodes){
 		
 		for(NodeTypeTag nodeTypeTag:NodeTypeTag.values()) {
-			List<Node> only=nodes.stream().filter(n->n.getNodeTypeTag()==nodeTypeTag).collect(Collectors.toList());
+			List<Node> only=nodes.stream()
+					.filter(n->n.getNodeTypeTag()==nodeTypeTag).collect(Collectors.toList());
 			if(!only.isEmpty()) {
 				return only;
 			}
