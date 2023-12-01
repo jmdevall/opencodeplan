@@ -93,6 +93,38 @@ public class CodePlanTest {
 		sut.codePlan(r,deltaSeed);
 	}
 	
+
+	@Test
+	public void otro3TestCodePlan() {
+		
+		//initialize default dependencies....
+		Parser parser=new ParserJavaParser();
+		PromptMakerDefault promptMaker=new PromptMakerDefault();
+		DependencyGraphConstructor dgConstructor=DependencyGraphConstructorJavaparser.newDefault();
+		Oracle oracle=new OracleDefault();
+		Llm llm=newTestingLlm();
+		
+		CodePlan sut =new CodePlan(parser, dgConstructor, promptMaker, oracle,llm);
+
+		
+		Repository r=RepositoryFile.newRepositoryFile(new File("/home/vicuna/js/nemofinder/src/main/java"));
+		DeltaSeeds deltaSeed=new DeltaSeeds();
+		
+		Seed initialCommand=Seed.builder()
+				.instruction(new InstructuionNatural("Renombra el método getWords por damePalabras"))
+				.block(NodeSearchDescriptor.builder()
+						.file("/nemofinder/DictionarySpanish.java")
+						.nodeTypeTag(NodeTypeTag.BodyOfMethod)
+						.position(LineColPos.newPosition(14, 0))
+						.build()
+				 )
+				.build();
+		
+		deltaSeed.addSeed(initialCommand);
+		
+		sut.codePlan(r,deltaSeed);
+	}
+
 	
 	private Llm newTestingLlm() {
 		try {

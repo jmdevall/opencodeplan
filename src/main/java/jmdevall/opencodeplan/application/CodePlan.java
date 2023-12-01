@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import jmdevall.opencodeplan.application.port.out.oracle.Oracle;
 import jmdevall.opencodeplan.application.port.out.parser.DependencyGraphConstructor;
@@ -13,6 +14,7 @@ import jmdevall.opencodeplan.domain.BI;
 import jmdevall.opencodeplan.domain.BlockRelationPair;
 import jmdevall.opencodeplan.domain.Fragment;
 import jmdevall.opencodeplan.domain.dependencygraph.DependencyGraph;
+import jmdevall.opencodeplan.domain.dependencygraph.DependencyRelation;
 import jmdevall.opencodeplan.domain.dependencygraph.Node;
 import jmdevall.opencodeplan.domain.instruction.DeltaSeeds;
 import jmdevall.opencodeplan.domain.plangraph.CMIRelation;
@@ -44,23 +46,29 @@ public class CodePlan {
     			List<Node> afectedNodes=impact.getDgc()==WhatD.D?change.getOriginal():change.getRevised();
     			
     			Node afectedNode=afectedNodes.get(0);
+
+				
+				//TODO: Rel tiene nodeids, no nodes. Comparar o buscar los nodos en el dependency graph de otro forma
+    			Stream<DependencyRelation> filter = affectedDg.getRels().stream()          
+				.filter(rel-> rel.getLabel()==impact.getDependencyLabel())
+				//.filter(rel-> rel.getOrigin().equals(b))
+				.filter(rel-> rel.getDestiny().equals(afectedNode));
     			
-    			ret.addAll(
-    				
-    				//TODO: Rel tiene nodeids, no nodes. Comparar o buscar los nodos en el dependency graph de otro forma
-	    			affectedDg.getRels().stream()          
-	    			.filter(rel-> rel.getLabel()==impact.getDependencyLabel())
-	    			.filter(rel-> rel.getOrigin().equals(b))
-	    			.filter(rel-> rel.getDestiny().equals(afectedNode))
-	    			.map((rel)->{
-	    				Optional<Node> node=affectedDg.findByNodeId(rel.getDestiny());
-	    				if(node.isPresent()) {
-	    					return new BlockRelationPair(node.get(),impact);
-	    				}
-	    				else throw new IllegalStateException();
-	    				
-	    			})
-	    			.collect(Collectors.toList())
+    			List<DependencyRelation> debug=filter.collect(Collectors.toList());
+    			
+				List<BlockRelationPair> collect = filter
+				.map((rel)->{
+					Optional<Node> node=affectedDg.findByNodeId(rel.getDestiny());
+					if(node.isPresent()) {
+						return new BlockRelationPair(node.get(),impact);
+					}
+					else throw new IllegalStateException();
+					
+				})
+				.collect(Collectors.toList());
+    			
+				ret.addAll(
+	    			collect
 	    		);
     		}
     		
