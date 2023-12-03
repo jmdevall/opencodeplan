@@ -37,7 +37,11 @@ public class TestingUtil {
 	}
 	
 	public File getSrcRootTestFolder() {
-		return new File("src/test/java");
+		File srcTestRoot = new File("src/test/java");
+		if(!srcTestRoot.exists()) {
+			throw new IllegalStateException("testing folder of source test bench not exists!!!");
+		}
+		return srcTestRoot;
 	}
 
 	public Repository getTestingRepository(String startfolder) {

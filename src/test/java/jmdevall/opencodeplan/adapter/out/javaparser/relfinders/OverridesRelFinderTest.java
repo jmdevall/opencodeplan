@@ -47,6 +47,32 @@ public class OverridesRelFinderTest {
 		
 
 	}
+	
+	@Test
+	public void findOverridesInterfaces() {
+		OverridesRelFinder sut=new OverridesRelFinder();
+		
+		CuRelFinderVisitProcessor vp=new CuRelFinderVisitProcessor(sut);
+		String startfolder=",testbench,testutil,implementation".replaceAll(",", File.separator);
+		CuSource cuSource=RepositoryFile.newRepositoryFile(testUtil.getSrcRootTestFolder(),
+				(int level, String path, File file)->path.startsWith(startfolder)).getCuSource();
+
+		CuSourceProcessor.process(cuSource, vp, testUtil.getTestingJavaParser());
+		
+		
+		
+		
+		List<DependencyRelation> rels = vp.getRels();
+		LogRelUtil.logRels(rels);
+		
+		assertEquals(4,rels.size());
+		
+		String expected="Rel(origin=NodeId(file=/testbench/testutil/overrides/C.java, range=[6,2]->[8,2]), destiny=NodeId(file=/testbench/testutil/overrides/B.java, range=[6,2]->[8,2]), label=OVERRIDES)";
+
+		List<String> collect = rels.stream().map( DependencyRelation::toString ).collect(Collectors.toList());
+		assertTrue(collect.contains(expected));
+		
+	}
 
 
 }

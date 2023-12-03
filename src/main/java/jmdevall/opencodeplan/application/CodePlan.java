@@ -16,6 +16,7 @@ import jmdevall.opencodeplan.domain.Fragment;
 import jmdevall.opencodeplan.domain.dependencygraph.DependencyGraph;
 import jmdevall.opencodeplan.domain.dependencygraph.DependencyRelation;
 import jmdevall.opencodeplan.domain.dependencygraph.Node;
+import jmdevall.opencodeplan.domain.dependencygraph.NodeId;
 import jmdevall.opencodeplan.domain.instruction.DeltaSeeds;
 import jmdevall.opencodeplan.domain.plangraph.CMIRelation;
 import jmdevall.opencodeplan.domain.plangraph.ClasifiedChange;
@@ -25,6 +26,7 @@ import jmdevall.opencodeplan.domain.plangraph.WhatD;
 import jmdevall.opencodeplan.domain.promptmaker.Context;
 import jmdevall.opencodeplan.domain.promptmaker.PromptMaker;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 @AllArgsConstructor
 public class CodePlan {
@@ -40,7 +42,8 @@ public class CodePlan {
     	ArrayList<BlockRelationPair>ret = new ArrayList<BlockRelationPair>();
     	
     	for(ClasifiedChange change:labels) {
-    		List<CMIRelation> impacts=change.getCmi().getFormalChangeMayImpact();
+    		
+			List<CMIRelation> impacts=change.getCmi().getFormalChangeMayImpact();
     		for(CMIRelation impact:impacts) {
     			DependencyGraph affectedDg=impact.getDgc()==WhatD.D?d:dp;
     			List<Node> afectedNodes=impact.getDgc()==WhatD.D?change.getOriginal():change.getRevised();
@@ -52,9 +55,20 @@ public class CodePlan {
     			Stream<DependencyRelation> filter = affectedDg.getRels().stream()          
 				.filter(rel-> rel.getLabel()==impact.getDependencyLabel())
 				//.filter(rel-> rel.getOrigin().equals(b))
-				.filter(rel-> rel.getDestiny().equals(afectedNode));
+				//.filter(rel-> rel.getDestiny().equals(afectedNode));
+				;
     			
-    			List<DependencyRelation> debug=filter.collect(Collectors.toList());
+    			Stream<DependencyRelation> copy = affectedDg.getRels().stream()          
+    					.filter(rel-> rel.getLabel()==impact.getDependencyLabel());
+    			//List<DependencyRelation> debug=filter.collect(Collectors.toList());
+    			
+    			List<Debug> debug=copy.map(dr->
+    				new Debug(
+    						 d.findByNodeId(dr.getOrigin()).get()
+    						,d.findByNodeId(dr.getDestiny()).get()
+    						)
+    				).collect(Collectors.toList());
+    			
     			
 				List<BlockRelationPair> collect = filter
 				.map((rel)->{
@@ -76,7 +90,13 @@ public class CodePlan {
     	return ret;
     }
     
-   
+    @Getter
+    @AllArgsConstructor
+    public static class Debug{
+    	Node origen;
+    	Node destino;
+    }
+  
    
     private void merge(Repository r,Fragment fragment, String llmrevised, Node b){
     	String curevised=fragment.merge(llmrevised);

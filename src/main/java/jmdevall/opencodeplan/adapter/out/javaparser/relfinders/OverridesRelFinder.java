@@ -12,6 +12,7 @@ import com.github.javaparser.resolution.SymbolResolver;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
 import com.github.javaparser.resolution.declarations.ResolvedMethodDeclaration;
 import com.github.javaparser.resolution.types.ResolvedReferenceType;
+import com.github.javaparser.symbolsolver.javaparsermodel.JavaParserFacade;
 
 import jmdevall.opencodeplan.adapter.out.javaparser.Util;
 import jmdevall.opencodeplan.domain.dependencygraph.DependencyLabel;
@@ -36,6 +37,10 @@ public class OverridesRelFinder extends VoidVisitorAdapter<List<DependencyRelati
 		for(ResolvedMethodDeclaration method:methods) {
 		
 			try {
+				System.out.println("methodName="+methodName);
+				System.out.println("methodDescriptor="+descriptor);
+				System.out.println("method.getName()"+method.getName());
+				System.out.println("method.toDescriptor()"+method.toDescriptor());
 				if(method.getName().equals(methodName) && method.toDescriptor().equals(descriptor)) {
 					return Optional.of(method);
 				}
@@ -56,6 +61,8 @@ public class OverridesRelFinder extends VoidVisitorAdapter<List<DependencyRelati
 			log.debug("descriptor="+resolved.toDescriptor());
 			
 			List<ResolvedReferenceType> ancestors=resolved.declaringType(). getAllAncestors();
+			
+			//resolved.declaringType().getA getAllAncestors();
 			
 			for(ResolvedReferenceType a:ancestors) {
 				Optional<ResolvedMethodDeclaration> metodoEnPadre=findMethod(a,m.getName().toString(),m.toDescriptor());

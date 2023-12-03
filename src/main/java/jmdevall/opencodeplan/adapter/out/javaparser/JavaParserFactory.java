@@ -4,6 +4,7 @@ import java.io.File;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParserConfiguration;
+import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.resolution.TypeSolver;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
@@ -23,6 +24,7 @@ public class JavaParserFactory {
 	
 		ParserConfiguration parserConfiguration = new ParserConfiguration().setSymbolResolver(symbolSolver);
 		JavaParser parser=new JavaParser(parserConfiguration);
+		StaticJavaParser.getConfiguration().setSymbolResolver(symbolSolver);  
 		return parser;
 	}
 
