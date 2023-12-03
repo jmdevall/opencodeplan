@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.body.CallableDeclaration.Signature;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
@@ -31,16 +32,33 @@ public class OverridesRelFinder extends VoidVisitorAdapter<List<DependencyRelati
 		super();
 	}
 	
+	/*
+	   public SymbolResolver getSymbolResolver() {
+	        return findCompilationUnit().map(cu -> {
+	            if (cu.containsData(SYMBOL_RESOLVER_KEY)) {
+	                return cu.getData(SYMBOL_RESOLVER_KEY);
+	            }
+	            throw new IllegalStateException("Symbol resolution not configured: to configure consider setting a SymbolResolver in the ParserConfiguration");
+	        }).orElseThrow(() -> new IllegalStateException("The node is not inserted in a CompilationUnit"));
+	    }
+*/
+	
 	
 	private Optional<ResolvedMethodDeclaration> findMethod(ResolvedReferenceType type, String methodName,String descriptor){
 		List<ResolvedMethodDeclaration> methods=type.getAllMethodsVisibleToInheritors();
 		for(ResolvedMethodDeclaration method:methods) {
 		
 			try {
+				System.out.println("qualified signature="+method.getQualifiedSignature());
+				System.out.println("signature="+method.getSignature());
+				
+				
 				System.out.println("methodName="+methodName);
 				System.out.println("methodDescriptor="+descriptor);
 				System.out.println("method.getName()"+method.getName());
 				System.out.println("method.toDescriptor()"+method.toDescriptor());
+				
+				
 				if(method.getName().equals(methodName) && method.toDescriptor().equals(descriptor)) {
 					return Optional.of(method);
 				}
@@ -48,6 +66,27 @@ public class OverridesRelFinder extends VoidVisitorAdapter<List<DependencyRelati
 				//TODO: en ciertos casos salta excepción no se por que
 				return Optional.empty();
 			}
+		}
+		return Optional.empty();
+	}
+	
+	private Optional<ResolvedMethodDeclaration> findMethodByResolvedMethodDeclaration(ResolvedReferenceType type, ResolvedMethodDeclaration resolvedMethodImp){
+		List<ResolvedMethodDeclaration> methods=type.getAllMethodsVisibleToInheritors();
+		for(ResolvedMethodDeclaration method:methods) {
+			if(method.getSignature().equals(resolvedMethodImp.getSignature())){
+				return Optional.of(method); 
+			}
+			/*try {
+				String signature2 = method.getSignature();
+				
+				
+				if(method.getName().equals(methodName) && signature2.equals(signature)) {
+					return Optional.of(method);
+				}
+			} catch (Exception e) {
+				//TODO: en ciertos casos salta excepción no se por que
+				return Optional.empty();
+			}*/
 		}
 		return Optional.empty();
 	}
@@ -60,16 +99,19 @@ public class OverridesRelFinder extends VoidVisitorAdapter<List<DependencyRelati
 			ResolvedMethodDeclaration resolved=m.resolve();
 			log.debug("descriptor="+resolved.toDescriptor());
 			
-			List<ResolvedReferenceType> ancestors=resolved.declaringType(). getAllAncestors();
+			List<ResolvedReferenceType> ancestors=resolved.declaringType().getAllAncestors();
 			
 			//resolved.declaringType().getA getAllAncestors();
 			
-			for(ResolvedReferenceType a:ancestors) {
-				Optional<ResolvedMethodDeclaration> metodoEnPadre=findMethod(a,m.getName().toString(),m.toDescriptor());
+			for(ResolvedReferenceType ancestor:ancestors) {
+				log.debug("searching method "+m.toDescriptor()+" in ancestestor "+ ancestor.getQualifiedName());
+				//Optional<ResolvedMethodDeclaration> metodoEnPadre=findMethod(ancestor,m.getName().toString(),m.toDescriptor());
+				
+				Optional<ResolvedMethodDeclaration> metodoEnPadre=findMethodByResolvedMethodDeclaration(ancestor,resolved);
 				if(metodoEnPadre.isPresent()) {
 					return metodoEnPadre.get().toAst();
 				}
-				log.debug("a "+a.getId()+ " "+ a.getQualifiedName());
+				
 			}
 			
 			

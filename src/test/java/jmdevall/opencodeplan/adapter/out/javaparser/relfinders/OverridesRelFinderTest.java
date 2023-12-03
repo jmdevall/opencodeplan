@@ -65,9 +65,9 @@ public class OverridesRelFinderTest {
 		List<DependencyRelation> rels = vp.getRels();
 		LogRelUtil.logRels(rels);
 		
-		assertEquals(4,rels.size());
+		assertEquals(2,rels.size());
 		
-		String expected="Rel(origin=NodeId(file=/testbench/testutil/overrides/C.java, range=[6,2]->[8,2]), destiny=NodeId(file=/testbench/testutil/overrides/B.java, range=[6,2]->[8,2]), label=OVERRIDES)";
+		String expected="Rel(origin=NodeId(file=/testbench/testutil/implementation/ExampleImpl.java, range=[5,2]->[7,2]), destiny=NodeId(file=/testbench/testutil/implementation/ExampleInterface.java, range=[4,2]->[4,33]), label=OVERRIDES)";
 
 		List<String> collect = rels.stream().map( DependencyRelation::toString ).collect(Collectors.toList());
 		assertTrue(collect.contains(expected));

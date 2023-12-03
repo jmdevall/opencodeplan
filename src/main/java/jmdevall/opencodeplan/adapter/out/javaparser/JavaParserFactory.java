@@ -24,7 +24,7 @@ public class JavaParserFactory {
 	
 		ParserConfiguration parserConfiguration = new ParserConfiguration().setSymbolResolver(symbolSolver);
 		JavaParser parser=new JavaParser(parserConfiguration);
-		StaticJavaParser.getConfiguration().setSymbolResolver(symbolSolver);  
+		StaticJavaParser.getConfiguration().setSymbolResolver(symbolSolver); //TODO: not necesary  
 		return parser;
 	}
 
