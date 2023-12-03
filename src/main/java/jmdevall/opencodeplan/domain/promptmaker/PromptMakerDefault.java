@@ -62,8 +62,10 @@ public class PromptMakerDefault implements PromptMaker {
 				sb.append(javaFragmentPrompt(change.getFragment().getRevised().prompt()));
 				sb.append("\n");
 				
-				sb.append(p3);
-				sb.append("«code_to_be_edited» is related to «code_changed_earlier» by «cause»="+change.getCause().getDependencyLabel());
+				if(change.getCause()!=null){
+					sb.append(p3);
+					sb.append("«code_to_be_edited» is related to «code_changed_earlier» by «cause»="+change.getCause().getDependencyLabel());
+				}
 				
 			}
 		}

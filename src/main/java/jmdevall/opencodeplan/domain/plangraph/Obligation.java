@@ -8,6 +8,7 @@ import jmdevall.opencodeplan.domain.BI;
 import jmdevall.opencodeplan.domain.Fragment;
 import jmdevall.opencodeplan.domain.dependencygraph.Node;
 import jmdevall.opencodeplan.domain.instruction.Instruction;
+import jmdevall.opencodeplan.domain.instruction.InstructuionNatural;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -97,7 +98,7 @@ public class Obligation {
 			Obligation o=
 					Obligation.builder()
 					.b(child)
-					.i(null)
+					.i(new InstructuionNatural("Modify the \"code to be edited\" to to accommodate previous editions"))
 					.cmi(elcmi)
 					.status(Status.PENDING)
 					.build();

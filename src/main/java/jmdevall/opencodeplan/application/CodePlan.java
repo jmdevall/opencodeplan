@@ -55,12 +55,14 @@ public class CodePlan {
     			Stream<DependencyRelation> filter = affectedDg.getRels().stream()          
 				.filter(rel-> rel.getLabel()==impact.getDependencyLabel())
 				//.filter(rel-> rel.getOrigin().equals(b))
-				//.filter(rel-> rel.getDestiny().equals(afectedNode));
+				.filter(rel-> rel.getDestiny().equals(afectedNode.getId()));
 				;
     			
     			Stream<DependencyRelation> copy = affectedDg.getRels().stream()          
-    					.filter(rel-> rel.getLabel()==impact.getDependencyLabel());
+    					.filter(rel-> rel.getLabel()==impact.getDependencyLabel())
+    					.filter(rel-> rel.getDestiny().equals(afectedNode.getId()));
     			//List<DependencyRelation> debug=filter.collect(Collectors.toList());
+    			
     			
     			List<Debug> debug=copy.map(dr->
     				new Debug(
@@ -72,7 +74,7 @@ public class CodePlan {
     			
 				List<BlockRelationPair> collect = filter
 				.map((rel)->{
-					Optional<Node> node=affectedDg.findByNodeId(rel.getDestiny());
+					Optional<Node> node=affectedDg.findByNodeId(rel.getOrigin());
 					if(node.isPresent()) {
 						return new BlockRelationPair(node.get(),impact);
 					}

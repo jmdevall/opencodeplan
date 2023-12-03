@@ -1,8 +1,15 @@
 Prueba de concepto-implementation de este paper en java: https://huggingface.co/papers/2309.12499
 
 
-**NOVEDADES**: !Por fín!!!!  Primer test lanzado del algoritmo que va haciendo algo. Ya se invoca el llm para recuperar las partes a incrustar en el repositorio... Podeis mirar la clase jmdevall.opencodeplan.application.CodePlanTest.java
-Sin embargo tengo que revisar el código encargado del mezclado (que se encarga de mezclar el código revisado en el código podado). No había contemplado que el llm tratase de cambiar algunas líneas de algún método no afectado. El paper no especifica como hace este paso. 
+**NOVEDADES**: 2023/12/03 Corregidos algunos bugs. Se invoca el llm para recuperar las partes a incrustar en el repositorio y se consigue obtener el contexto temporal para una segunda invocación... 
+
+Podeis mirar la clase jmdevall.opencodeplan.application.CodePlanTest.java (el test otro3TestCodePlan que simplemente trata de renombrar un método. Como consecuencia hace una segunda llamada al llm para renombrar la interfaz de la que hereda el método, sin embargo parece sigue habiendo algun que otro problema porque no está detectando que dicho método se utiliza en otra clase)
+
+Para depurar mejor he implementado dos adaptadores al llm:
+* LlmEngineCacheAdapter: Utiliza una carpeta en local donde guarda las requests y responses en ficheros a modo de caché.
+* LlmEngineDebugAdapter: guarda en una carpeta temporal del sistema cada una de las peticiones/respuestas que realiza al llm.
+
+Issues: El código encargado del mezclado (que se encarga de mezclar el código revisado en el código podado). No había contemplado que el llm tratase de cambiar algunas líneas de algún método no afectado. El paper no especifica como hace este paso. 
 
 Las pruebas las estoy haciendo en local arrancando el oobatextgen, usando distintos modelos. Desconozco como anda ahora mismo estado del arte.
 
