@@ -1,9 +1,9 @@
 Prueba de concepto-implementation de este paper en java: https://huggingface.co/papers/2309.12499
 
 
-**NOVEDADES**: 2023/12/03 Corregidos algunos bugs. Se invoca el llm para recuperar las partes a incrustar en el repositorio y se consigue obtener el contexto temporal para una segunda invocación... 
+**NOVEDADES**: 2023/12/04 Sigo corrigiendo bugs. Se invoca el llm para recuperar las partes a incrustar en el repositorio y se consigue obtener el contexto temporal para una segunda invocación y una tercera etc....Había un bug en el método getAffectedBlocks que estaba cogiendo el nodo destino en lugar del nodo origen para obtener los nodos afectados.
 
-Podeis mirar la clase jmdevall.opencodeplan.application.CodePlanTest.java (el test otro3TestCodePlan que simplemente trata de renombrar un método. Como consecuencia hace una segunda llamada al llm para renombrar la interfaz de la que hereda el método, sin embargo parece sigue habiendo algun que otro problema porque no está detectando que dicho método se utiliza en otra clase)
+Puedes probar el test jmdevall.opencodeplan.application.CodePlanTest.otro3TestCodePlan que está funcionando: simplemente trata de renombrar un método. Como consecuencia hace una segunda llamada al llm para renombrar la interfaz de la que hereda el método. etc. etc.
 
 Para depurar mejor he implementado dos adaptadores al llm:
 * LlmEngineCacheAdapter: Utiliza una carpeta en local donde guarda las requests y responses en ficheros a modo de caché.

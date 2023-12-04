@@ -46,35 +46,34 @@ public class CodePlan {
 			List<CMIRelation> impacts=change.getCmi().getFormalChangeMayImpact();
     		for(CMIRelation impact:impacts) {
     			DependencyGraph affectedDg=impact.getDgc()==WhatD.D?d:dp;
-    			List<Node> afectedNodes=impact.getDgc()==WhatD.D?change.getOriginal():change.getRevised();
+    			List<Node> touchedNodes=impact.getDgc()==WhatD.D?change.getOriginal():change.getRevised();
     			
-    			Node afectedNode=afectedNodes.get(0);
+    			Node touched=touchedNodes.get(0);
 
 				
-				//TODO: Rel tiene nodeids, no nodes. Comparar o buscar los nodos en el dependency graph de otro forma
     			Stream<DependencyRelation> filter = affectedDg.getRels().stream()          
 				.filter(rel-> rel.getLabel()==impact.getDependencyLabel())
-				//.filter(rel-> rel.getOrigin().equals(b))
-				.filter(rel-> rel.getDestiny().equals(afectedNode.getId()));
-				;
+				.filter(rel-> rel.getOrigin().equals(touched.getId()));
+				
+
+    			//################### ONLY FOR DEBUG #####################
     			
     			Stream<DependencyRelation> copy = affectedDg.getRels().stream()          
     					.filter(rel-> rel.getLabel()==impact.getDependencyLabel())
-    					.filter(rel-> rel.getDestiny().equals(afectedNode.getId()));
-    			//List<DependencyRelation> debug=filter.collect(Collectors.toList());
-    			
+    					.filter(rel-> rel.getOrigin().equals(touched.getId()));
     			
     			List<Debug> debug=copy.map(dr->
     				new Debug(
-    						 d.findByNodeId(dr.getOrigin()).get()
-    						,d.findByNodeId(dr.getDestiny()).get()
+    						affectedDg.findByNodeId(dr.getOrigin()).get()
+    						,affectedDg.findByNodeId(dr.getDestiny()).get()
     						)
     				).collect(Collectors.toList());
-    			
+
+    			//################### ONLY FOR DEBUG #####################    			
     			
 				List<BlockRelationPair> collect = filter
 				.map((rel)->{
-					Optional<Node> node=affectedDg.findByNodeId(rel.getOrigin());
+					Optional<Node> node=affectedDg.findByNodeId(rel.getDestiny());
 					if(node.isPresent()) {
 						return new BlockRelationPair(node.get(),impact);
 					}
