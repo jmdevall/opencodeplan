@@ -1,74 +1,60 @@
 package jmdevall.opencodeplan.adapter.out.repository;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 
-import jmdevall.opencodeplan.application.port.out.repository.CuSource;
-import jmdevall.opencodeplan.application.port.out.repository.CuSourceMulti;
-import jmdevall.opencodeplan.application.port.out.repository.Repository;
-import jmdevall.opencodeplan.adapter.out.file.FileUtil;
-import jmdevall.opencodeplan.adapter.out.file.direxplorer.DirExplorer;
 import jmdevall.opencodeplan.adapter.out.file.direxplorer.Filter;
+import jmdevall.opencodeplan.application.port.out.repository.CuSource;
+import jmdevall.opencodeplan.application.port.out.repository.Repository;
 
 public class RepositoryFile implements Repository{
 
-	private File srcRoot;
-	private Filter filter;
+	/**
+	 * List of sourcefolder in order
+	 */
+	private List<SourceFolder> buildPath;
 	
 	private RepositoryFile(File srcRoot,Filter filter) {
 		super();
-		this.srcRoot = srcRoot;
-		this.filter = filter;
+		this.buildPath=Arrays.asList(new SourceFolder(srcRoot,filter,false));
 	}
 	
 	public static RepositoryFile newRepositoryFile(File srcRoot) {
-		return new RepositoryFile(srcRoot, defaultJavaExtensionFilter());
+		return new RepositoryFile(srcRoot, FiltersFactory.defaultJavaExtensionFilter());
 	}
 	
 	public static RepositoryFile newRepositoryFile(File srcRoot,Filter fileFilter) {
 		return new RepositoryFile(srcRoot, fileFilter);
 	}
 
-	public static Filter defaultJavaExtensionFilter() {
-		return (level, path, file) -> path.endsWith(".java");
-	}
-	
 	@Override
 	public File getSrcRoot() {
-		return this.srcRoot;
+		return this.buildPath.get(0).getSourceRoot();
 	}
 
 	@Override
 	public void save(String filepath, String newFileContent) {
-		File targetFile = new File(srcRoot, filepath);
-		File parent = targetFile.getParentFile();
-		if (parent != null && !parent.exists() && !parent.mkdirs()) {
-		   throw new IllegalStateException("Couldn't create dir: " + parent);
+		SourceFolder destSourceFolder=findFirstSourceFolderContainingExistingPath(filepath)
+				.orElse(this.buildPath.get(0));
+		
+		destSourceFolder.save(filepath, newFileContent);
+	}
+	
+	private Optional<SourceFolder> findFirstSourceFolderContainingExistingPath(String filepath) {
+		for(SourceFolder sourceFolder:buildPath) {
+			if(sourceFolder.contains(filepath)) {
+				return Optional.of(sourceFolder);
+			}
 		}
-		try {
-			Files.write(targetFile.toPath(), newFileContent.getBytes());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		return Optional.empty();
 	}
 
 	@Override
 	public CuSource getCuSource() {
-		CuSourceMulti cuSource=new CuSourceMulti();
-
-        new DirExplorer(
-        		filter,
-            
-            (level, subpathFromRoot, file) -> {
-               String javaFileContent= FileUtil.readFile(file.getAbsolutePath()) +"\n"; //bug de javaparser https://github.com/javaparser/javaparser/issues/2169
-               cuSource.add(subpathFromRoot, javaFileContent);
-
-         }).explore(srcRoot);
-        
-        return cuSource;
-
+		//TODO: explore multiples sourcefolders
+		return this.buildPath.get(0).getCuSource();
 	}
 
 }

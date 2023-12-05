@@ -1,4 +1,4 @@
-package jmdevall.opencodeplan.adapter.out;
+package jmdevall.opencodeplan.adapter.out.repository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -8,11 +8,10 @@ import java.nio.file.Paths;
 
 import org.junit.jupiter.api.Test;
 
-import jmdevall.opencodeplan.adapter.out.repository.RepositoryFile;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class RespositoryFileTest {
+public class RepositoryFileTest {
 
 	@Test
 	public void canSaveContentOfFile() throws Exception{
