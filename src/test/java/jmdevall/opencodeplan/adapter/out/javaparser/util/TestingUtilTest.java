@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
+import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
 
@@ -36,7 +37,7 @@ public class TestingUtilTest {
 
 	@Test
 	public void getPublicClassOfCompilationUnit() {
-		JavaParser javaparser=JavaParserFactory.newDefaultJavaParser(testUtil.getSrcRootTestFolder());
+		JavaParser javaparser=testUtil.getTestingJavaParser();
 		
 		ParseResult<CompilationUnit> cu=javaparser.parse(testUtil.readFileFromTestSource("/testbench/testutil/Multiclass.java"));
 		assertTrue(cu.isSuccessful());
@@ -46,7 +47,7 @@ public class TestingUtilTest {
 	
 	@Test
 	public void getFileNameOfCompilationUnitWithPackage() {
-		JavaParser javaparser=JavaParserFactory.newDefaultJavaParser(testUtil.getSrcRootTestFolder());
+		JavaParser javaparser=testUtil.getTestingJavaParser();
 		
 		String readFileFromTestSource = testUtil.readFileFromTestSource("/testbench/testutil/Multiclass.java");
 		ParseResult<CompilationUnit> cu=javaparser.parse(readFileFromTestSource);
@@ -57,7 +58,7 @@ public class TestingUtilTest {
 
 	@Test
 	public void getFileNameOfCompilationUnitWithoutPackage() {
-		JavaParser javaparser=JavaParserFactory.newDefaultJavaParser(testUtil.getSrcRootTestFolder());
+		JavaParser javaparser=testUtil.getTestingJavaParser();
 		
 		ParseResult<CompilationUnit> cu=javaparser.parse(testUtil.readFileFromTestSource("/CanRead.java"));
 		String filename=Util.getFileNameOfCompilationUnit(cu.getResult().get());

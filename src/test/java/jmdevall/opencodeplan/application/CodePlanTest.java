@@ -13,7 +13,7 @@ import jmdevall.opencodeplan.adapter.out.llm.cache.LlmEngineCacheAdapter;
 import jmdevall.opencodeplan.adapter.out.llm.debug.LlmEngineDebugAdapter;
 import jmdevall.opencodeplan.adapter.out.llm.ooba.LlmEngineOoba;
 import jmdevall.opencodeplan.adapter.out.oracle.OracleDefault;
-import jmdevall.opencodeplan.adapter.out.repository.RepositoryFile;
+import jmdevall.opencodeplan.adapter.out.repository.RepositoryMulpleFolders;
 import jmdevall.opencodeplan.application.port.out.llm.LlmEngine;
 import jmdevall.opencodeplan.application.port.out.oracle.Oracle;
 import jmdevall.opencodeplan.application.port.out.parser.DependencyGraphConstructor;
@@ -43,7 +43,7 @@ public class CodePlanTest {
 		CodePlan sut =new CodePlan(parser, dgConstructor, promptMaker, oracle,llm);
 
 		
-		Repository r=RepositoryFile.newRepositoryFile(new File("/home/vicuna/js/nemofinder/src/main/java"));
+		Repository r=RepositoryMulpleFolders.newFromSingleSourceRoot(new File("/home/vicuna/js/nemofinder/src/main/java"));
 		DeltaSeeds deltaSeed=new DeltaSeeds();
 		
 		Seed initialCommand=Seed.builder()
@@ -75,7 +75,7 @@ public class CodePlanTest {
 		CodePlan sut =new CodePlan(parser, dgConstructor, promptMaker, oracle,llm);
 
 		
-		Repository r=RepositoryFile.newRepositoryFile(new File("/home/vicuna/js/nemofinder/src/main/java"));
+		Repository r=RepositoryMulpleFolders.newFromSingleSourceRoot(new File("/home/vicuna/js/nemofinder/src/main/java"));
 		DeltaSeeds deltaSeed=new DeltaSeeds();
 		
 		Seed initialCommand=Seed.builder()
@@ -107,7 +107,7 @@ public class CodePlanTest {
 		CodePlan sut =new CodePlan(parser, dgConstructor, promptMaker, oracle,llm);
 
 		
-		Repository r=RepositoryFile.newRepositoryFile(new File("/home/vicuna/js/nemofinder/src/main/java"));
+		Repository r=RepositoryMulpleFolders.newFromSingleSourceRoot(new File("/home/vicuna/js/nemofinder/src/main/java"));
 		DeltaSeeds deltaSeed=new DeltaSeeds();
 		
 		Seed initialCommand=Seed.builder()

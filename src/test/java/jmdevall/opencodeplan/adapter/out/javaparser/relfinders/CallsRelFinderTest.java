@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import jmdevall.opencodeplan.adapter.out.javaparser.CuRelFinderVisitProcessor;
 import jmdevall.opencodeplan.adapter.out.javaparser.CuSourceProcessor;
 import jmdevall.opencodeplan.adapter.out.javaparser.util.TestingUtil;
-import jmdevall.opencodeplan.adapter.out.repository.RepositoryFile;
+import jmdevall.opencodeplan.adapter.out.repository.RepositoryMulpleFolders;
 import jmdevall.opencodeplan.application.port.out.repository.CuSource;
 import jmdevall.opencodeplan.domain.dependencygraph.DependencyRelation;
 
@@ -25,7 +25,7 @@ public class CallsRelFinderTest {
 		
 		CuRelFinderVisitProcessor vp=new CuRelFinderVisitProcessor(sut);
 		String startfolder=",testbench,testutil,calls".replaceAll(",", File.separator);
-		CuSource cuSource=RepositoryFile.newRepositoryFile(testUtil.getSrcRootTestFolder(),
+		CuSource cuSource=RepositoryMulpleFolders.newFromSingleSourceRoot(testUtil.getSrcRootTestFolder(),
 				(int level, String path, File file)->path.startsWith(startfolder))
 				.getCuSource();
 

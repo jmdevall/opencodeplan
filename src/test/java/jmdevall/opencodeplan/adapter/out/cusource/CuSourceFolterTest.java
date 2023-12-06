@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import jmdevall.opencodeplan.adapter.out.javaparser.util.TestingUtil;
 import jmdevall.opencodeplan.adapter.out.repository.CuSourceFactory;
-import jmdevall.opencodeplan.adapter.out.repository.RepositoryFile;
+import jmdevall.opencodeplan.adapter.out.repository.RepositoryMulpleFolders;
 import jmdevall.opencodeplan.application.port.out.repository.CuSource;
 
 public class CuSourceFolterTest {
@@ -19,7 +19,7 @@ public class CuSourceFolterTest {
 	public void canReadSourceCode() {
 		File root=testUtil.getSrcTestFile("/testbench");
 		//CuSourceFolder sut=CuSourceFolder.newDefaultJavaCuSourceFolder(testUtil.getSrcRootTestFolder());
-		CuSource sut=RepositoryFile.newRepositoryFile(root).getCuSource();
+		CuSource sut=RepositoryMulpleFolders.newFromSingleSourceRoot(root).getCuSource();
 		
 		String sourceCode=sut.getSource(sut.getPaths().iterator().next());
 		assertNotNull(sourceCode);

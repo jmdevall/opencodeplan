@@ -1,10 +1,10 @@
 package jmdevall.opencodeplan.application.port.out.repository;
 
-import java.io.File;
+import java.util.List;
 
 public interface Repository {
 
-	File getSrcRoot();
+	List<SourceFolder> getBuildPath();
 	
 	CuSource getCuSource();
 

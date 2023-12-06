@@ -1,7 +1,9 @@
-package jmdevall.opencodeplan.application.port.out.repository;
+package jmdevall.opencodeplan.application.port.out.repository.cusource;
 
 import java.util.Collection;
 import java.util.HashMap;
+
+import jmdevall.opencodeplan.application.port.out.repository.CuSource;
 
 /**
  * Source of compilation units

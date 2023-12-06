@@ -3,20 +3,23 @@ package jmdevall.opencodeplan.domain.promptmaker;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 
 import jmdevall.opencodeplan.adapter.out.javaparser.DependencyGraphConstructorJavaparser;
 import jmdevall.opencodeplan.adapter.out.javaparser.util.TestingUtil;
+import jmdevall.opencodeplan.adapter.out.repository.FiltersFactory;
 import jmdevall.opencodeplan.application.port.out.repository.CuSource;
 import jmdevall.opencodeplan.application.port.out.repository.Repository;
-import jmdevall.opencodeplan.domain.BI;
+import jmdevall.opencodeplan.application.port.out.repository.SourceFolder;
 import jmdevall.opencodeplan.domain.Fragment;
 import jmdevall.opencodeplan.domain.dependencygraph.DependencyGraph;
+import jmdevall.opencodeplan.domain.dependencygraph.LineColRange;
 import jmdevall.opencodeplan.domain.dependencygraph.Node;
 import jmdevall.opencodeplan.domain.dependencygraph.NodeId;
-import jmdevall.opencodeplan.domain.dependencygraph.LineColRange;
 import jmdevall.opencodeplan.domain.instruction.InstructuionNatural;
 import jmdevall.opencodeplan.domain.plangraph.PlanGraph;
 import lombok.extern.slf4j.Slf4j;
@@ -34,9 +37,10 @@ public class ContextTest {
 			this.srcRoot = srcRoot;
 		}
 
+		
 		@Override
-		public File getSrcRoot() {
-			return this.srcRoot;
+		public List<SourceFolder> getBuildPath() {
+			return Arrays.asList(new SourceFolder(srcRoot,FiltersFactory.allFiles(),true));
 		}
 
 		@Override
@@ -49,8 +53,8 @@ public class ContextTest {
 			// TODO Auto-generated method stub
 			return null;
 		}
-		
 	}
+
 	private TestingUtil testUtil=new TestingUtil();
 
 	

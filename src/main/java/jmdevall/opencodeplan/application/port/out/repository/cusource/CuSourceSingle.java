@@ -1,7 +1,9 @@
-package jmdevall.opencodeplan.application.port.out.repository;
+package jmdevall.opencodeplan.application.port.out.repository.cusource;
 
 import java.util.Arrays;
 import java.util.Collection;
+
+import jmdevall.opencodeplan.application.port.out.repository.CuSource;
 
 public class CuSourceSingle implements CuSource {
 

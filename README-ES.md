@@ -84,6 +84,6 @@ Por supuesto, si quieres colaborar, participar, sugerir cosas, preguntar lo que 
 - [x] Primer test funcionando
 - [ ] Mejor documentación y explicación para que la comunidad pueda probarlo
 - [ ] El algoritmo se ejecuta sobre otro proyecto java. Quizas debería crear una carpeta dentro del proyecto tal que se pudieran bajar los proyectos de prueba usando git (actualmente solo tengo en otra carpeta en local y para cada prueba tengo que andar restaurando el repositorio a mano.
-- [ ] Actualmente el objeto repository solo puede manejar una única carpeta de fuentes para el proyecto. Debería ser capaz de manejar multiples directorios de fuentes, por ejemplo, en proyectos maven hay una carpeta src/main/java y otra src/test/java. Los cambios que realiza el algoritmo afectan a clases de ambas.
+- [x] Actualmente el objeto repository solo puede manejar una única carpeta de fuentes para el proyecto. Debería ser capaz de manejar multiples directorios de fuentes, por ejemplo, en proyectos maven hay una carpeta src/main/java y otra src/test/java. Los cambios que realiza el algoritmo afectan a clases de ambas.
 - [ ] Implementar el oracle. Si es sobre un proyecto maven, debería ser capaz de invocarlo para que pase los tests y el resultado de los tests pasárselo al prompt.
 - [ ] El paper en los modificaciones de métodos habla de hacer un análisis de "escaping object"

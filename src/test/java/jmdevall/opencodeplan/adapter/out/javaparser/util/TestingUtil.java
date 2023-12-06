@@ -8,13 +8,16 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.stream.Collectors;
 
 import com.github.javaparser.JavaParser;
 
 import jmdevall.opencodeplan.adapter.out.javaparser.JavaParserFactory;
-import jmdevall.opencodeplan.adapter.out.repository.RepositoryFile;
+import jmdevall.opencodeplan.adapter.out.repository.FiltersFactory;
+import jmdevall.opencodeplan.adapter.out.repository.RepositoryMulpleFolders;
 import jmdevall.opencodeplan.application.port.out.repository.Repository;
+import jmdevall.opencodeplan.application.port.out.repository.SourceFolder;
 
 public class TestingUtil {
 	
@@ -43,15 +46,19 @@ public class TestingUtil {
 		}
 		return srcTestRoot;
 	}
+	
+	public SourceFolder getSrcTestSourceFolder() {
+		return new SourceFolder(getSrcRootTestFolder(),FiltersFactory.defaultJavaExtensionFilter(),true);
+	}
 
 	public Repository getTestingRepository(String startfolder) {
 		return
-				RepositoryFile.newRepositoryFile(getSrcRootTestFolder(),
+				RepositoryMulpleFolders.newFromSingleSourceRoot(getSrcRootTestFolder(),
 				(int level, String path, File file)->path.startsWith(startfolder));
 	}
 	
 	public JavaParser getTestingJavaParser() {
-		return JavaParserFactory.newDefaultJavaParser(getSrcRootTestFolder());
+		return JavaParserFactory.newDefaultJavaParser(Arrays.asList(getSrcTestSourceFolder()));
 	}
 	
 

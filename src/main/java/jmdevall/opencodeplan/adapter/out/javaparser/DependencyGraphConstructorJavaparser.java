@@ -48,7 +48,7 @@ public class DependencyGraphConstructorJavaparser implements DependencyGraphCons
 		CuSource cuSource=repository.getCuSource();
 		
 		AstConstructorJavaParser astcreator=new AstConstructorJavaParser(cuSource);
-		JavaParser parser=JavaParserFactory.newDefaultJavaParser(repository.getSrcRoot());
+		JavaParser parser=JavaParserFactory.newDefaultJavaParser(repository.getBuildPath());
 		CuSourceProcessor.process(cuSource, astcreator,parser);
 		HashMap<String, Node> forest=astcreator.getForest();
 

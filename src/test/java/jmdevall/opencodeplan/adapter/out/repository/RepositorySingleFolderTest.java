@@ -9,7 +9,9 @@ import java.nio.file.Files;
 
 import org.junit.jupiter.api.Test;
 
-public class SourceFolderTest {
+import jmdevall.opencodeplan.application.port.out.repository.SourceFolder;
+
+public class RepositorySingleFolderTest {
 
 	@Test
 	public void giveIfTheSourceFolderContainsFileOrNot() throws IOException {
@@ -17,8 +19,9 @@ public class SourceFolderTest {
 		new File(tempFolder,"holamundo.txt").createNewFile();
 		
 		SourceFolder sourceFolder=new SourceFolder(tempFolder,FiltersFactory.allFiles(),true);
+		RepositorySingleFolder sut=new RepositorySingleFolder(sourceFolder);
 		
-		assertTrue(sourceFolder.contains("holamundo.txt"));
-		assertFalse(sourceFolder.contains("esteno.txt"));
+		assertTrue(sut.contains("holamundo.txt"));
+		assertFalse(sut.contains("esteno.txt"));
 	}
 }
