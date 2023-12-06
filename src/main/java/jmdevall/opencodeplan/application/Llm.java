@@ -1,7 +1,7 @@
 package jmdevall.opencodeplan.application;
 
 import jmdevall.opencodeplan.application.port.out.llm.LlmEngine;
-import jmdevall.opencodeplan.domain.Fragment;
+import jmdevall.opencodeplan.domain.LlmResult;
 
 public class Llm {
 
@@ -17,10 +17,21 @@ public class Llm {
 	 * @param prompt
 	 * @return
 	 */
-	public String invoke(String prompt) {
+	public LlmResult invoke(String prompt) {
 		String result = llmEngine.generate(prompt);
 
-		return extractOnlyCodeOfResponse(result);
+		String codeExtracted = extractOnlyCodeOfResponse(result);
+		if(!codeExtracted.isBlank()) {
+			return LlmResult.newOk(codeExtracted);
+		}
+		if(resultContainsNoChangesString(result)) {
+			return LlmResult.newNochange();
+		}
+		return LlmResult.newUnknown(result);
+	}
+
+	public boolean resultContainsNoChangesString(String result) {
+		return result.toLowerCase().contains("no changes");
 	}
 
 	public String extractOnlyCodeOfResponse(String input) {

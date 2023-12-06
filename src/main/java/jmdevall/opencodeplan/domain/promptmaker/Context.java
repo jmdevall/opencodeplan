@@ -92,7 +92,11 @@ public class Context {
 		
 		for(DependencyRelation rel:rels) {
 			if(method.getId().getRange().contains(rel.getOrigin().getRange())) {
-				Node nodeRelacionado=d.findByNodeId(rel.getDestiny()).get();
+				Optional<Node> findByNodeId = d.findByNodeId(rel.getDestiny());
+				if(findByNodeId.isEmpty()) {
+					System.out.println("foo");
+				}
+				Node nodeRelacionado=findByNodeId.get();
 				affectedBlocks.add(nodeRelacionado.getId());
 			}
 		}

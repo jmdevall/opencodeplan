@@ -13,6 +13,7 @@ import jmdevall.opencodeplan.application.port.out.repository.Repository;
 import jmdevall.opencodeplan.domain.BI;
 import jmdevall.opencodeplan.domain.BlockRelationPair;
 import jmdevall.opencodeplan.domain.Fragment;
+import jmdevall.opencodeplan.domain.LlmResult;
 import jmdevall.opencodeplan.domain.dependencygraph.DependencyGraph;
 import jmdevall.opencodeplan.domain.dependencygraph.DependencyRelation;
 import jmdevall.opencodeplan.domain.dependencygraph.Node;
@@ -99,12 +100,22 @@ public class CodePlan {
     }
   
    
-    private void merge(Repository r,Fragment fragment, String llmrevised, Node b){
-    	String curevised=fragment.merge(llmrevised);
-    	Node revisedCuNodeParsed=parser.parse(curevised);
-    	fragment.setRevised(revisedCuNodeParsed);
+    private void merge(Repository r,Fragment fragment, LlmResult llmrevised, Node b){
+    	if(llmrevised.isNochanges()) {
+    		fragment.setRevised(fragment.getOriginalcu());
+    		return; //no need to do nothing
+    	}
+    	if(llmrevised.isOk()) {
+	    	String curevised=fragment.merge(llmrevised.getNewcode());
+	    	Node revisedCuNodeParsed=parser.parse(curevised);
+	    	fragment.setRevised(revisedCuNodeParsed);
+	    	
+	    	r.save(b.getId().getFile(), curevised);
+    	}
+    	else {
+    		llmrevised.getLlmresult(); //TODO: what to do???
+    	}
     	
-    	r.save(b.getId().getFile(), curevised);
     }
     
     /*
@@ -152,7 +163,7 @@ public class CodePlan {
             Context context = Context.gatherContext(bi.getB(), r, d ,g);
             // Third step: use the LLM to get edited code fragment
             String prompt = promptMaker.makePrompt(fragment, bi.getI(), context);
-            String llmrevised = llm.invoke(prompt);
+            LlmResult llmrevised = llm.invoke(prompt);
             // Fourth step: merge the updated code fragment into R
 
             merge(r,fragment, llmrevised, bi.getB());

@@ -45,8 +45,12 @@ public class DependencyGraph {
     	if(!forest.containsKey(nodeid.getFile())) {
     		return Optional.empty();
     	}
-    	Node cu=forest.get(nodeid.getFile());
-    	return cu.toStream().filter(n->n.getId().equals(nodeid)).findFirst();
+    	Node cu=forest.get(nodeid.getFile());  //TODO: bug. el nodo de tipo field se ha recortado y no encuentra
+    	Optional<Node> findFirst = cu.toStream().filter(n->n.getId().equals(nodeid)).findFirst();
+    	if(findFirst.isEmpty()) {
+    		System.out.println("no encontrado");
+    	}
+		return findFirst;
     }
     
     public Optional<Node> findFinalNodeContaining(NodeId nodeid){

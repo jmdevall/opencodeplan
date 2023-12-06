@@ -1,6 +1,7 @@
 package jmdevall.opencodeplan;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
@@ -31,4 +32,14 @@ public class LlmTest {
 		String actual=sut.extractOnlyCodeOfResponse(posibleOutputOfLlm);
 		assertEquals(expected,actual);
 	}
+	
+	String exampleRealOutput="The existing code is already updated according to the earlier code changes. Therefore, no changes are required in the \"Code to be Changed Next\".";
+
+	@Test
+	public void whatifNoCode() {
+		Llm sut=new Llm(null);
+		boolean nochanges=sut.resultContainsNoChangesString(exampleRealOutput);
+		assertTrue(nochanges);
+	}
+	
 }

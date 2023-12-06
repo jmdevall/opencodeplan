@@ -77,11 +77,7 @@ public class CodePlanTest {
 		
 		CodePlan sut =new CodePlan(parser, dgConstructor, promptMaker, oracle,llm);
 
-		SourceFolder srcmain=new SourceFolder(new File("/home/vicuna/js/nemofinder/src/main/java"), FiltersFactory.defaultJavaExtensionFilter(), false);
-		SourceFolder srctest=new SourceFolder(new File("/home/vicuna/js/nemofinder/src/test/java"), FiltersFactory.defaultJavaExtensionFilter(), true);
-		
-		
-		Repository r=RepositoryMulpleFolders.newRepositoryMultipleFolders(Arrays.asList(srcmain,srctest));
+		Repository r = getNemoFinderProjectRepository();
 		DeltaSeeds deltaSeed=new DeltaSeeds();
 		
 		Seed initialCommand=Seed.builder()
@@ -98,6 +94,15 @@ public class CodePlanTest {
 		
 		sut.codePlan(r,deltaSeed);
 	}
+
+
+	private Repository getNemoFinderProjectRepository() {
+		SourceFolder srcmain=new SourceFolder(new File("/home/vicuna/js/nemofinder/src/main/java"), FiltersFactory.defaultJavaExtensionFilter(), false);
+		SourceFolder srctest=new SourceFolder(new File("/home/vicuna/js/nemofinder/src/test/java"), FiltersFactory.defaultJavaExtensionFilter(), true);
+		
+		Repository r=RepositoryMulpleFolders.newRepositoryMultipleFolders(Arrays.asList(srcmain,srctest));
+		return r;
+	}
 	
 
 	@Test
@@ -111,9 +116,9 @@ public class CodePlanTest {
 		Llm llm=newTestingLlm();
 		
 		CodePlan sut =new CodePlan(parser, dgConstructor, promptMaker, oracle,llm);
-
 		
-		Repository r=RepositoryMulpleFolders.newFromSingleSourceRoot(new File("/home/vicuna/js/nemofinder/src/main/java"));
+		Repository r=getNemoFinderProjectRepository();
+
 		DeltaSeeds deltaSeed=new DeltaSeeds();
 		
 		Seed initialCommand=Seed.builder()

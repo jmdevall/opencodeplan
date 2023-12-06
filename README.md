@@ -154,6 +154,7 @@ Of course, if you want to collaborate, participate, suggest things, ask whatever
 **TODO LIST**
 
 - [x] First test running
+- [ ] bug in constructed-by relations in fields (fields are pruned. Search alternative
 - [ ] Better documentation and explanation so the community can test it
 - [ ] The algorithm is executed on another java project. Maybe I should create a folder within the project so that the test projects could be downloaded using git (currently I only have it in another folder locally and for each test I have to restore the repository by hand.
 - [x] Currently the repository object can only handle a single source folder for the project. It should be able to handle multiple source directories, for example in maven projects there is a folder src/main/java and another src/test/java. The changes made by the algorithm affect classes of both.
