@@ -51,13 +51,12 @@ public class RepositorySingleFolder implements Repository{
         		this.sourceFolder.getFilter(),
             
             (level, subpathFromRoot, file) -> {
-               String javaFileContent= FileUtil.readFile(file.getAbsolutePath()) +"\n"; //bug de javaparser https://github.com/javaparser/javaparser/issues/2169
+               String javaFileContent= FileUtil.readFile(file.getAbsolutePath());
                cuSource.add(subpathFromRoot, javaFileContent);
 
          }).explore(this.getSourceFolder().getSourceRoot());
         
         return cuSource;
-
 	}
 
 	@Override

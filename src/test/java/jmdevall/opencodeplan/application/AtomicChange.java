@@ -24,8 +24,8 @@ import com.github.javaparser.JavaParser;
 
 import jmdevall.opencodeplan.adapter.out.javaparser.AstConstructorJavaParser;
 import jmdevall.opencodeplan.adapter.out.javaparser.CuSourceProcessor;
-import jmdevall.opencodeplan.adapter.out.repository.CuSourceFactory;
 import jmdevall.opencodeplan.application.port.out.repository.CuSource;
+import jmdevall.opencodeplan.application.port.out.repository.cusource.CuSourceFactory;
 import jmdevall.opencodeplan.domain.dependencygraph.Node;
 import jmdevall.opencodeplan.domain.promptmaker.DiffUtil;
 import lombok.extern.slf4j.Slf4j;

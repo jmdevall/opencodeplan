@@ -1,7 +1,6 @@
-package jmdevall.opencodeplan.adapter.out.repository;
+package jmdevall.opencodeplan.application.port.out.repository.cusource;
 
 import jmdevall.opencodeplan.application.port.out.repository.CuSource;
-import jmdevall.opencodeplan.application.port.out.repository.cusource.CuSourceSingle;
 import lombok.extern.slf4j.Slf4j;
 
 /**

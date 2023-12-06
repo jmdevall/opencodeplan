@@ -16,6 +16,7 @@ import jmdevall.opencodeplan.adapter.out.javaparser.relfinders.UsesRelFinder;
 import jmdevall.opencodeplan.application.port.out.parser.DependencyGraphConstructor;
 import jmdevall.opencodeplan.application.port.out.repository.CuSource;
 import jmdevall.opencodeplan.application.port.out.repository.Repository;
+import jmdevall.opencodeplan.application.port.out.repository.cusource.CuSourceFixBug;
 import jmdevall.opencodeplan.domain.dependencygraph.DependencyGraph;
 import jmdevall.opencodeplan.domain.dependencygraph.DependencyRelation;
 import jmdevall.opencodeplan.domain.dependencygraph.Node;
@@ -45,7 +46,7 @@ public class DependencyGraphConstructorJavaparser implements DependencyGraphCons
 	@Override
 	public DependencyGraph constructDependencyGraph(Repository repository) {
 		
-		CuSource cuSource=repository.getCuSource();
+		CuSource cuSource=new CuSourceFixBug(repository.getCuSource());
 		
 		AstConstructorJavaParser astcreator=new AstConstructorJavaParser(cuSource);
 		JavaParser parser=JavaParserFactory.newDefaultJavaParser(repository.getBuildPath());

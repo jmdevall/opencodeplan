@@ -17,7 +17,8 @@ public class CuSourceProcessor {
 		
 		for(String filepath:cuSource.getPaths()) {
         	
-            ParseResult<CompilationUnit> compilationUnitPr = javaparser.parse(cuSource.getSource(filepath));
+            String source = cuSource.getSource(filepath);
+			ParseResult<CompilationUnit> compilationUnitPr = javaparser.parse(source);
             if(compilationUnitPr.isSuccessful()) {
          	   com.github.javaparser.ast.Node rootnode=compilationUnitPr.getResult().get().findRootNode();
          	   CompilationUnit cu=Util.getCompilationUnit(rootnode);

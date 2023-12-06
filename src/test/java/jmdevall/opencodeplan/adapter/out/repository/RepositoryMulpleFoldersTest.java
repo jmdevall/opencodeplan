@@ -10,6 +10,8 @@ import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
 
+import jmdevall.opencodeplan.adapter.out.javaparser.util.TestingUtil;
+import jmdevall.opencodeplan.application.port.out.repository.CuSource;
 import jmdevall.opencodeplan.application.port.out.repository.SourceFolder;
 import lombok.extern.slf4j.Slf4j;
 
@@ -49,22 +51,30 @@ public class RepositoryMulpleFoldersTest {
 		
 
 		SourceFolder sf1=new SourceFolder(srcRoot1,FiltersFactory.defaultJavaExtensionFilter(),false);
-		SourceFolder sf2=new SourceFolder(srcRoot1,FiltersFactory.defaultJavaExtensionFilter(),true);
+		SourceFolder sf2=new SourceFolder(srcRoot2,FiltersFactory.defaultJavaExtensionFilter(),true);
 		
 		RepositorySingleFolder onlySf2=new RepositorySingleFolder(sf2);
 		
-		onlySf2.save("untest", "test.java");
+		onlySf2.save("/test.java", "untest");
 		
 		RepositoryMulpleFolders sut=RepositoryMulpleFolders.newRepositoryMultipleFolders(
 				Arrays.asList(sf1,sf2));
 
-		String source=sut.getCuSource().getSource("test.java");
+		String source=sut.getCuSource().getSource("/test.java");
 		
 		assertNotNull(source);
 		assertEquals("untest",source);
-		
-		
 	}
 	
+	TestingUtil testUtil=new TestingUtil();
+	
+	@Test
+	public void canReadSourceCode() {
+		File root=testUtil.getSrcTestFile("/testbench");
+		CuSource sut=RepositoryMulpleFolders.newFromSingleSourceRoot(root).getCuSource();
+		
+		String sourceCode=sut.getSource(sut.getPaths().iterator().next());
+		assertNotNull(sourceCode);
+	}
 	
 }

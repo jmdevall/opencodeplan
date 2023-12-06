@@ -12,6 +12,7 @@ import jmdevall.opencodeplan.domain.dependencygraph.Node;
 import jmdevall.opencodeplan.domain.dependencygraph.NodeId;
 import jmdevall.opencodeplan.domain.dependencygraph.LineColRange;
 import jmdevall.opencodeplan.application.port.out.repository.CuSource;
+import jmdevall.opencodeplan.application.port.out.repository.cusource.CuSourceFixBug;
 import jmdevall.opencodeplan.domain.dependencygraph.IndexPosRange;
 import lombok.extern.slf4j.Slf4j;
 
@@ -22,7 +23,7 @@ public class AstConstructorJavaParser implements CuProcessor{
 	
 	public AstConstructorJavaParser(CuSource cuSource) {
 		forest=new HashMap<String,Node>();
-		this.cuSource=cuSource;
+		this.cuSource=new CuSourceFixBug(cuSource);
 	}
 
 	private jmdevall.opencodeplan.domain.dependencygraph.Node toDomainNode(com.github.javaparser.ast.Node node){
@@ -44,7 +45,15 @@ public class AstConstructorJavaParser implements CuProcessor{
 		LineColRange range = nodeId.getRange();
 		IndexPosRange rrange=absoluterange(range, cucontent);
 
-		String nodecontent = cucontent.substring(rrange.getBegin(), rrange.getEnd());
+		
+		String nodecontent;
+		try {
+			nodecontent = cucontent.substring(rrange.getBegin(), rrange.getEnd());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			nodecontent="";
+		}
 
 		Node domainNode=Node.builder()
     		.id(nodeId)
