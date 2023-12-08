@@ -75,8 +75,9 @@ public class AstConstructorJavaParser implements CuProcessor{
         return domainNode;
     }
 	
-	private String notInterestedTypes[]= {"FieldDeclaration","LambdaExpr"};
-	
+	//private String notInterestedTypes[]= {"FieldDeclaration","LambdaExpr"};
+	private String notInterestedTypes[]= {}; //TODO: 
+
 	private boolean isInterestedType(String type) {
 		for(String nitype: notInterestedTypes) {
 			if(nitype.equals(type)) {
