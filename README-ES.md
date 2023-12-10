@@ -21,6 +21,8 @@ Actualmente solo dispongo de una tarjeta gráfica doméstica de 8 Gb por lo que 
 
 python server.py --model phind-codellama-34b-v2.Q5_K_M.gguf --threads 12 --n_ctx 16384 --api --verbose
 
+otro modelo usando exllama:
+python server.py --model TheBloke_Mistral-7B-Code-16K-qlora-GPTQ --api --verbose
 Una vez arrancado ooba levanta el api en el puerto 5000
 
 ATENCIÓN: este proyecto aún está incompleto. No es funcional. Sin embargo, se pueden ver ciertas partes y hay componentes sueltos.
@@ -86,5 +88,6 @@ Por supuesto, si quieres colaborar, participar, sugerir cosas, preguntar lo que 
 - [ ] Mejor documentación y explicación para que la comunidad pueda probarlo
 - [ ] El algoritmo se ejecuta sobre otro proyecto java. Quizas debería crear una carpeta dentro del proyecto tal que se pudieran bajar los proyectos de prueba usando git (actualmente solo tengo en otra carpeta en local y para cada prueba tengo que andar restaurando el repositorio a mano.
 - [x] Actualmente el objeto repository solo puede manejar una única carpeta de fuentes para el proyecto. Debería ser capaz de manejar multiples directorios de fuentes, por ejemplo, en proyectos maven hay una carpeta src/main/java y otra src/test/java. Los cambios que realiza el algoritmo afectan a clases de ambas.
+- [ ] Al arrancar un modelo en ooba con exllama, parece que ooba expone en el puerto 5000 otro api diferente. Segun parece es el api compatible con openai.Sería recomendable en ese caso hacer otra implementación del servicio rest compatible con openai.
 - [ ] Implementar el oracle. Si es sobre un proyecto maven, debería ser capaz de invocarlo para que pase los tests y el resultado de los tests pasárselo al prompt.
 - [ ] El paper en los modificaciones de métodos habla de hacer un análisis de "escaping object"

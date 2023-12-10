@@ -158,6 +158,7 @@ Of course, if you want to collaborate, participate, suggest things, ask whatever
 - [ ] Better documentation and explanation so the community can test it
 - [ ] The algorithm is executed on another java project. Maybe I should create a folder within the project so that the test projects could be downloaded using git (currently I only have it in another folder locally and for each test I have to restore the repository by hand.
 - [x] Currently the repository object can only handle a single source folder for the project. It should be able to handle multiple source directories, for example in maven projects there is a folder src/main/java and another src/test/java. The changes made by the algorithm affect classes of both.
+- [ ] When starting a model in ooba with exllama, it seems that ooba exposes another different api in port 5000. It seems that it is the api compatible with openai. It would be advisable in that case to make another implementation of the rest service compatible with openai.
 - [ ] Implement the oracle. If it is on a maven project, you should be able to invoke it to pass the tests and pass the results of the tests to the prompt.
 - [ ] The paper in the method modifications talks about doing an "escaping object" analysis
 
