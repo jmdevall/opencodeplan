@@ -1,6 +1,6 @@
 Proof of concept-implementation of this paper in java: https://huggingface.co/papers/2309.12499
 
-**NEWS**: 2023/12/04 I continue correcting bugs. The llm is invoked to recover the parts to be embedded in the repository and the temporary context is obtained for a second invocation and a third etc... There was a bug in the getAffectedBlocks method that was taking the destination node instead of the source node to get the affected nodes.
+**NEWS**: 12/2023/10 I have tried using the 7b model TheBloke_Mistral-7B-codealpaca-lora-GPTQ with exllama and the openai-compatible api provided by ooba but the model from what I see is not good enough. I have tried to try the new magiccode model that has just been released but it gives me a strange error saying that it cannot accommodate the necessary memory. It's strange because other models with 7B parameters do fit on my 8Gb GPU... I will try the ggub version, but from what I see on the forums it also has some problems
 
 You can try the test jmdevall.opencodeplan.application.CodePlanTest.another3TestCodePlan which is working: just try renaming a method. As a consequence, it makes a second call to llm to rename the interface from which the method inherits. etc etc
 
@@ -158,7 +158,7 @@ Of course, if you want to collaborate, participate, suggest things, ask whatever
 - [ ] Better documentation and explanation so the community can test it
 - [ ] The algorithm is executed on another java project. Maybe I should create a folder within the project so that the test projects could be downloaded using git (currently I only have it in another folder locally and for each test I have to restore the repository by hand.
 - [x] Currently the repository object can only handle a single source folder for the project. It should be able to handle multiple source directories, for example in maven projects there is a folder src/main/java and another src/test/java. The changes made by the algorithm affect classes of both.
-- [ ] When starting a model in ooba with exllama, it seems that ooba exposes another different api in port 5000. It seems that it is the api compatible with openai. It would be advisable in that case to make another implementation of the rest service compatible with openai.
+- [x] When starting a model in ooba with exllama, it seems that ooba exposes another different api in port 5000. It seems that it is the api compatible with openai. It would be advisable in that case to make another implementation of the rest service compatible with openai.
 - [ ] Implement the oracle. If it is on a maven project, you should be able to invoke it to pass the tests and pass the results of the tests to the prompt.
 - [ ] The paper in the method modifications talks about doing an "escaping object" analysis
 

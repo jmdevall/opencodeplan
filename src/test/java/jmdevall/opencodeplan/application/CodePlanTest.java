@@ -13,6 +13,7 @@ import jmdevall.opencodeplan.adapter.out.javaparser.ParserJavaParser;
 import jmdevall.opencodeplan.adapter.out.llm.cache.LlmEngineCacheAdapter;
 import jmdevall.opencodeplan.adapter.out.llm.debug.LlmEngineDebugAdapter;
 import jmdevall.opencodeplan.adapter.out.llm.ooba.LlmEngineOoba;
+import jmdevall.opencodeplan.adapter.out.llm.openai.LlmEngineOpenai;
 import jmdevall.opencodeplan.adapter.out.oracle.OracleDefault;
 import jmdevall.opencodeplan.adapter.out.repository.FiltersFactory;
 import jmdevall.opencodeplan.adapter.out.repository.RepositoryMulpleFolders;
@@ -140,7 +141,8 @@ public class CodePlanTest {
 	private Llm newTestingLlm() {
 		try {
 			File cacheFolder=new File("/home/vicuna/temp/cachellm");
-			LlmEngine ooba=new LlmEngineOoba("http://localhost:5000/api");
+			//LlmEngine ooba=new LlmEngineOoba("http://localhost:5000/api");
+			LlmEngine ooba=new LlmEngineOpenai("http://localhost:5000", "isthesame", "foo");
 			LlmEngine engine=new LlmEngineDebugAdapter(
 				new LlmEngineCacheAdapter(ooba,cacheFolder)
 			);

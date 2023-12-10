@@ -1,7 +1,7 @@
 Prueba de concepto-implementation de este paper en java: https://huggingface.co/papers/2309.12499
 
 
-**NOVEDADES**: 2023/12/04 Sigo corrigiendo bugs. Se invoca el llm para recuperar las partes a incrustar en el repositorio y se consigue obtener el contexto temporal para una segunda invocación y una tercera etc....Había un bug en el método getAffectedBlocks que estaba cogiendo el nodo destino en lugar del nodo origen para obtener los nodos afectados.
+**NOVEDADES**: 2023/12/10 He probado usando modelo de 7b TheBloke_Mistral-7B-codealpaca-lora-GPTQ con exllama y el api compatible con openai que suministra ooba pero el modelo por lo que veo no es lo suficientemente bueno. He intentado probar el modelo nuevo que acaba de salir magiccode pero este me da un error extraño como diciendo que no puede alojar la memoria necesaria. Es raro porque otros modelos de 7B de parámetros si me caben en mi GPU de 8Gb... Probaré la versión ggub, pero por lo que veo en los foros también tiene algun problema
 
 Puedes probar el test jmdevall.opencodeplan.application.CodePlanTest.otro3TestCodePlan que está funcionando: simplemente trata de renombrar un método. Como consecuencia hace una segunda llamada al llm para renombrar la interfaz de la que hereda el método. etc. etc.
 
@@ -88,6 +88,6 @@ Por supuesto, si quieres colaborar, participar, sugerir cosas, preguntar lo que 
 - [ ] Mejor documentación y explicación para que la comunidad pueda probarlo
 - [ ] El algoritmo se ejecuta sobre otro proyecto java. Quizas debería crear una carpeta dentro del proyecto tal que se pudieran bajar los proyectos de prueba usando git (actualmente solo tengo en otra carpeta en local y para cada prueba tengo que andar restaurando el repositorio a mano.
 - [x] Actualmente el objeto repository solo puede manejar una única carpeta de fuentes para el proyecto. Debería ser capaz de manejar multiples directorios de fuentes, por ejemplo, en proyectos maven hay una carpeta src/main/java y otra src/test/java. Los cambios que realiza el algoritmo afectan a clases de ambas.
-- [ ] Al arrancar un modelo en ooba con exllama, parece que ooba expone en el puerto 5000 otro api diferente. Segun parece es el api compatible con openai.Sería recomendable en ese caso hacer otra implementación del servicio rest compatible con openai.
+- [x] Al arrancar un modelo en ooba con exllama, parece que ooba expone en el puerto 5000 otro api diferente. Segun parece es el api compatible con openai.Sería recomendable en ese caso hacer otra implementación del servicio rest compatible con openai.
 - [ ] Implementar el oracle. Si es sobre un proyecto maven, debería ser capaz de invocarlo para que pase los tests y el resultado de los tests pasárselo al prompt.
 - [ ] El paper en los modificaciones de métodos habla de hacer un análisis de "escaping object"
