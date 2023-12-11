@@ -140,13 +140,16 @@ public class CodePlanTest {
 	
 	private Llm newTestingLlm() {
 		try {
-			File cacheFolder=new File("/home/vicuna/temp/cachellm");
+			
+			File cacheFolder=new File("/home/vicuna/.opencodeplan/cache");
+			File debugFolder=new File("/home/vicuna/.opencodeplan/debug");
+			
 			//LlmEngine ooba=new LlmEngineOoba("http://localhost:5000/api");
 			LlmEngine ooba=new LlmEngineOpenai("http://localhost:5000", "isthesame", "foo");
-			LlmEngine engine=new LlmEngineDebugAdapter(
-				new LlmEngineCacheAdapter(ooba,cacheFolder)
-			);
-			Llm llm=new Llm(engine);
+			LlmEngine cache=new LlmEngineCacheAdapter(ooba,cacheFolder);
+			LlmEngine debug=new LlmEngineDebugAdapter(cache,debugFolder);
+			
+			Llm llm=new Llm(debug);
 			return llm;
 		} catch (IOException e) {
 			throw new IllegalStateException();

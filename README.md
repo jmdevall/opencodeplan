@@ -1,35 +1,46 @@
 Proof of concept-implementation of this paper in java: https://huggingface.co/papers/2309.12499
 
-**NEWS**: 12/2023/10 I have tried using the 7b model TheBloke_Mistral-7B-codealpaca-lora-GPTQ with exllama and the openai-compatible api provided by ooba but the model from what I see is not good enough. I have tried to try the new magiccode model that has just been released but it gives me a strange error saying that it cannot accommodate the necessary memory. It's strange because other models with 7B parameters do fit on my 8Gb GPU... I will try the ggub version, but from what I see on the forums it also has some problems
-
-You can try the test jmdevall.opencodeplan.application.CodePlanTest.another3TestCodePlan which is working: just try renaming a method. As a consequence, it makes a second call to llm to rename the interface from which the method inherits. etc etc
-
-To debug better I have implemented two adapters to the llm:
-* LlmEngineCacheAdapter: Uses a local folder where it saves requests and responses in files as a cache.
-* LlmEngineDebugAdapter: saves each of the requests/responses made to the llm in a temporary system folder.
-
-Issues: The code responsible for mixing (which is responsible for mixing the revised code into the pruned code). I had not contemplated that the llm would try to change some lines of some unaffected method. The paper does not specify how to do this step.
-
-I am doing the tests locally, starting oobatextgen, using different models. I don't know how the state of the art is right now.
-
-https://huggingface.co/TheBloke/Phind-CodeLlama-34B-v2-GGUF -> Soooo slow
-TheBloke_Mistral-7B-Code-16K-qlora-GPTQ" that fits on the GPU -> Not good enough but at least it fits on the GPU
+**NEWS**: 12/2023/11 I made a very simple command line argument UI to test algorithm applyed over maven projects. It spect a config file "opencodeplan.properties" in some normal locations and must be run in the root of a maven project. It expect to found 2 source folders: src/main/java and src/test/java in the current folder in wich is run. Now the default working folder is ~/.opencodeplan
 
 
-I currently only have an 8Gb domestic graphics card so I can only run quantized models with 7B parameters on the GPU. I think it is insufficient, so it would be advisable to go for more advanced 33B models, which would require at least a 24Gb card...
+I am doing the tests locally, starting oobatextgen, using different models. I don't know how the state of the art is right now... could be magicoder but llamacpp do not work and GPTQ model has some problem in my GPU.
 
-python server.py --model phind-codellama-34b-v2.Q5_K_M.gguf --threads 12 --n_ctx 16384 --api --verbose
+Getting started
+===============
 
-Once started ooba raises the api on port 5000
+Compile and create fat jar package with all, the command line ui and all the dependencies:
 
-ATTENTION: this project is still incomplete. It is not functional. However, certain parts can be seen and there are loose components.
+>mvn package -D skipTests
 
-As a test repository I am using another project of mine https://github.com/jmdevall/nemofinder which I have cloned locally.
+It may generate 2 jars, one of them is the fat jar with all the dependencies. Simply run java -jar opencodeplan-1.0-SNAPSHOT-jar-with-dependencies.jar for help.
 
-In the test it is necessary to start the iterative process by indicating a block and an instruction. From what the paper says, an instruction can be of type Diff or a natural language instruction.
+Before that... you need the llm engine to be up and running:
+
+start oobatextgen with your model, I currently use this command:
+
+> python server.py --model phind-codellama-34b-v2.Q5_K_M.gguf --threads 12 --n_ctx 16384 --api --verbose
+
+Once started ooba raises the api on port 5000. In past versions of ooba the api was different It seems that now, the only api available is the openai compatible one.
+
+open a terminal and get into the root of a maven project, then execute the command to operate on the project.
+
+example: 
+
+> java -jar <path>/opencodeplan-1.0-SNAPSHOT-jar-with-dependencies.jar -f /nemofinder/DictionarySpanish.java 14 0 -i "Renombra el método getWords por damePalabras"
+
+the -f is to indicate "the block": the portion of code in witch starts to operate, currently only over body methods.
+the -i is to give the instruction in natural language.
+
+
+**ATTENTION**: this project is incomplete so it is most likely that the result will not be as expected. The normal thing is that it fails
+
+As a test repository/project I am using another project of mine https://github.com/jmdevall/nemofinder which I have cloned locally.
+
+If you see the code, to start the iterative process it is needed to indicate a block and an instruction. From what the paper says, an instruction can be of type Diff or a natural language instruction.
 The block is difficult to specify since the code has not been parsed yet. I have had to create a class to describe the block (look for it once the code has been parsed).
 
 Project structure:
+==================
 I have tried to follow a clean architecture, in order to be able to change the parts that are not properly part of the algorithm. These external parts are:
 
 - the llm
@@ -122,6 +133,7 @@ https://tbuss.de/posts/2023/9-how-to-do-the-package-structure-in-a-ports-and-ada
 The objective is to separate the parts that belong to the algorithm from those that do not, so that whoever wants to can reuse as much as possible.
 
 FAQ:
+====
 What is your goal with this project?
 
 The development is being slow since I only dedicate some part of my free time. Personally, I have been trying other projects that use AI and act as assistants or are capable of generating code. For example:
@@ -161,5 +173,5 @@ Of course, if you want to collaborate, participate, suggest things, ask whatever
 - [x] When starting a model in ooba with exllama, it seems that ooba exposes another different api in port 5000. It seems that it is the api compatible with openai. It would be advisable in that case to make another implementation of the rest service compatible with openai.
 - [ ] Implement the oracle. If it is on a maven project, you should be able to invoke it to pass the tests and pass the results of the tests to the prompt.
 - [ ] The paper in the method modifications talks about doing an "escaping object" analysis
-
+- [ ] The code responsible for mixing (which is responsible for mixing the revised code into the pruned code). I had not contemplated that the llm would try to change some lines of some unaffected method. The paper does not specify how to do this step.
 (Note: this is automatic transalation)

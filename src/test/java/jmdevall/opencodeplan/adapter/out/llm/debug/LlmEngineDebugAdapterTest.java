@@ -1,5 +1,6 @@
 package jmdevall.opencodeplan.adapter.out.llm.debug;
 
+import java.io.File;
 import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
@@ -20,7 +21,10 @@ public class LlmEngineDebugAdapterTest {
 	
 	@Test
 	public void createTempFolder() throws IOException {
-		LlmEngineDebugAdapter sut=new LlmEngineDebugAdapter(new LlmEngineDummy());
+		File root=new File(System.getProperty("user.home"), ".opencodeplan/debug");
+		root.mkdirs();
+		 
+		LlmEngineDebugAdapter sut=new LlmEngineDebugAdapter(new LlmEngineDummy(),root);
 		
 		sut.generate("prueba");
 		

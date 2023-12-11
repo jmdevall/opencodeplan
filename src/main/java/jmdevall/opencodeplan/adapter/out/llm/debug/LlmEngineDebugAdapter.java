@@ -3,6 +3,8 @@ package jmdevall.opencodeplan.adapter.out.llm.debug;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -22,9 +24,12 @@ public class LlmEngineDebugAdapter implements LlmEngine{
 	private static final int PADDING=5;
 	private static final String EXTENSION=".txt";
 	
-	public LlmEngineDebugAdapter(LlmEngine llmEngine) throws IOException {
+	public LlmEngineDebugAdapter(LlmEngine llmEngine, File root) throws IOException {
+		
+		Path dirroot = root.toPath();
+		
 		this.llmEngine=llmEngine;
-		this.tempFolder = Files.createTempDirectory("llmengine").toFile();
+		this.tempFolder = Files.createTempDirectory(dirroot,"llmengine").toFile();
 		String tmpFolderLocation = tempFolder.getAbsolutePath();
 		//String tmpDirsLocation = System.getProperty("java.io.tmpdir");
 		

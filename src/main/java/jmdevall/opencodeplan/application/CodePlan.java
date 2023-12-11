@@ -39,7 +39,7 @@ public class CodePlan {
     private Llm llm;
     
     
-    List<BlockRelationPair> getAffectedBlocks(List<ClasifiedChange> labels, Node b, DependencyGraph d, DependencyGraph dp) {
+    public List<BlockRelationPair> getAffectedBlocks(List<ClasifiedChange> labels, Node b, DependencyGraph d, DependencyGraph dp) {
     	ArrayList<BlockRelationPair>ret = new ArrayList<BlockRelationPair>();
     	
     	for(ClasifiedChange change:labels) {
@@ -133,7 +133,7 @@ public class CodePlan {
 	 * 
 	 */
 	    
-	void codePlan(Repository r, DeltaSeeds deltaSeeds){
+	public void codePlan(Repository r, DeltaSeeds deltaSeeds){
 	    PlanGraph g = new PlanGraph();
 	    DependencyGraph d = dependencyGraphConstructor.constructDependencyGraph(r);
 	     while (!deltaSeeds.isEmpty()){
@@ -143,14 +143,14 @@ public class CodePlan {
 	     }
 	}
 
-    void initializePlanGraph(PlanGraph g, DeltaSeeds deltaSeeds, DependencyGraph d) {
+    public void initializePlanGraph(PlanGraph g, DeltaSeeds deltaSeeds, DependencyGraph d) {
         List<BI> bis = deltaSeeds.getBis(d);
 		bis.forEach(bi -> {
             g.addPendingRoot(bi);
         });
     }
 
-    void adaptivePlanAndExecute(Repository r, DependencyGraph d, PlanGraph g, Llm llm) {
+    public void adaptivePlanAndExecute(Repository r, DependencyGraph d, PlanGraph g, Llm llm) {
         while (g.hasNodesWithPendingStatus()) {
 
             Obligation obligation = g.getNextPending().get();
