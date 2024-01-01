@@ -1,6 +1,6 @@
 Proof of concept-implementation of this paper in java: https://huggingface.co/papers/2309.12499
 
-**NEWS**: 12/2023/11 I made a very simple command line argument UI to test algorithm applyed over maven projects. It spect a config file "opencodeplan.properties" in some normal locations and must be run in the root of a maven project. It expect to found 2 source folders: src/main/java and src/test/java in the current folder in wich is run. Now the default working folder is ~/.opencodeplan
+**NEWS**: Happy new Year! I'm keeping an eye on the gpt-pilot project, and figure how to apply/combine both. It is something like proposed the ACE framework. https://github.com/daveshap/ACE_Framework/blob/main/ACE_Framework.md where you have layers of agents. In the ACE framwork, the top layers manage higher order of abstraction. The lower layer, called "code monkey" may be the corresponding with codeplan algorithm.
 
 
 I am doing the tests locally, starting oobatextgen, using different models. I don't know how the state of the art is right now... could be magicoder but llamacpp do not work and GPTQ model has some problem in my GPU.
