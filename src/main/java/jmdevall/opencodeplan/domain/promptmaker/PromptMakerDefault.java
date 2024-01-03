@@ -7,13 +7,15 @@ import jmdevall.opencodeplan.domain.plangraph.TemporalContext;
 
 public class PromptMakerDefault implements PromptMaker {
 
-	private static final String alpacaInstruction=
-	"Below is an instruction that describes a task. Write a response that appropriately completes the request.\n"
-    +"\n"
-	+"### Instruction:\n"
-	+"%s\n"
-    +"\n"
-	+"### Response:\n";
+	private InstructionTemplate instructionTemplate;
+	
+	public PromptMakerDefault(String intructionTemplateName) {
+		this.instructionTemplate=InstructionTemplate.find(intructionTemplateName);
+	}
+	
+	public PromptMakerDefault(InstructionTemplate instructionTemplate) {
+		this.instructionTemplate=instructionTemplate;
+	}
 	
 	private static final String  p1=
 	 "Task Instruction: Your task is to ...\n%s";
@@ -89,7 +91,7 @@ public class PromptMakerDefault implements PromptMaker {
 		
 		sb.append(finalInstruction);
 		
-		return String.format(alpacaInstruction, sb.toString());		
+		return String.format(instructionTemplate.getTemplate(), sb.toString());		
 	}
 	
 	private String javaFragmentPrompt(String javacode) {

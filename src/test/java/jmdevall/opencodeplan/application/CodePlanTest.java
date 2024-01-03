@@ -29,17 +29,19 @@ import jmdevall.opencodeplan.domain.instruction.InstructuionNatural;
 import jmdevall.opencodeplan.domain.instruction.NodeSearchDescriptor;
 import jmdevall.opencodeplan.domain.instruction.Seed;
 import jmdevall.opencodeplan.domain.plangraph.NodeTypeTag;
+import jmdevall.opencodeplan.domain.promptmaker.InstructionTemplate;
 import jmdevall.opencodeplan.domain.promptmaker.PromptMaker;
 import jmdevall.opencodeplan.domain.promptmaker.PromptMakerDefault;
 
 public class CodePlanTest {
 
+	
 	@Test
 	public void testCodePlan() {
 		
 		//initialize default dependencies....
 		Parser parser=new ParserJavaParser();
-		PromptMakerDefault promptMaker=new PromptMakerDefault();
+		PromptMakerDefault promptMaker=new PromptMakerDefault(InstructionTemplate.CHATML);
 		DependencyGraphConstructor dgConstructor=DependencyGraphConstructorJavaparser.newDefault();
 		Oracle oracle=new OracleDefault();
 		Llm llm=newTestingLlm();
@@ -71,7 +73,7 @@ public class CodePlanTest {
 		
 		//initialize default dependencies....
 		Parser parser=new ParserJavaParser();
-		PromptMakerDefault promptMaker=new PromptMakerDefault();
+		PromptMakerDefault promptMaker=new PromptMakerDefault(InstructionTemplate.CHATML);
 		DependencyGraphConstructor dgConstructor=DependencyGraphConstructorJavaparser.newDefault();
 		Oracle oracle=new OracleDefault();
 		Llm llm=newTestingLlm();
@@ -111,7 +113,7 @@ public class CodePlanTest {
 		
 		//initialize default dependencies....
 		Parser parser=new ParserJavaParser();
-		PromptMakerDefault promptMaker=new PromptMakerDefault();
+		PromptMakerDefault promptMaker=new PromptMakerDefault(InstructionTemplate.CHATML);
 		DependencyGraphConstructor dgConstructor=DependencyGraphConstructorJavaparser.newDefault();
 		Oracle oracle=new OracleDefault();
 		Llm llm=newTestingLlm();

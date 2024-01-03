@@ -9,4 +9,5 @@ public class Options {
 	private int column;
 	
 	private String instruction;
+	
 }

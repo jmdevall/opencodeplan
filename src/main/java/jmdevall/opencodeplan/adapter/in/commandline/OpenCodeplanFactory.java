@@ -34,7 +34,7 @@ public class OpenCodeplanFactory {
 		LlmEngine engine=getLlm(properties, llmengineType);
 		
 		Parser parser=new ParserJavaParser();
-		PromptMakerDefault promptMaker=new PromptMakerDefault();
+		PromptMakerDefault promptMaker=new PromptMakerDefault(properties.getProperty("llm.engine.instructiontemplatename").trim());
 		DependencyGraphConstructor dgConstructor=DependencyGraphConstructorJavaparser.newDefault();
 		Oracle oracle=new OracleDefault();
 		Llm llm=new Llm(engine);

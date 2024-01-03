@@ -1,42 +1,46 @@
-Proof of concept-implementation of this paper in java: https://huggingface.co/papers/2309.12499
+Proof of concept-implementation of this paper https://huggingface.co/papers/2309.12499 in java language
 
 **NEWS**: Happy new Year! I'm keeping an eye on the gpt-pilot project, and figure how to apply/combine both. It is something like proposed the ACE framework. https://github.com/daveshap/ACE_Framework/blob/main/ACE_Framework.md where you have layers of agents. In the ACE framwork, the top layers manage higher order of abstraction. The lower layer, called "code monkey" may be the corresponding with codeplan algorithm.
 
 
-I am doing the tests locally, starting oobatextgen, using different models. I don't know how the state of the art is right now... could be magicoder but llamacpp do not work and GPTQ model has some problem in my GPU.
-
 Getting started
 ===============
 
-Compile and create fat jar package with all, the command line ui and all the dependencies:
+I assume you already master some Java... Compile and create fat jar package with all, the command line ui and all the dependencies:
 
->mvn package -D skipTests
+> mvn package -D skipTests
 
-It may generate 2 jars, one of them is the fat jar with all the dependencies. Simply run java -jar opencodeplan-1.0-SNAPSHOT-jar-with-dependencies.jar for help.
+It may generate 2 jars, one of them is the fat jar with all the dependencies. For help, simply run:
 
-Before that... you need the llm engine to be up and running:
+> java -jar opencodeplan-1.0-SNAPSHOT-jar-with-dependencies.jar 
 
-start oobatextgen with your model, I currently use this command:
+You need the llm engine to be up and running: I currently only use open source models with oobatextgen but should work with any compatible like openai rest api (not tested). I always download quantized models from "Thebloke" in huggingface.co.
+
+start oobatextgen with your model, for example, I have tested with:
 
 > python server.py --model phind-codellama-34b-v2.Q5_K_M.gguf --threads 12 --n_ctx 16384 --api --verbose
 
-Once started ooba raises the api on port 5000. In past versions of ooba the api was different It seems that now, the only api available is the openai compatible one.
+This another one has just arrived and seems to be better, but I have doubts...
+> python server.py --model dolphin-2.7-mixtral-8x7b.Q5_K_M.gguf --threads 12 --n_ctx 32768 --api --verbose
 
-open a terminal and get into the root of a maven project, then execute the command to operate on the project.
+new: Each model has its own "instruction template", you must select it by it's name, in your config file. There are currently only "alpacha" and "chatml". In the description of the model thebloke says what the instruction template to use.
 
-example: 
+Once started ooba raises up the api on port 5000. Note: In past versions of ooba the rest api was different so It seems that nowdays, the only api that offers is the openai compatible one.
+
+open a terminal and get into the root of a maven project, and then execute the command to operate on the project, for example:
 
 > java -jar <path>/opencodeplan-1.0-SNAPSHOT-jar-with-dependencies.jar -f /nemofinder/DictionarySpanish.java 14 0 -i "Renombra el método getWords por damePalabras"
 
-the -f is to indicate "the block": the portion of code in witch starts to operate, currently only over body methods.
+the -f is to indicate "the block": the portion of code in witch starts to operate, currently only over body methods... actually it's almost the same because currently I send the full content of the source file. In the paper suggest to prune the unnecesary methods but It is complicate to handle de merge of the code once the llm returns.
+
+
 the -i is to give the instruction in natural language.
 
-
-**ATTENTION**: this project is incomplete so it is most likely that the result will not be as expected. The normal thing is that it fails
+**ATTENTION**: this project is experimental so it is most likely that the result will not be as expected.
 
 As a test repository/project I am using another project of mine https://github.com/jmdevall/nemofinder which I have cloned locally.
 
-If you see the code, to start the iterative process it is needed to indicate a block and an instruction. From what the paper says, an instruction can be of type Diff or a natural language instruction.
+If you see the code, to start the iterative process it is needed to indicate a block and an instruction. From what the paper says, an instruction can be of type "Diff" or a "natural language instruction".
 The block is difficult to specify since the code has not been parsed yet. I have had to create a class to describe the block (look for it once the code has been parsed).
 
 Project structure:
@@ -47,11 +51,11 @@ I have tried to follow a clean architecture, in order to be able to change the p
 - the code repository
 - the parser/dependency analyzer
 
-In the domain part are the data structures that the algorithm manages.
+In the domain are the clases that represents the data structures that the algorithm manages.
 
 In the application part are the services... essentially the algorithm.
 
-For now there is no user interface or anything like that. All tests are done from the tests
+Currently there are only the command line interface, in the future may plan to integrate with vscode, or expose an api rest or integrate as part of another AI assistant project, I don't know.
 
 I have followed the package structure suggested here:
 https://tbuss.de/posts/2023/9-how-to-do-the-package-structure-in-a-ports-and-adapter-architecture/
@@ -59,6 +63,7 @@ https://tbuss.de/posts/2023/9-how-to-do-the-package-structure-in-a-ports-and-ada
 The objective is to separate the parts that belong to the algorithm from those that do not, so that whoever wants to can reuse as much as possible.
 
 FAQ:
+===
 What is your goal with this project?
 
 The development is being slow since I only dedicate some part of my free time. Personally, I have been trying other projects that use AI and act as assistants or are capable of generating code. For example:
@@ -89,79 +94,6 @@ That was my first attempt, but I ran into 2 problems:
 Of course, if you want to collaborate, participate, suggest things, ask whatever you want... this is a free project
 (Note: this is automatic transalation)
 
-To debug better I have implemented two adapters to the llm:
-* LlmEngineCacheAdapter: Uses a local folder where it saves requests and responses in files as a cache.
-* LlmEngineDebugAdapter: saves each of the requests/responses made to the llm in a temporary system folder.
-
-Issues: The code responsible for mixing (which is responsible for mixing the revised code into the pruned code). I had not contemplated that the llm would try to change some lines of some unaffected method. The paper does not specify how to do this step.
-
-I am doing the tests locally, starting oobatextgen, using different models. I don't know how the state of the art is right now.
-
-https://huggingface.co/TheBloke/Phind-CodeLlama-34B-v2-GGUF -> Soooo slow
-TheBloke_Mistral-7B-Code-16K-qlora-GPTQ" that fits on the GPU -> Not good enough but at least it fits on the GPU
-
-
-I currently only have an 8Gb domestic graphics card so I can only run quantized models with 7B parameters on the GPU. I think it is insufficient, so it would be advisable to go for more advanced 33B models, which would require at least a 24Gb card...
-
-python server.py --model phind-codellama-34b-v2.Q5_K_M.gguf --threads 12 --n_ctx 16384 --api --verbose
-
-Once started ooba raises the api on port 5000
-
-ATTENTION: this project is still incomplete. It is not functional. However, certain parts can be seen and there are loose components.
-
-As a test repository I am using another project of mine https://github.com/jmdevall/nemofinder which I have cloned locally.
-
-In the test it is necessary to start the iterative process by indicating a block and an instruction. From what the paper says, an instruction can be of type Diff or a natural language instruction.
-The block is difficult to specify since the code has not been parsed yet. I have had to create a class to describe the block (look for it once the code has been parsed).
-
-Project structure:
-I have tried to follow a clean architecture, in order to be able to change the parts that are not properly part of the algorithm. These external parts are:
-
-- the llm
-- the code repository
-- the parser/dependency analyzer
-
-In the domain part are the data structures that the algorithm manages.
-
-In the application part are the services... essentially the algorithm.
-
-For now there is no user interface or anything like that. All tests are done from the tests
-
-I have followed the package structure suggested here:
-https://tbuss.de/posts/2023/9-how-to-do-the-package-structure-in-a-ports-and-adapter-architecture/
-
-The objective is to separate the parts that belong to the algorithm from those that do not, so that whoever wants to can reuse as much as possible.
-
-FAQ:
-====
-What is your goal with this project?
-
-The development is being slow since I only dedicate some part of my free time. Personally, I have been trying other projects that use AI and act as assistants or are capable of generating code. For example:
-
-https://github.com/paul-gauthier/aider, https://github.com/genia-dev/GeniA etc.
-
-The fundamental idea of the "codeplan" paper is to take advantage of the information on the project's dependencies to generate the most specific prompt possible. Make small changes little by little throughout the code base.
-The difficulty that attendees seem to currently encounter is:
-- 1 manage to gather the relevant information to make a change.
-- 2 Print the result of the llm as a change back in the repository.
-The paper seems to have solved these two problems: it suggests using the language's own semantic information to obtain the dependencies of the parts involved in the code. This, together with the previous changes, would allow us to obtain the perfect prompt. On the other hand, when making small changes that only affect the code of one class at a time, in principle it is easier to transfer those changes back to the repository, while at the same time they serve to categorize the type of change and thus feed back to the prompt in future modifications.
-
-In any case, the conclusion that seems to prevail is that, the smaller the change and the more controlled it is, the easier it is to take advantage of/interpret the result of the LLM, the easier it is to follow a methodical plan that allows working with large projects. In the paper, an algorithm, codeplan, is suggested, but I suggest going further: some other algorithm could be applied to this same idea... for example... the algorithm that follows the Test Driven Development methodology or whatever is dictated by the plan generated by an agent at a higher level to guide development.
-In any case, my only intention is that this can serve as help or inspiration for any other project
-
-Why java and not python?
-For many reasons:
-1 I am more used to working with java
-2 Java is a language widely used in projects in the business world. In practice I think it would be the language that could be used the most.
-3 Java is a strongly typed language. As the paper indicates, the algorithm is more appropriate and easier to implement in this type of languages.
-4 Python seems more suitable for the particular world of artificial intelligence... it might seem that it is easier to implement in python. However, I don't really use anything extraordinary that requires any specialized bookstore. For me, the llm is simply an external web service to which you put a String and it returns another String. The most complex thing in this case is the Java parser and obtaining the dependencies. Furthermore, since I wanted to reuse something already done, there were few options beyond the javaparser library.
-
-Why do you use javaparser and not use tree-setter as a parser as the paper indicates?
-That was my first attempt, but I ran into 2 problems:
-1) The java version is linked using a native library. In my case I couldn't get it to work, it gave me core dumps and I couldn't find the reason.
-2) In addition to the parser, to find the dependencies it is very useful that the library also implements a "typesolver". This is already given to you by javaparser while for tree-setter I think there is nothing.
-
-Of course, if you want to collaborate, participate, suggest things, ask whatever you want... this is a free project
 
 **TODO LIST**
 

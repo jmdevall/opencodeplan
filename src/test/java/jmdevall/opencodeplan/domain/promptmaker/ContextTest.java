@@ -99,7 +99,7 @@ public class ContextTest {
 		Context c=Context.gatherContext(si.get(), repository, d, new PlanGraph());
 		
 		Fragment f=Fragment.newFromPrunedCuNode(si.get().getRootParent(), searchNode);
-		PromptMakerDefault pm=new PromptMakerDefault();
+		PromptMakerDefault pm=new PromptMakerDefault(InstructionTemplate.CHATML);
 		InstructuionNatural i=new InstructuionNatural("Haz que el método devuelva un Collection");
 		String prompt=pm.makePrompt(f, i, c);
 		
