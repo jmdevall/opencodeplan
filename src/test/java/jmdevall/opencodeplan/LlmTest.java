@@ -3,6 +3,8 @@ package jmdevall.opencodeplan;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 
 import jmdevall.opencodeplan.application.Llm;
@@ -29,8 +31,9 @@ public class LlmTest {
 	@Test
 	public void extractOnlyCodeOfResponse() {
 		Llm sut=new Llm(null);
-		String actual=sut.extractOnlyCodeOfResponse(posibleOutputOfLlm);
-		assertEquals(expected,actual);
+		List<String> actual=sut.extractOnlyCodeOfResponse(posibleOutputOfLlm);
+		assertEquals(1,actual.size());
+		assertEquals(expected,actual.get(0));
 	}
 	
 	String exampleRealOutput="The existing code is already updated according to the earlier code changes. Therefore, no changes are required in the \"Code to be Changed Next\".";

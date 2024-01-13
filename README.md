@@ -16,14 +16,7 @@ It may generate 2 jars, one of them is the fat jar with all the dependencies. Fo
 
 You need the llm engine to be up and running: I currently only use open source models with oobatextgen but should work with any compatible like openai rest api (not tested). I always download quantized models from "Thebloke" in huggingface.co.
 
-start oobatextgen with your model, for example, I have tested with:
-
-> python server.py --model phind-codellama-34b-v2.Q5_K_M.gguf --threads 12 --n_ctx 16384 --api --verbose
-
-This another one has just arrived and seems to be better, but I have doubts...
-> python server.py --model dolphin-2.7-mixtral-8x7b.Q5_K_M.gguf --threads 12 --n_ctx 32768 --api --verbose
-
-new: Each model has its own "instruction template", you must select it by it's name, in your config file. There are currently only "alpacha" and "chatml". In the description of the model thebloke says what the instruction template to use.
+start oobatextgen with your model, see last section "tested models":
 
 Once started ooba raises up the api on port 5000. Note: In past versions of ooba the rest api was different so It seems that nowdays, the only api that offers is the openai compatible one.
 
@@ -107,3 +100,18 @@ Of course, if you want to collaborate, participate, suggest things, ask whatever
 - [ ] The paper in the method modifications talks about doing an "escaping object" analysis
 - [ ] The code responsible for mixing (which is responsible for mixing the revised code into the pruned code). I had not contemplated that the llm would try to change some lines of some unaffected method. The paper does not specify how to do this step.
 (Note: this is automatic transalation)
+
+tested models
+=============
+
+phind, instruction template: alpaca
+> python server.py --model phind-codellama-34b-v2.Q5_K_M.gguf --threads 12 --n_ctx 16384 --api --verbose
+
+dolphin mistrael mixture of experts, template: chatml
+This another one has just arrived and seems to be better, but I have doubts...
+> python server.py --model dolphin-2.7-mixtral-8x7b.Q5_K_M.gguf --threads 12 --n_ctx 32768 --api --verbose
+
+wizard coder, instruction template: alpaca
+> python server.py --model wizardcoder-33b-v1.1.Q5_K_M.gguf --threads 12 --n_ctx 16384 --api --verbose
+
+new: Each model has its own "instruction template", you must select it by it's name, in your config file. There are currently only "alpacha" and "chatml". In the description of the model thebloke says what the instruction template to use.

@@ -113,7 +113,7 @@ public class CodePlanTest {
 		
 		//initialize default dependencies....
 		Parser parser=new ParserJavaParser();
-		PromptMakerDefault promptMaker=new PromptMakerDefault(InstructionTemplate.CHATML);
+		PromptMakerDefault promptMaker=new PromptMakerDefault(InstructionTemplate.ALPACA);
 		DependencyGraphConstructor dgConstructor=DependencyGraphConstructorJavaparser.newDefault();
 		Oracle oracle=new OracleDefault();
 		Llm llm=newTestingLlm();

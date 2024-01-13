@@ -28,11 +28,25 @@ public class PromptMakerDefault implements PromptMaker {
 	
 	private static final String p5="Code to be Changed Next: The existing code is given below -\n";
 			
-	private static final String finalInstruction=
+	/*private static final String finalInstruction=
 	"Edit the \"Code to be Changed Next\" and produce \"Changed Code\" below. Edit the \"Code "
 	+"to be Changed Next\" according to the \"Task Instructions\" to make it consistent with "
-	+"the \"Earlier Code Changes\", \"Causes for Change\" and \"Related Code\". If no changes are "
-	+"needed, output \"No changes.\"";
+	+"the \"Earlier Code Changes\", \"Causes for Change\" and \"Related Code\"."
+	+ ""
+	+ " If no changes are "
+	+"needed, output \"No changes.\""
+	+ "\n IMPORTANT: just provide one code snippet: the changed code between ``` . Don't provide multiple code snippets.";
+	*/
+
+	private static final String finalInstruction=
+	 "Edit the \"Code to be Changed Next\" and produce \"Changed Code\" below.\n"
+	+" You must provide 1 and only 1 snippet code between \"```\".\n" 			
+	+ " Edit the \"Code to be Changed Next\" according to the \"Task Instructions\" to make it consistent with "
+	+"the \"Earlier Code Changes\", \"Causes for Change\" and \"Related Code\".\n"
+	+ " If no changes are needed, simply output \"No changes.\"";
+
+	
+	
 		
 	@Override
 	public String makePrompt(Fragment fragment, Instruction i, Context context){

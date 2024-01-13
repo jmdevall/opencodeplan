@@ -71,34 +71,38 @@ public class OpenCodeplanFactory {
 		boolean cacheactive="true".equals(properties.getProperty("llm.cache.active"));
 		if(cacheactive) {
 
-			String llmCacheFolder=properties.getProperty("llm.cache.folder",null);
-			
-			File theDir = llmCacheFolder==null?new File(System.getProperty("user.home"),".opencodeplan/cache"): new File(llmCacheFolder);
-			
-			if (!theDir.exists()){
-			    theDir.mkdirs();
-			}
-			log.info("using cache folder "+llmCacheFolder);
-			
-			
+			File theDir = getCacheFolderCreated(properties.getProperty("llm.cache.folder",null));
+
 			engine=new LlmEngineCacheAdapter(engine, theDir);
 		}
 		
 		boolean debugActive="true".equals(properties.getProperty("llm.debug.active"));
 		if(debugActive) {
-			String llmDebugFolder=properties.getProperty("llm.debug.folder",null);
-			
-			File theDir = llmDebugFolder==null?new File(System.getProperty("user.home"),".opencodeplan/debug"): new File(llmDebugFolder);
-			
-			if (!theDir.exists()){
-			    theDir.mkdirs();
-			}
-			log.info("using llmDebugFolderr "+llmDebugFolder);
-			
+			File theDir = getDebugFolderCreated(properties.getProperty("llm.debug.folder",null));
 			
 			engine=new LlmEngineDebugAdapter(engine, theDir);
 		}
 		return engine;
+	}
+
+	private static File getDebugFolderCreated(String llmDebugFolder) {
+		File theDir = llmDebugFolder==null?new File(System.getProperty("user.home"),".opencodeplan/debug"): new File(llmDebugFolder);
+		
+		if (!theDir.exists()){
+		    theDir.mkdirs();
+		}
+		log.info("using llmDebugFolder "+llmDebugFolder);
+		return theDir;
+	}
+
+	private static File getCacheFolderCreated(String llmCacheFolder) {
+		File theDir = llmCacheFolder==null?new File(System.getProperty("user.home"),".opencodeplan/cache"): new File(llmCacheFolder);
+		
+		if (!theDir.exists()){
+		    theDir.mkdirs();
+		}
+		log.info("using cache folder "+llmCacheFolder);
+		return theDir;
 	}
 	
 }
